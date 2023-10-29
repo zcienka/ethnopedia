@@ -1,11 +1,11 @@
 import { Formik, Field, Form } from "formik"
 
 const MetadataForm = () => {
-    const ipcRenderer = (window as any).electron.ipcRenderer
+    const ipcRenderer = (window as any).ipcRenderer
 
     const onFormSubmit = (e: any) => {
         console.log("onFormSubmit")
-        ipcRenderer.send("submit:metadataForm", "form-submit")
+        ipcRenderer.send("submit:metadataForm", { data: "form-submit" })
     }
 
     return <>
@@ -28,6 +28,10 @@ const MetadataForm = () => {
                 <button type="submit">Submit</button>
             </Form>
         </Formik>
+
+        <button onClick={() => onFormSubmit("form-submit")}>
+            click
+        </button>
     </>
 }
 export default MetadataForm

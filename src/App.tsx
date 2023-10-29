@@ -9,6 +9,7 @@ const App = () => {
     // return <div className="flex flex-row font-black">
     //     homedir: {electron.homeDir()}
     // </div>
+
     return <BrowserRouter>
         <Routes>
             {/*<Route path="/" element={<Home/>} />*/}
