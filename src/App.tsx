@@ -1,7 +1,11 @@
 import React from "react"
-import {Route, BrowserRouter, Routes} from "react-router-dom"
+import { Route, BrowserRouter, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import MetadataForm from "./forms/MetadataForm"
+import { QueryClient, QueryClientProvider } from "react-query"
+
+const queryClient = new QueryClient()
+
 
 const App = () => {
     const electron = (window as any).electron
@@ -10,13 +14,14 @@ const App = () => {
     //     homedir: {electron.homeDir()}
     // </div>
 
-    return <BrowserRouter>
-        <Routes>
-            {/*<Route path="/" element={<Home/>} />*/}
-            <Route path="/" element={<MetadataForm/>} />
-        </Routes>
-    </BrowserRouter>
-
+    return <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                {/*<Route path="/" element={<MetadataForm/>} />*/}
+            </Routes>
+        </BrowserRouter>
+    </QueryClientProvider>
 }
 
 export default App

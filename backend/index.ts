@@ -1,11 +1,14 @@
 import express from "express"
 
 const app = express()
+const cors = require("cors")
+
 const tracks = require("./routes/track")
 const connectDB = require("./db/connect")
 
 require("dotenv").config()
 
+app.use(cors())
 app.use(express.json())
 app.use("/api/v1/track", tracks)
 
