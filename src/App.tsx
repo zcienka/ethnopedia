@@ -3,6 +3,7 @@ import { Route, BrowserRouter, Routes } from "react-router-dom"
 import Home from "./pages/Home"
 import MetadataForm from "./forms/MetadataForm"
 import { QueryClient, QueryClientProvider } from "react-query"
+import NewTableForm from "./forms/NewTableForm"
 
 const queryClient = new QueryClient()
 
@@ -18,7 +19,7 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
-                {/*<Route path="/" element={<MetadataForm/>} />*/}
+                {/*<Route path="/" element={<NewTableForm/>} />*/}
             </Routes>
         </BrowserRouter>
     </QueryClientProvider>

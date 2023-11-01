@@ -1,6 +1,7 @@
 import { useQuery } from "react-query"
 import { fetchTracks } from "../api/tracks"
 import LoadingPage from "../pages/LoadingPage"
+import { v4 as uuidv4 } from "uuid"
 
 const Table = () => {
     const { data: tracks, isLoading } = useQuery(
@@ -10,18 +11,20 @@ const Table = () => {
 
     console.log({ tracks, isLoading })
 
-    if (tracks !== undefined) {
-
+    if (tracks === undefined) {
+        return <LoadingPage />
+    } else {
         const allTracks = tracks!.tracks?.map((track: any) => {
             return <tr className="border-b dark:border-gray-700">
                 <th
                     scope="row"
                     className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    key={uuidv4()}
                 >
                     {track["Miejsce zamieszkania"]}
                 </th>
                 <td className="px-4 py-3">
-                    {track["Sposob wykonania"]}
+                    {track["Sposób wykonania"]}
                 </td>
                 <td className="px-4 py-3">
                     {track["Funkcja utworu"]}
@@ -33,7 +36,7 @@ const Table = () => {
                     {track["Link do nagrania"]}
                 </td>
                 <td className="px-4 py-3">
-                    {track["Zrodlo"]}
+                    {track["Źródło"]}
                 </td>
                 <td className="px-4 py-3">
                     {track["Klasyfikacja melodyczna"]}
@@ -416,7 +419,6 @@ const Table = () => {
             </section>
         </div>
     }
-    return <LoadingPage />
 }
 
 export default Table

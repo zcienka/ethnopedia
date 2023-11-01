@@ -8,29 +8,29 @@ const MetadataForm = () => {
     }
 
     return <>
-        <h1>MetadataInfoForm</h1>
+        {/*<h1>MetadataInfoForm</h1>*/}
 
-        <Formik
-            initialValues={{ email: "", password: "" }}
-            onSubmit={(values, { setSubmitting }) => {
-                onFormSubmit("form-submit")
-            }}>
-            <Form>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <Field type="email" name="email" />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <Field type="password" name="password" />
-                </div>
-                <button type="submit">Submit</button>
-            </Form>
-        </Formik>
+        {/*<Formik*/}
+        {/*    initialValues={{ email: "", password: "" }}*/}
+        {/*    onSubmit={(values, { setSubmitting }) => {*/}
+        {/*        onFormSubmit("form-submit")*/}
+        {/*    }}>*/}
+        {/*    <Form>*/}
+        {/*        <div>*/}
+        {/*            <label htmlFor="email">Email:</label>*/}
+        {/*            <Field type="email" name="email" />*/}
+        {/*        </div>*/}
+        {/*        <div>*/}
+        {/*            <label htmlFor="password">Password:</label>*/}
+        {/*            <Field type="password" name="password" />*/}
+        {/*        </div>*/}
+        {/*        <button type="submit">Submit</button>*/}
+        {/*    </Form>*/}
+        {/*</Formik>*/}
 
         <section className="bg-white dark:bg-gray-900">
             <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-                <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Add a new product</h2>
+                <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">Dodaj nowy utwór</h2>
                 <form action="#">
                     <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
                         <div className="sm:col-span-2">
@@ -85,15 +85,15 @@ const MetadataForm = () => {
                     </div>
                     <button type="submit"
                             className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">
-                        Add product
+                         Dodaj nowy
                     </button>
                 </form>
             </div>
         </section>
 
-        <button onClick={() => onFormSubmit("form-submit")}>
-            click
-        </button>
+        {/*<button onClick={() => onFormSubmit("form-submit")}>*/}
+        {/*    click*/}
+        {/*</button>*/}
     </>
 }
 export default MetadataForm
