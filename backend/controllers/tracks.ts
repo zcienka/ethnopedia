@@ -4,7 +4,8 @@ const Track = require("../models/track")
 
 const getAllTracks = asyncWrapper(async (req: any, res: any) => {
     const tracks = await Track.find({})
-    res.status(200).json({ tracks })
+    const columnNames = Object.keys(tracks[0].toObject())
+    res.status(200).json({tracks, columnNames})
 })
 
 module.exports = {

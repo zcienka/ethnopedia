@@ -1,6 +1,31 @@
+import React, { useState } from "react"
+import { v4 as uuidv4 } from "uuid"
+import SidebarTableComponent from "./SidebarTableComponent"
+
 const Sidebar = () => {
+    const [sidebarComponents, setSidebarTableComponents] = useState([{ id: 1 }])
+    const [nextSidebarTableComponentId, setNextSidebarTableComponentId] = useState(2)
+
+    const addNewSidebarTableComponent = () => {
+        setSidebarTableComponents([...sidebarComponents, { id: nextSidebarTableComponentId }])
+        setNextSidebarTableComponentId(nextSidebarTableComponentId + 1)
+    }
+
+    const handleSidebarTableComponentChange = (id: number, value: any) => {
+        const updatedSidebarTableComponents = [...sidebarComponents]
+
+        const sidebarToUpdate: any = updatedSidebarTableComponents.find((sidebar) => sidebar.id === id)
+
+        if (sidebarToUpdate) {
+            sidebarToUpdate.value = value
+        }
+
+        setSidebarTableComponents(updatedSidebarTableComponents)
+    }
+
     return <aside className="w-64 transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">
-        <div className="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+        <div
+            className="overflow-y-auto py-5 px-3 h-full bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <ul className="space-y-2">
                 <li>
                     <a
@@ -14,6 +39,15 @@ const Sidebar = () => {
                         <span className="ml-3">Overview</span>
                     </a>
                 </li>
+
+                {sidebarComponents.map((sidebar, index) => (
+                    <span key={uuidv4()}>
+                             <SidebarTableComponent
+                                 componentName={"Nowa tabela"}
+                                 onInputChange={(value) => handleSidebarTableComponentChange(sidebar.id, value)} />
+                     </span>
+                ))}
+
                 <li>
                     <button type="button"
                             className="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -101,6 +135,10 @@ const Sidebar = () => {
                     </a>
                 </li>
             </ul>
+
+            <button onClick={addNewSidebarTableComponent}>
+                dodaj nowy
+            </button>
 
         </div>
     </aside>

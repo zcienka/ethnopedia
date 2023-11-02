@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 const TrackSchema = new mongoose.Schema({
     name: {
@@ -6,4 +6,4 @@ const TrackSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model('Track', TrackSchema)
+module.exports = mongoose.model("Track", TrackSchema)

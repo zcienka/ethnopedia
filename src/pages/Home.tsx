@@ -3,8 +3,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 
 const Home = () => {
-    return (
-        <div className="flex flex-col">
+    return <div className="flex flex-col">
 
             <div className="flex flex-row flex-grow">
                 <Sidebar />
@@ -16,7 +15,6 @@ const Home = () => {
                 </div>
             </div>
         </div>
-    );
 };
 
 export default Home;

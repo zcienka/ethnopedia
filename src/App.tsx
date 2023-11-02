@@ -7,7 +7,6 @@ import NewTableForm from "./forms/NewTableForm"
 
 const queryClient = new QueryClient()
 
-
 const App = () => {
     const electron = (window as any).electron
 

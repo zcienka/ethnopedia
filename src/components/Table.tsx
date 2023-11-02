@@ -14,7 +14,7 @@ const Table = () => {
     if (tracks === undefined) {
         return <LoadingPage />
     } else {
-        const allTracks = tracks!.tracks?.map((track: any) => {
+        const allTracks = tracks.map((track: any) => {
             return <tr className="border-b dark:border-gray-700">
                 <th
                     scope="row"
