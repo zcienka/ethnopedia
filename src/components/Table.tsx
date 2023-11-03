@@ -2,48 +2,28 @@ import { useQuery } from "react-query"
 import { fetchTracks } from "../api/tracks"
 import LoadingPage from "../pages/LoadingPage"
 import { v4 as uuidv4 } from "uuid"
+import { useState } from "react"
 
 const Table = () => {
-    const { data: tracks, isLoading } = useQuery(
+    const { data: fetchedData } = useQuery(
         ["track"],
         fetchTracks,
     )
 
-    console.log({ tracks, isLoading })
-
-    if (tracks === undefined) {
+    if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const allTracks = tracks.map((track: any) => {
-            return <tr className="border-b dark:border-gray-700">
-                <th
-                    scope="row"
-                    className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    key={uuidv4()}
-                >
-                    {track["Miejsce zamieszkania"]}
-                </th>
-                <td className="px-4 py-3">
-                    {track["Sposób wykonania"]}
-                </td>
-                <td className="px-4 py-3">
-                    {track["Funkcja utworu"]}
-                </td>
-                <td className="px-4 py-3">
-                    {track["Uwagi"]}
-                </td>
-                <td className="px-4 py-3">
-                    {track["Link do nagrania"]}
-                </td>
-                <td className="px-4 py-3">
-                    {track["Źródło"]}
-                </td>
-                <td className="px-4 py-3">
-                    {track["Klasyfikacja melodyczna"]}
-                </td>
-            </tr>
-        })
-
+        const allTracks = fetchedData.tracks.map((track: any) => {
+            return (
+                <tr className="border-b dark:border-gray-700" key={uuidv4()}>
+                    {fetchedData.columnNames.map((columnName: string, index: number) => (
+                        <td className="px-4 py-3" key={index}>
+                            {track[columnName]}
+                        </td>
+                    ))}
+                </tr>
+            );
+        });
         return <div className="grow">
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
