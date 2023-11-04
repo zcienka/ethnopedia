@@ -1,9 +1,10 @@
 import React from "react"
 import { Route, BrowserRouter, Routes } from "react-router-dom"
-import Home from "./pages/Home"
-import MetadataForm from "./forms/MetadataForm"
 import { QueryClient, QueryClientProvider } from "react-query"
-import NewTableForm from "./forms/NewTableForm"
+import LoginPage from "./pages/LoginPage"
+import "./i18n"
+import "i18next"
+import Home from "./pages/Home"
 
 const queryClient = new QueryClient()
 
@@ -17,8 +18,8 @@ const App = () => {
     return <QueryClientProvider client={queryClient}>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Home />} />
-                {/*<Route path="/" element={<NewTableForm/>} />*/}
+                {/*<Route path="/" element={<LoginPage />} />*/}
+                <Route path="/" element={<Home/>} />
             </Routes>
         </BrowserRouter>
     </QueryClientProvider>

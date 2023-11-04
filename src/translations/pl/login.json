@@ -1,0 +1,12 @@
+{
+  "title": "Zaloguj się",
+  "register": "Zarejestruj się",
+  "email": "Email",
+  "password": "Hasło",
+  "repeatPassword": "Powtórz hasło",
+  "forgotPassword": "Zapomniałeś hasła?",
+  "rememberMe": "Zapamiętaj mnie",
+  "dontHaveAccount": "Nie masz jeszcze konta?",
+  "createAccount": "Załóż konto",
+  "loginButton": "Zaloguj się"
+}

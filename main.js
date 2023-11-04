@@ -2,7 +2,8 @@ const { app, BrowserWindow } = require("electron")
 const path = require("path")
 const url = require("url")
 const { remote } = require("electron")
-const { ipcMain } = require('electron/main');
+const { ipcMain } = require("electron/main")
+
 function createWindow() {
     const win = new BrowserWindow({
         width: 800,

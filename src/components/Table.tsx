@@ -3,44 +3,46 @@ import { fetchTracks } from "../api/tracks"
 import LoadingPage from "../pages/LoadingPage"
 import { v4 as uuidv4 } from "uuid"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 const Table = () => {
     const { data: fetchedData } = useQuery(
         ["track"],
         fetchTracks,
     )
+    const [t] = useTranslation<any>("table")
 
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
         const allTracks = fetchedData.tracks.map((track: any) => {
-            return (
-                <tr className="border-b dark:border-gray-700" key={uuidv4()}>
-                    {fetchedData.columnNames.map((columnName: string, index: number) => (
-                        <td className="px-4 py-3" key={index}>
-                            {track[columnName]}
-                        </td>
-                    ))}
-                </tr>
-            );
-        });
+            return <tr className="border-b dark:border-gray-700">
+                {fetchedData.columnNames.map((columnName: string, index: number) => (
+                    <td className="px-4 py-3" key={uuidv4()}>
+                        {track[columnName]}
+                    </td>
+                ))}
+            </tr>
+        })
         return <div className="grow">
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                     <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                         <div
-                            className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                            className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0
+                            md:space-x-4 p-4">
                             <div className="w-full md:w-1/2">
                                 <form className="flex items-center">
                                     <label
                                         htmlFor="simple-search"
                                         className="sr-only"
                                     >
-                                        Search
+                                        {t("search")}
                                     </label>
                                     <div className="relative w-full">
                                         <div
-                                            className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            className="absolute inset-y-0 left-0 flex items-center pl-3
+                                            pointer-events-none">
                                             <svg
                                                 aria-hidden="true"
                                                 className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -49,9 +51,7 @@ const Table = () => {
                                                 xmlns="http://www.w3.org/2000/svg"
                                             >
                                                 <path
-                                                    fill-rule="evenodd"
                                                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                                    clip-rule="evenodd"
                                                 />
                                             </svg>
                                         </div>
@@ -59,7 +59,7 @@ const Table = () => {
                                             type="text"
                                             id="simple-search"
                                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                            placeholder="Search"
+                                            placeholder={`${t("search")}`}
                                         />
                                     </div>
                                 </form>
@@ -78,12 +78,10 @@ const Table = () => {
                                         aria-hidden="true"
                                     >
                                         <path
-                                            clip-rule="evenodd"
-                                            fill-rule="evenodd"
                                             d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                                         />
                                     </svg>
-                                    Add product
+                                    {t("addNewRecord")}
                                 </button>
                                 <div className="flex items-center space-x-3 w-full md:w-auto">
                                     <button
@@ -100,8 +98,6 @@ const Table = () => {
                                             aria-hidden="true"
                                         >
                                             <path
-                                                clip-rule="evenodd"
-                                                fill-rule="evenodd"
                                                 d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                             />
                                         </svg>
@@ -152,7 +148,7 @@ const Table = () => {
                                                 clip-rule="evenodd"
                                             />
                                         </svg>
-                                        Filter
+                                        {t("filter")}
                                         <svg
                                             className="-mr-1 ml-1.5 w-5 h-5"
                                             fill="currentColor"
@@ -169,7 +165,7 @@ const Table = () => {
                                     </button>
                                     <div
                                         id="filterDropdown"
-                                        className="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
+                                        className="z-10 visible w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
                                     >
                                         <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">
                                             Choose brand
@@ -258,27 +254,11 @@ const Table = () => {
                                 <thead
                                     className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
-                                    <th scope="col" className="px-4 py-3">
-                                        Miejsce zamieszkania
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        Sposób wykonania
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        Funkcja utworu
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        Uwagi
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        Link do nagrania
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        Źródło
-                                    </th>
-                                    <th scope="col" className="px-4 py-3">
-                                        Klasyfikacja melodyczna
-                                    </th>
+                                    {fetchedData.columnNames.map((columnName: string) => (
+                                        <th className="px-4 py-3" key={uuidv4()}>
+                                            {columnName}
+                                        </th>
+                                    ))}
 
                                     <th scope="col" className="px-4 py-3">
                                             <span className="sr-only">
