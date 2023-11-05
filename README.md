@@ -16,6 +16,7 @@ The application is built using the following technologies:
 
 ## Running the application
 
+### Frontend
 To run the application run the following command:
 
 ```
@@ -27,4 +28,21 @@ To build the application for production, use the following command:
 
 ```
 npm run build
+```
+### Backend 
+1. Before running the backend, make sure to set up your configuration. Create a `.env` file in the backend directory with the following environment variables:
+
+```
+PORT=8000
+MONGO_URI=
+ACCESS_TOKEN_SECRET=
+```
+2. Install Dependencies:
+```
+cd backend
+npm install
+```
+3. Run the Backend:
+```
+npx nodemon
 ```
