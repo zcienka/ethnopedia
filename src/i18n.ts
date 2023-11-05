@@ -1,4 +1,6 @@
 import i18next from "i18next"
+import filedropzone_en from "./translations/en/fileDropzone.json"
+import filedropzone_pl from "./translations/pl/fileDropzone.json"
 import login_en from "./translations/en/login.json"
 import login_pl from "./translations/pl/login.json"
 import navbar_en from "./translations/en/navbar.json"
@@ -15,12 +17,14 @@ export const resources = {
         navbar: navbar_pl,
         sidebar: sidebar_pl,
         table: table_pl,
+        fileDropzone: filedropzone_pl,
     },
     en: {
         login: login_en,
         navbar: navbar_en,
         sidebar: sidebar_en,
         table: table_en,
+        fileDropzone: filedropzone_en,
     },
 } as const
 

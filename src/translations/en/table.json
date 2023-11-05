@@ -1,5 +1,7 @@
 {
   "search": "Search",
   "addNewRecord": "Add new record",
-  "filter": "Filter"
+  "filter": "Filter",
+  "excelExport": "Export file",
+  "fileImport": "Import file"
 }

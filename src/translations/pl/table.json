@@ -1,5 +1,7 @@
 {
   "search": "Wyszukaj",
   "addNewRecord": "Dodaj nowy rekord",
-  "filter": "Filtruj"
+  "filter": "Filtruj",
+  "excelExport": "Eksportuj plik",
+  "fileImport": "Importuj plik"
 }

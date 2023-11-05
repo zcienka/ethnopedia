@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage"
 import "./i18n"
 import "i18next"
 import Home from "./pages/Home"
+import LandingPage from "./pages/LandingPage"
 
 const queryClient = new QueryClient()
 
@@ -19,7 +20,8 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 {/*<Route path="/" element={<LoginPage />} />*/}
-                <Route path="/" element={<Home/>} />
+                <Route path="/" element={<LandingPage/>} />
+                {/*<Route path="/" element={<Home/>} />*/}
             </Routes>
         </BrowserRouter>
     </QueryClientProvider>
