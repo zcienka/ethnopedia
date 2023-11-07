@@ -5,6 +5,7 @@ module.exports = {
         "./pages/**/*.{html,js}",
         "./components/**/*.{html,js}",
     ],
+    darkMode: "class",
     theme: {
         fontFamily: {
             roboto: ["Roboto", "sans-serif"],

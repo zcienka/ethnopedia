@@ -16,6 +16,7 @@ const Table = () => {
         ["track"],
         fetchTracks,
     )
+
     const [t] = useTranslation("table")
 
     const categoryColorList = [
@@ -88,7 +89,7 @@ const Table = () => {
                                             pointer-events-none">
                                             <svg
                                                 aria-hidden="true"
-                                                className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                                                className="w-5 h-5 text-gray-700 dark:text-gray-100"
                                                 fill="currentColor"
                                                 viewBox="0 0 20 20"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +102,10 @@ const Table = () => {
                                         <input
                                             type="text"
                                             id="simple-search"
-                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm
+                                            rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full
+                                             pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+                                              dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                             placeholder={`${t("search")}`}
                                         />
                                     </div>
@@ -118,7 +122,7 @@ const Table = () => {
                                 </button>
                                 <div className="flex items-center space-x-3 w-full md:w-auto">
                                     <button
-                                        className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                        className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                         type="button"
                                     >
                                         <FileExportIcon />
@@ -126,7 +130,7 @@ const Table = () => {
                                         {t("excelExport")}
                                     </button>
                                     <button
-                                        className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                        className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                         type="button"
                                     >
                                         <FileImportIcon />
@@ -136,7 +140,7 @@ const Table = () => {
                                     <button
                                         id="filterDropdownButton"
                                         data-dropdown-toggle="filterDropdown"
-                                        className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                        className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                         type="button"
                                     >
                                         <FilterIcon />
@@ -158,9 +162,9 @@ const Table = () => {
                             </div>
                         </div>
                         <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <table className="w-full text-sm text-left text-gray-700 dark:text-gray-100">
                                 <thead
-                                    className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                     className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
                                 <tr>
                                     <th className="px-4 py-3">
                                     </th>

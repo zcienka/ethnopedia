@@ -20,8 +20,8 @@ const App = () => {
         <BrowserRouter>
             <Routes>
                 {/*<Route path="/" element={<LoginPage />} />*/}
-                <Route path="/" element={<LandingPage/>} />
-                {/*<Route path="/" element={<Home/>} />*/}
+                {/*<Route path="/" element={<LandingPage/>} />*/}
+                <Route path="/" element={<Home />} />
             </Routes>
         </BrowserRouter>
     </QueryClientProvider>
