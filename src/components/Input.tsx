@@ -2,14 +2,14 @@ import React from "react"
 
 interface Props {
     columnName: string;
-    onInputChange: (event: any) => void;
+    onInputChange: (event: any) => void
 }
 
 const Input: React.FC<Props> = ({ columnName, onInputChange }) => {
 
     return <div className="w-full">
         <label htmlFor={`${columnName}`}
-               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+               className="block my-2 text-sm font-medium text-gray-900 dark:text-white">
             {columnName}
         </label>
         <input type="text"

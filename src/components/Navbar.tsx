@@ -1,9 +1,11 @@
 import SampleAvatar from "../assets/images/sample-avatar.jpg"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import ToggleTheme from "./ToggleTheme"
+import { useNavigate } from "react-router-dom"
 
 const Navbar = () => {
-    const [isUserLoggedIn, setUserLoggedIn] = useState(false)
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
+    const navigate = useNavigate()
 
     return <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full border-b shadow-md dark:border-gray-700">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -23,11 +25,16 @@ const Navbar = () => {
                                 className="text-gray-900 bg-white border border-gray-300 focus:outline-none
                                 hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5
                                  py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600
-                                  dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                  dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                                onClick={() => navigate("/login")}>
                             Login
                         </button>
                         <button type="button"
-                                className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                                className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100
+                                focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2
+                                 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700
+                                 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                                onClick={() => navigate("/register")}>
                             Register
                         </button>
                     </>}

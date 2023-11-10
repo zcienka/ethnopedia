@@ -8,8 +8,11 @@ import { ReactComponent as FileExportIcon } from "../assets/icons/fileExport.svg
 import { ReactComponent as FileImportIcon } from "../assets/icons/fileImport.svg"
 import { ReactComponent as FilterIcon } from "../assets/icons/filter.svg"
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg"
+import { ReactComponent as AngleDown } from "../assets/icons/angleDown.svg"
 import Pagination from "./Pagination"
 import Category from "./Category"
+import { useState } from "react"
+import TableForm from "../forms/TableForm"
 
 const Table = () => {
     const { data: fetchedData } = useQuery(
@@ -18,6 +21,7 @@ const Table = () => {
     )
 
     const [t] = useTranslation("table")
+    const [showTable, setShowTable] = useState<boolean>(true)
 
     const categoryColorList = [
         "indigo",
@@ -30,9 +34,8 @@ const Table = () => {
         "purple",
         "purple",
         "purple",
-        "purple"
+        "purple",
     ]
-
 
     if (fetchedData === undefined) {
         return <LoadingPage />
@@ -68,6 +71,7 @@ const Table = () => {
             </tr>
         })
         return <div className="grow">
+            {showTable && <TableForm/>}
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                     <div
@@ -115,8 +119,10 @@ const Table = () => {
                                 className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                                 <button
                                     type="button"
-                                    className="flex items-center justify-center text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-                                >
+                                    className="flex items-center justify-center text-white bg-primary-700
+                                    hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg
+                                    text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
+                                    dark:focus:ring-primary-800" onClick={() => setShowTable(showTable  => !showTable)}>
                                     <PlusIcon />
                                     {t("addNewRecord")}
                                 </button>
@@ -145,17 +151,7 @@ const Table = () => {
                                     >
                                         <FilterIcon />
                                         {t("filter")}
-                                        <svg
-                                            className="-mr-1 ml-1.5 w-5 h-5"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            aria-hidden="true"
-                                        >
-                                            <path
-                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                            />
-                                        </svg>
+                                        <AngleDown />
                                     </button>
                                     <FilterDropdown />
                                 </div>
@@ -164,7 +160,7 @@ const Table = () => {
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left text-gray-700 dark:text-gray-100">
                                 <thead
-                                     className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
+                                    className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-100">
                                 <tr>
                                     <th className="px-4 py-3">
                                     </th>

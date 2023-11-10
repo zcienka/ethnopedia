@@ -26,5 +26,5 @@ const getAllTracks = asyncWrapper(async (req: any, res: any) => {
 })
 
 module.exports = {
-    getAllTracks,
+    getAllTracks
 }
