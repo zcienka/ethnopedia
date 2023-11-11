@@ -1,6 +1,6 @@
 import Table from "../components/Table"
 import Navbar from "../components/Navbar"
-import Sidebar from "../components/Sidebar"
+import Sidebar from "../components/sidebar/Sidebar"
 
 const Home = () => {
 

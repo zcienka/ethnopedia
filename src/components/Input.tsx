@@ -6,7 +6,6 @@ interface Props {
 }
 
 const Input: React.FC<Props> = ({ columnName, onInputChange }) => {
-
     return <div className="w-full">
         <label htmlFor={`${columnName}`}
                className="block my-2 text-sm font-medium text-gray-900 dark:text-white">

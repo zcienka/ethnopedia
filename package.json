@@ -26,7 +26,8 @@
         "react-scripts": "5.0.1",
         "uuid": "^9.0.1",
         "wait-on": "^7.0.1",
-        "web-vitals": "^3.5.0"
+        "web-vitals": "^3.5.0",
+        "xlsx": "^0.18.5"
     },
     "main": "main.js",
     "homepage": ".",

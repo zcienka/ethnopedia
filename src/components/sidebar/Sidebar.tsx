@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { v4 as uuidv4 } from "uuid"
 import SidebarTableComponent from "./SidebarTableComponent"
-import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg"
+import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { useTranslation } from "react-i18next"
 import SidebarSearchBar from "./SidebarSearchBar"
 
@@ -18,7 +18,6 @@ const Sidebar = () => {
 
     const handleSidebarTableComponentChange = (id: number, value: any) => {
         const updatedSidebarTableComponents = [...sidebarComponents]
-
         const sidebarToUpdate: any = updatedSidebarTableComponents.find((sidebar) => sidebar.id === id)
 
         if (sidebarToUpdate) {
@@ -33,9 +32,9 @@ const Sidebar = () => {
         <div
             className="overflow-y-auto py-5 px-3 h-full font-medium bg-white border-r border-gray-200
             dark:bg-gray-800 dark:border-gray-700 text-sm">
-            <SidebarSearchBar/>
+            <SidebarSearchBar />
             <ul className="space-y-2">
-                {sidebarComponents.map((sidebar, index) => (
+                {sidebarComponents.map((sidebar) => (
                     <span key={uuidv4()}>
                              <SidebarTableComponent
                                  componentName={`${t("newCollection")}`}
@@ -46,14 +45,13 @@ const Sidebar = () => {
 
             <button
                 className="flex px-4 py-2 items-center text-sm font-normal text-gray-900 rounded-lg dark:text-white
-                 hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                 hover:bg-gray-100 dark:hover:bg-gray-700 group w-full"
                 onClick={addNewSidebarTableComponent}>
                 <PlusIcon />
-                <span className="flex-1 ml-1 whitespace-nowrap">
+                <span className="ml-1 whitespace-nowrap">
                     {t("addNewCollection")}
                 </span>
             </button>
-
         </div>
     </aside>
 }
