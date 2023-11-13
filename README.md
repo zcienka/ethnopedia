@@ -1,8 +1,13 @@
 # Metadata Editor
 
-The Metadata Editor is a desktop application that allows users to edit the metadata of their files.
+The Metadata Editor is a desktop application inspired by CollectiveAccess that allows users to edit the metadata of their files.
 
 It is intended to be used by musicians to edit the metadata of their music files.
+
+## Features
+- **Metadata Import/Export**: Import and export metadata from Excel files.
+- **Metadata Editing**: Easily edit tags like artist, genre and more.
+- **User-friendly Interface**: Intuitive design for effortless navigation.
 
 ## Technology stack
 
@@ -13,6 +18,7 @@ The application is built using the following technologies:
 -   [TypeScript](https://www.typescriptlang.org/)
 -   [Tailwind CSS](https://tailwindcss.com/)
 -   [Flowbite](https://flowbite.com/)
+
 
 ## Running the application
 
@@ -42,7 +48,7 @@ ACCESS_TOKEN_SECRET=
 cd backend
 npm install
 ```
-3. Run the Backend:
+3. Run the server:
 ```
 npx nodemon
 ```

@@ -5,8 +5,8 @@ import LoginPage from "./pages/LoginPage"
 import "./i18n"
 import "i18next"
 import Home from "./pages/Home"
-import LandingPage from "./pages/LandingPage"
 import ArtworkPreview from "./pages/ArtworkPreview"
+import "./index.css"
 
 const queryClient = new QueryClient()
 
@@ -17,17 +17,20 @@ const App = () => {
     //     homedir: {electron.homeDir()}
     // </div>
 
-    return <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-            <Routes>
-                {/*<Route path="/" element={<LoginPage />} />*/}
-                {/*<Route path="/" element={<LandingPage/>} />*/}
-                <Route path="/artwork/:artworkId" element={<ArtworkPreview />} />
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<LoginPage />} />
-            </Routes>
-        </BrowserRouter>
-    </QueryClientProvider>
+    return <div className="dark:text-white">
+        <QueryClientProvider client={queryClient}>
+            <BrowserRouter>
+                <Routes>
+                    {/*<Route path="/" element={<LoginPage />} />*/}
+                    {/*<Route path="/" element={<LandingPage/>} />*/}
+                    <Route path="/artwork/:artworkId" element={<ArtworkPreview />} />
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<LoginPage />} />
+                </Routes>
+            </BrowserRouter>
+        </QueryClientProvider>
+    </div>
+
 }
 
 export default App
