@@ -4,7 +4,7 @@ import asyncWrapper from "./middleware/async"
 const app = express()
 const cors = require("cors")
 
-const tracks = require("./routes/track")
+const artworks = require("./routes/artwork")
 const auth = require("./routes/auth")
 
 const connectDB = require("./db/connect")
@@ -14,7 +14,8 @@ require("dotenv").config()
 app.use(cors())
 app.use(express.json())
 app.use(asyncWrapper)
-app.use("/api/v1/track", tracks)
+
+app.use("/api/v1/artwork", artworks)
 app.use("/api/v1/auth", auth)
 
 const port = process.env.PORT || 5000

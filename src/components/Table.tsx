@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { fetchTracks } from "../api/tracks"
+import { getArtworks } from "../api/artworks"
 import LoadingPage from "../pages/LoadingPage"
 import { v4 as uuidv4 } from "uuid"
 import { useTranslation } from "react-i18next"
@@ -16,11 +16,12 @@ import { useState } from "react"
 import TableForm from "../forms/TableForm"
 import * as XLSX from "xlsx"
 import FileDropzone from "./FileDropzone"
+import { useNavigate } from "react-router-dom"
 
 const Table = () => {
     const { data: fetchedData } = useQuery(
-        ["track"],
-        fetchTracks,
+        ["artwork"],
+        getArtworks,
     )
 
     const [t] = useTranslation("table")
@@ -33,18 +34,23 @@ const Table = () => {
         "pink",
     ]
 
+    const navigate = useNavigate()
+
     const exportToExcel = () => {
-        const ws = XLSX.utils.json_to_sheet(fetchedData.tracks)
+        const ws = XLSX.utils.json_to_sheet(fetchedData.artworks)
         const wb = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(wb, ws, "DataSheet")
         XLSX.writeFile(wb, "DataExport.xlsx")
     }
 
+
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const allTracks = fetchedData.tracks.map((track: any, index: number) => {
-            return <tr className="border-b dark:border-gray-700" key={uuidv4()}>
+        const allArtworks = fetchedData.artworks.map((artwork: any, index: number) => {
+            return <tr className="border-b dark:border-gray-700 cursor-pointer"
+                       key={uuidv4()}
+                       onClick={() => navigate(`/artwork/${artwork._id}`)}>
                 <th scope="col" className="p-4">
                     <div className="flex items-center">
                         <input id="checkbox-all-search" type="checkbox"
@@ -61,18 +67,20 @@ const Table = () => {
                     if (columnName === "Kategoria") {
                         const color = categoryColorList[index]
                         return <td className="px-4 py-3" key={uuidv4()}>
-                            <Category name={track[columnName]} color={color} />
+                            <Category name={artwork[columnName]} color={color} />
                         </td>
                     } else {
                         return (
                             <td className="px-4 py-3" key={uuidv4()}>
-                                {track[columnName]}
+                                {artwork[columnName]}
                             </td>
                         )
                     }
                 })}
             </tr>
         })
+
+
         return <div className="grow">
             {showTable && <TableForm onClose={() => setShowTable(false)} />}
             {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
@@ -191,7 +199,7 @@ const Table = () => {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {allTracks}
+                                {allArtworks}
                                 </tbody>
                             </table>
                         </div>

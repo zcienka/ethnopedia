@@ -5,7 +5,7 @@ interface Props {
 
 const Category = ({ name, color }: Props) => {
     console.log(color)
-    const textColorClass = `text-emerald-200`
+    const textColorClass = `text-emerald-400`
     return <span
         className={`inline-flex items-center ${textColorClass} text-xs mr-2 px-3 py-3 font-bold rounded-full`}
     >

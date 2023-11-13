@@ -6,6 +6,7 @@ import "./i18n"
 import "i18next"
 import Home from "./pages/Home"
 import LandingPage from "./pages/LandingPage"
+import ArtworkPreview from "./pages/ArtworkPreview"
 
 const queryClient = new QueryClient()
 
@@ -21,6 +22,7 @@ const App = () => {
             <Routes>
                 {/*<Route path="/" element={<LoginPage />} />*/}
                 {/*<Route path="/" element={<LandingPage/>} />*/}
+                <Route path="/artwork/:artworkId" element={<ArtworkPreview />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<LoginPage />} />
             </Routes>

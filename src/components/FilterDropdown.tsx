@@ -15,7 +15,9 @@ const FilterDropdown = () => {
                     id="apple"
                     type="checkbox"
                     value=""
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500
+                    dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600
+                    dark:border-gray-500"
                 />
                 <label
                     htmlFor="apple"
@@ -29,7 +31,9 @@ const FilterDropdown = () => {
                     id="fitbit"
                     type="checkbox"
                     value=""
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500
+                    dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600
+                    dark:border-gray-500"
                 />
                 <label
                     htmlFor="fitbit"
@@ -43,7 +47,9 @@ const FilterDropdown = () => {
                     id="razor"
                     type="checkbox"
                     value=""
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500
+                    dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600
+                    dark:border-gray-500"
                 />
                 <label
                     htmlFor="razor"
@@ -57,7 +63,9 @@ const FilterDropdown = () => {
                     id="nikon"
                     type="checkbox"
                     value=""
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500
+                    dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600
+                    dark:border-gray-500"
                 />
                 <label
                     htmlFor="nikon"
@@ -71,7 +79,9 @@ const FilterDropdown = () => {
                     id="benq"
                     type="checkbox"
                     value=""
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500
+                    dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600
+                    dark:border-gray-500"
                 />
                 <label
                     htmlFor="benq"
