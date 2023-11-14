@@ -2,14 +2,12 @@ import React, { useState } from "react"
 import { v4 as uuidv4 } from "uuid"
 import SidebarTableComponent from "./SidebarTableComponent"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
-import { useTranslation } from "react-i18next"
 import SidebarSearchBar from "./SidebarSearchBar"
 
 
 const Sidebar = () => {
     const [sidebarComponents, setSidebarTableComponents] = useState([{ id: 1 }])
     const [nextSidebarTableComponentId, setNextSidebarTableComponentId] = useState(2)
-    const [t] = useTranslation("sidebar")
 
     const addNewSidebarTableComponent = () => {
         setSidebarTableComponents([...sidebarComponents, { id: nextSidebarTableComponentId }])
@@ -37,7 +35,7 @@ const Sidebar = () => {
                 {sidebarComponents.map((sidebar) => (
                     <span key={uuidv4()}>
                              <SidebarTableComponent
-                                 componentName={`${t("newCollection")}`}
+                                 componentName={`Nowa kolekcja`}
                                  onInputChange={(value) => handleSidebarTableComponentChange(sidebar.id, value)} />
                      </span>
                 ))}
@@ -49,7 +47,7 @@ const Sidebar = () => {
                 onClick={addNewSidebarTableComponent}>
                 <PlusIcon />
                 <span className="ml-1 whitespace-nowrap">
-                    {t("addNewCollection")}
+                    Dodaj nową kolekcję
                 </span>
             </button>
         </div>

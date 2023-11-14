@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { ReactComponent as DragAndDrop } from "../assets/icons/dragAndDrop.svg"
-import { useTranslation } from "react-i18next"
 import { ReactComponent as Close } from "../assets/icons/close.svg"
 
 type Props = {
@@ -10,7 +9,6 @@ type Props = {
 const FileDropzone = ({ onClose }: Props) => {
     const [isWindowOpen, setWindowOpen] = useState(false)
     const [uploadedFile, setUploadedFile] = useState(null)
-    const [t] = useTranslation("fileDropzone")
 
     const handleFileUpload = (event: any) => {
         const file = event.target.files[0]
@@ -53,7 +51,7 @@ const FileDropzone = ({ onClose }: Props) => {
                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                 <DragAndDrop />
                                 <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                    <span className="font-semibold">{t("clickToUpload")}</span> {t("orDragAndDrop")}
+                                    <span className="font-semibold">Kliknij, aby przesłać</span> lub przeciągnij i upuść
                                 </p>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">Pliki XLSX, XLS lub CSV</p>
                             </div>

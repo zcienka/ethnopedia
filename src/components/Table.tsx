@@ -97,7 +97,7 @@ const Table = () => {
                                         htmlFor="simple-search"
                                         className="sr-only"
                                     >
-                                        {t("search")}
+                                        Wyszukaj
                                     </label>
                                     <div className="relative w-full">
                                         <div
@@ -112,7 +112,7 @@ const Table = () => {
                                             rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full
                                             pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
                                             dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                            placeholder={`${t("search")}`}
+                                            placeholder={`Wyszukaj`}
                                         />
                                     </div>
                                 </form>
@@ -128,7 +128,7 @@ const Table = () => {
                                     dark:focus:ring-primary-800"
                                     onClick={() => setShowTable(showTable => !showTable)}>
                                     <PlusIcon />
-                                    {t("addNewRecord")}
+                                    Dodaj nowy rekord
                                 </button>
                                 <div className="flex items-center space-x-3 w-full md:w-auto">
                                     <button
@@ -142,7 +142,7 @@ const Table = () => {
                                     >
                                         <FileExportIcon />
 
-                                        {t("excelExport")}
+                                        Eksportuj plik
                                     </button>
                                     <button
                                         className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
@@ -154,8 +154,7 @@ const Table = () => {
                                         onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
                                     >
                                         <FileImportIcon />
-                                        {/*<FileDropzone />*/}
-                                        {t("fileImport")}
+                                        Importuj plik
                                     </button>
                                     <button
                                         id="filterDropdownButton"
@@ -169,7 +168,7 @@ const Table = () => {
                                         type="button"
                                     >
                                         <FilterIcon />
-                                        {t("filter")}
+                                        Filtruj
                                         <AngleDown />
                                     </button>
                                     <FilterDropdown />
