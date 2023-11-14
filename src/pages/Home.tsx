@@ -1,4 +1,4 @@
-import Table from "../components/Table"
+import Artwork from "../components/Artwork"
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/sidebar/Sidebar"
 
@@ -9,7 +9,7 @@ const Home = () => {
             <Sidebar />
             <div className="flex-grow">
                 <Navbar />
-                <Table />
+                <Artwork />
             </div>
         </div>
     </div>

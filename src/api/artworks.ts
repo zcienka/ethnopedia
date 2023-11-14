@@ -17,7 +17,7 @@ export const createArtwork = async () => {
 }
 
 
-export const updatePostFn = async ({ id, artwork }: {
+export const updateArtwork = async ({ id, artwork }: {
     id: string
     artwork: any
 }) => {
@@ -25,7 +25,7 @@ export const updatePostFn = async ({ id, artwork }: {
     return response.data
 }
 
-export const deletePostFn = async (id: string) => {
+export const deleteArtwork = async (id: string) => {
     const response = await axios.delete(`v1/artwork/${id}`)
     return response.data
 }

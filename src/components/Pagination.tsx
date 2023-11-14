@@ -1,7 +1,7 @@
 const Pagination = () => {
     return <nav
         className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
-        aria-label="Table navigation"
+        aria-label="Artwork navigation"
     >
     <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
         Showing <span className="font-semibold text-gray-900 dark:text-white">
