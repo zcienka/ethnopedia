@@ -131,7 +131,7 @@ const Table = ({ fetchedData, tableRows }: Props) => {
                                 <th className="px-4 py-3">
                                 </th>
 
-                                {fetchedData.columnNames.map((columnName: string) => (
+                                {fetchedData.columnNames && fetchedData.columnNames.map((columnName: string) => (
                                     <th className="px-4 py-3" key={uuidv4()}>
                                         {columnName}
                                     </th>

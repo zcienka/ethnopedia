@@ -14,13 +14,13 @@ const Sections = () => {
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const allSections = fetchedData.sections.map((section: any, index: number) => {
-            const rowNames = fetchedData.columnNames.map((columnName: string) => {
+        const allSections = fetchedData.sections.map((section: any) => {
+            const rowNames = fetchedData.sections.map(() => {
                     return <td className="px-4 py-3" key={uuidv4()}>
-                        {section[columnName]}
+                        {section.Name}
                     </td>
                 }
-            )
+            )[0]
 
             return <Row columnNames={rowNames} navigationPath={`/section/${section._id}`} />
         })
