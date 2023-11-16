@@ -1,6 +1,7 @@
 import Artwork from "../components/Artwork"
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/sidebar/Sidebar"
+import GridItem from "../components/GridItem"
 
 const Home = () => {
 
@@ -9,7 +10,7 @@ const Home = () => {
             <Sidebar />
             <div className="flex-grow">
                 <Navbar />
-                <Artwork />
+                <GridItem />
             </div>
         </div>
     </div>

@@ -22,10 +22,10 @@ const Navbar = () => {
                     </button> :
                     <>
                         <button type="button" onClick={() => navigate("/login")}>
-                            Login
+                            Zaloguj się
                         </button>
                         <button type="button" onClick={() => navigate("/register")}>
-                            Register
+                            Zarejestruj się
                         </button>
                     </>}
                 <div
