@@ -1,6 +1,6 @@
 import TableForm from "../forms/TableForm"
 import FileDropzone from "./FileDropzone"
-import FilterDropdown from "./FilterDropdown"
+import FilterDropdown from "./search/FilterDropdown"
 import Pagination from "./Pagination"
 import { ReactComponent as FileExportIcon } from "../assets/icons/fileExport.svg"
 import { ReactComponent as FileImportIcon } from "../assets/icons/fileImport.svg"

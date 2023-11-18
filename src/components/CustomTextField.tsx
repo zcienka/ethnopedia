@@ -8,7 +8,6 @@ interface Props {
 }
 
 const CustomTextField: React.FC<Props> = ({ columnName, onInputChange, value }) => {
-    console.log(onInputChange)
     return <>
         <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             {columnName}

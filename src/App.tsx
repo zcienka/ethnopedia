@@ -3,11 +3,11 @@ import { Route, BrowserRouter, Routes } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "react-query"
 import LoginPage from "./pages/LoginPage"
 import Home from "./pages/Home"
-import ArtworkPreview from "./pages/ArtworkPreview"
+import ArtworkPreview from "./components/artwork/ArtworkPreview"
 import "./index.css"
-import Collections from "./components/Collections"
 import Sections from "./components/Sections"
 import Subsections from "./components/Subsections"
+import Categories from "./pages/Categories"
 
 const queryClient = new QueryClient()
 
@@ -25,12 +25,12 @@ const App = () => {
                     {/*<Route path="/" element={<LoginPage />} />*/}
                     {/*<Route path="/" element={<LandingPage/>} />*/}
                     <Route path="/artwork/:artworkId" element={<ArtworkPreview />} />
-                    <Route path="/collections" element={<Collections />} />
                     <Route path="/sections" element={<Sections />} />
                     <Route path="/subsections" element={<Subsections />} />
 
                     <Route path="/artworks" element={<ArtworkPreview />} />
                     <Route path="/" element={<Home />} />
+                    <Route path="/categories/:collectionName" element={<Categories />} />
                     <Route path="/login" element={<LoginPage />} />
                 </Routes>
             </BrowserRouter>

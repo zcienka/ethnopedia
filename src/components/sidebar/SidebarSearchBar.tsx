@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next"
 import { ReactComponent as SearchBarLoop } from "../../assets/icons/searchLoop.svg"
 import { useState } from "react"
 

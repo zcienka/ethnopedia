@@ -6,4 +6,4 @@ const ArtworkSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("Track", ArtworkSchema)
+module.exports = mongoose.model("Artwork", ArtworkSchema)

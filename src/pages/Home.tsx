@@ -1,16 +1,15 @@
-import Artwork from "../components/Artwork"
 import Navbar from "../components/Navbar"
 import Sidebar from "../components/sidebar/Sidebar"
-import GridItem from "../components/GridItem"
+import CollectionsPage from "./CollectionsPage"
+import SearchComponent from "../components/search/SearchComponent"
+import React from "react"
 
 const Home = () => {
-
     return <div className="flex flex-col">
         <div className="flex flex-grow">
-            <Sidebar />
             <div className="flex-grow">
                 <Navbar />
-                <GridItem />
+                <CollectionsPage />
             </div>
         </div>
     </div>

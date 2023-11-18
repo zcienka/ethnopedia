@@ -6,7 +6,7 @@ export const getArtworks = async () => {
     return response.data
 }
 
-export const getArtwork = async (id: any) => {
+export const getArtwork = async (id: string) => {
     return await axios.get(`${API_URL}v1/artwork/${id}`).then(res => res.data)
 }
 

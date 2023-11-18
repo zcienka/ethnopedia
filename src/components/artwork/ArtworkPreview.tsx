@@ -1,19 +1,19 @@
 import { useParams } from "react-router-dom"
 import { useQuery } from "react-query"
-import { getArtwork } from "../api/artworks"
-import LoadingPage from "./LoadingPage"
-import Navbar from "../components/Navbar"
-import CustomTextField from "../components/CustomTextField"
+import { getArtwork } from "../../api/artworks"
+import LoadingPage from "../../pages/LoadingPage"
+import Navbar from "../Navbar"
+import CustomTextField from "../CustomTextField"
 import React, { useEffect, useState } from "react"
 
 const ArtworkPreview = () => {
     const [textFields, setTextFields] = useState<any>([])
-
     const { artworkId } = useParams<string>()
 
     const { data: fetchedData } = useQuery({
         queryKey: ["artwork", artworkId],
-        queryFn: () => getArtwork(artworkId),
+        queryFn: () => getArtwork(artworkId as string),
+        enabled: !!artworkId,
     })
 
     const handleTextFieldChange = (id: number, event: string) => {

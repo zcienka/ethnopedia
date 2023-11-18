@@ -1,9 +1,5 @@
 import React, { useState } from "react"
-import { v4 as uuidv4 } from "uuid"
-import SidebarTableComponent from "./SidebarTableComponent"
-import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import SidebarSearchBar from "./SidebarSearchBar"
-
 
 const Sidebar = () => {
     const [sidebarComponents, setSidebarTableComponents] = useState([{ id: 1 }])
