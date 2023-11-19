@@ -1,6 +1,6 @@
 const AdvancedSearch = () => {
     return <>
-AdvancedSearch
+        AdvancedSearch
     </>
 }
 export default AdvancedSearch

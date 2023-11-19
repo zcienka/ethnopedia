@@ -16,16 +16,15 @@ export const createArtwork = async () => {
         .then(res => res.data)
 }
 
-
 export const updateArtwork = async ({ id, artwork }: {
     id: string
     artwork: any
 }) => {
-    const response = await axios.patch(`v1/artwork/${id}`, artwork)
+    const response = await axios.patch(`${API_URL}v1/artwork/${id}`, artwork)
     return response.data
 }
 
 export const deleteArtwork = async (id: string) => {
-    const response = await axios.delete(`v1/artwork/${id}`)
+    const response = await axios.delete(`${API_URL}v1/artwork/${id}`)
     return response.data
 }

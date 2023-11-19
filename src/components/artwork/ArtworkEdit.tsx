@@ -6,7 +6,7 @@ import Navbar from "../Navbar"
 import CustomTextField from "../CustomTextField"
 import React, { useEffect, useState } from "react"
 
-const ArtworkPreview = () => {
+const ArtworkEdit = () => {
     const [textFields, setTextFields] = useState<any>([])
     const { artworkId } = useParams<string>()
 
@@ -72,4 +72,4 @@ const ArtworkPreview = () => {
         </>
     }
 }
-export default ArtworkPreview
+export default ArtworkEdit

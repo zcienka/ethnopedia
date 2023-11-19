@@ -10,7 +10,7 @@ interface Props {
 const CustomTextField: React.FC<Props> = ({ columnName, onInputChange, value }) => {
     return <>
         <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            {columnName}
+            {columnName.charAt(0).toUpperCase() + columnName.slice(1)}
         </label>
 
         <div className="flex flex-row">
