@@ -10,10 +10,11 @@ const {
     getFilteredArtworks,
 } = require("../controllers/artworks")
 
+router.get("/filter", getFilteredArtworks)
 router.route("/").get(getAllArtworks)
 router.route("/:artworkId").get(getArtwork)
-// router.route("/:artworkId").delete(deleteArtwork)
-// router.route("/:artworkId").post(createArtwork)
-// router.get("/categories/:category/section/:section", getFilteredArtworks)
+router.route("/:artworkId").delete()
+router.route("/:artworkId").delete(deleteArtwork)
+router.route("/:artworkId").post(createArtwork)
 
 module.exports = router

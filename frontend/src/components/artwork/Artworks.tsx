@@ -1,16 +1,40 @@
 import { useQuery } from "react-query"
-import { getArtworks } from "../../api/artworks"
+import { getArtworks, getSearchResult } from "../../api/artworks"
 import LoadingPage from "../../pages/LoadingPage"
-import React from "react"
+import React, { useEffect } from "react"
 import Navbar from "../Navbar"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import SearchComponent from "../search/SearchComponent"
 
 const Artworks = () => {
-    const { data: fetchedData } = useQuery(
-        ["artwork"],
-        getArtworks,
-    )
+    const location = useLocation()
+    const searchParams = new URLSearchParams(location.search)
+
+    const [queryParams, setQueryString] = React.useState<string>("")
+
+    const { data: fetchedData } = useQuery({
+        queryKey: ["artwork", searchParams],
+        queryFn: () => getSearchResult(queryParams as string),
+        enabled: !! queryParams,
+    })
+
+    useEffect(() => {
+        if (searchParams !== undefined) {
+            new URLSearchParams({ category: "Highlander Tunes from the Tatras", section: "Sygnatura nagrania" })
+            updateParamString(searchParams)
+        }
+    }, [])
+
+    const updateParamString = (searchParams: any) => {
+        let paramString = ""
+        for (const [key, value] of searchParams.entries()) {
+            if (paramString !== "") {
+                paramString += "&"
+            }
+            paramString += `${key}=${value}`
+        }
+        setQueryString(paramString)
+    }
 
     const navigate = useNavigate()
 

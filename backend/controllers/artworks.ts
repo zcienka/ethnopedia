@@ -26,6 +26,20 @@ const getAllArtworks = async (req: Request, res: Response, next: NextFunction) =
     res.status(200).json({ artworks, columnNames })
 }
 
+const getFieldNames = async (req: Request, res: Response, next: NextFunction) => {
+    const pipeline = [
+        { "$project": { "arrayofkeyvalue": { "$objectToArray": "$$ROOT" } } },
+        { "$unwind": "$arrayofkeyvalue" },
+        { "$group": { "_id": null, "allKeys": { "$addToSet": "$arrayofkeyvalue.k" } } },
+    ]
+
+    const result = await Artwork.aggregate(pipeline).toArray()
+
+    const fieldNames = result.length > 0 ? result[0].allKeys : []
+
+    res.json(fieldNames)
+}
+
 const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
     const artworkId = req.params.artworkId
 
@@ -50,26 +64,20 @@ const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
 
 const getFilteredArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const category = req.params.category
-        const section = req.params.section
+        let query = JSON.parse(JSON.stringify(req.query))
 
-        const records = await Artwork.find({
-            "category": category,
-            "sections.sectionName": section,
-        }).exec()
+        Object.keys(query).forEach(key => {
+            if (typeof query[key] === "string") {
+                query[key] = new RegExp(query[key], "i")
+            }
+        })
 
+        const records = await Artwork.find(query).exec()
         return res.status(200).json(records)
-        if (records.length === 0) {
-            return res.status(404).json("No artworks found matching the criteria")
-        } else {
-            return res.status(200).json(records)
-        }
-
     } catch (error) {
         next(error)
     }
 }
-
 const createArtwork = async (req: Request, res: Response, next: NextFunction) => {
     const title = req.body.title
     const description = req.body.description
@@ -117,4 +125,5 @@ module.exports = {
     createArtwork,
     deleteArtwork,
     getFilteredArtworks,
+    getFieldNames,
 }

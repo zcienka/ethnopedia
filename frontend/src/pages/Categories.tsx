@@ -17,7 +17,6 @@ const Categories = () => {
 
     const navigate = useNavigate()
 
-
     if (fetchedData === undefined) {
         return <LoadingPage />
     }
@@ -30,7 +29,7 @@ const Categories = () => {
                 <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
                                 cursor-pointer"
                      key={uuidv4()}
-                     onClick={() => navigate(`\section/${section}`)}>
+                     onClick={() => navigate(`/artworks/search?category=${category.collectionName}&section=${section}`)}>
                     <div className="flex flex-row">
                         <input type="checkbox" id="exampleCheckbox" name="exampleCheckbox" />
                         <h2 className="text-lg font-semibold ml-4">{section}</h2>
