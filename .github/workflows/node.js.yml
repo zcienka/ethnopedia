@@ -1,0 +1,28 @@
+name: Build Metadata editor frontend page
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '18'
+
+    - name: Change directory
+      run: cd frontend
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
