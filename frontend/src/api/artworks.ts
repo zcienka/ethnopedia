@@ -12,7 +12,7 @@ export const getArtwork = async (id: string) => {
 }
 
 export const getSearchResult = async (queryParameters: string) => {
-    return await axios.get(`${API_URL}v1/artworks?${queryParameters}`)
+    return await axios.get(`${API_URL}v1/artwork/filter?${queryParameters}`)
         .then(res => res.data)
 }
 

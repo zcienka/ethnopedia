@@ -20,8 +20,7 @@ const Categories = () => {
     if (fetchedData === undefined) {
         return <LoadingPage />
     }
-
-
+console.log({fetchedData})
     const categoryElements = fetchedData.map((category: any, index: number) => (
         <div key={index}>
             <h2 className="mb-2 text-xl font-bold">{category.collectionName}</h2>
@@ -29,7 +28,7 @@ const Categories = () => {
                 <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
                                 cursor-pointer"
                      key={uuidv4()}
-                     onClick={() => navigate(`/artworks/search?category=${category.collectionName}&section=${section}`)}>
+                     onClick={() => navigate(`/artworks/search?Kategoria=${category.collectionName}`)}>
                     <div className="flex flex-row">
                         <input type="checkbox" id="exampleCheckbox" name="exampleCheckbox" />
                         <h2 className="text-lg font-semibold ml-4">{section}</h2>

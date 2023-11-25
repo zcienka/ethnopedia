@@ -48,6 +48,7 @@ const ArtworkEdit = () => {
                     onInputChange={(event) => handleTextFieldChange(index, event)} />
             </div>
         })
+
         return <>
             <Navbar />
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">

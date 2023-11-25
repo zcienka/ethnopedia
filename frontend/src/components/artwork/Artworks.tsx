@@ -15,12 +15,13 @@ const Artworks = () => {
     const { data: fetchedData } = useQuery({
         queryKey: ["artwork", searchParams],
         queryFn: () => getSearchResult(queryParams as string),
-        enabled: !! queryParams,
+        enabled: !!queryParams,
     })
+
+    console.log({ queryParams })
 
     useEffect(() => {
         if (searchParams !== undefined) {
-            new URLSearchParams({ category: "Highlander Tunes from the Tatras", section: "Sygnatura nagrania" })
             updateParamString(searchParams)
         }
     }, [])
@@ -35,13 +36,13 @@ const Artworks = () => {
         }
         setQueryString(paramString)
     }
-
+console.log({fetchedData})
     const navigate = useNavigate()
 
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const allArtworks = fetchedData.artworks.map((artwork: any) => (
+        const allArtworks = fetchedData.map((artwork: any) => (
             <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
             cursor-pointer"
                  key={artwork._id}
@@ -50,9 +51,9 @@ const Artworks = () => {
                 <div className="flex flex-row">
                     <input className="mr-4" type="checkbox" id="exampleCheckbox" name="exampleCheckbox" />
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.title}</h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.artist}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-300">{artwork.year}</p>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Title}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artist}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-300">{artwork.Year}</p>
                     </div>
                 </div>
             </div>
