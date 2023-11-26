@@ -66,7 +66,7 @@ const RegisterPage = () => {
                         initialValues={{ firstName: "", username: "", password: "", confirmPassword: "" }}
                         validationSchema={validationSchema}
                         onSubmit={(values, { setSubmitting }) => {
-                            const { firstName, username, password, confirmPassword } = values
+                            const { firstName, username, password } = values
 
                             registerUser({ username, firstName, password }, {
                                 onSuccess: (response) => {

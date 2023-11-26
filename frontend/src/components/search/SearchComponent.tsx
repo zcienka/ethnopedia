@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom"
 const SearchComponent = () => {
     const [activeTab, setActiveTab] = useState<string>("quickSearch")
     const [showFileDropzone, setShowFileDropzone] = useState<boolean>(false)
-    const [showTable, setShowTable] = useState<boolean>(false)
+    const [, setShowTable] = useState<boolean>(false)
 
     const handleTabClick = (tabName: string) => {
         setActiveTab(tabName)
@@ -23,8 +23,6 @@ const SearchComponent = () => {
         // XLSX.utils.book_append_sheet(wb, ws, "DataSheet")
         // XLSX.writeFile(wb, "DataExport.xlsx")
     }
-
-    const navigate = useNavigate()
 
     return <div className="mb-2">
         {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
