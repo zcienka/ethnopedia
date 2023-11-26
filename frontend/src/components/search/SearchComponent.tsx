@@ -5,7 +5,6 @@ import FileDropzone from "../FileDropzone"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.svg"
 import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
-import { useNavigate } from "react-router-dom"
 
 
 const SearchComponent = () => {
