@@ -49,7 +49,7 @@ The application is built using the following technologies:
 ### Frontend
 Before running the frontend, `cd frontend`
 
-Make sure to set up your configuration. Create a `.env` file in the backend directory with the following environment variables:
+Make sure to set up your configuration. Create a `.env` file in the frontend directory with the following environment variables:
 ```
 REACT_APP_API_URL=http://localhost:8080/api/
 ```
