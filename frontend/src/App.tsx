@@ -5,19 +5,16 @@ import LoginPage from "./pages/LoginPage"
 import Home from "./pages/Home"
 import ArtworkEdit from "./components/artwork/ArtworkEdit"
 import "./index.css"
-import Sections from "./components/Sections"
-import Subsections from "./components/Subsections"
 import Categories from "./pages/Categories"
 import ArtworkView from "./pages/ArtworkView"
 import NotFoundPage from "./pages/NotFoundPage"
 import Artworks from "./components/artwork/Artworks"
-import dotenv from "dotenv"
+import RegisterPage from "./pages/RegisterPage"
 
 const queryClient = new QueryClient()
-// dotenv.config()
 
 const App = () => {
-    const electron = (window as any).electron
+    // const electron = (window as any).electron
 
     // return <div className="flex flex-row font-black">
     //     homedir: {electron.homeDir()}
@@ -30,14 +27,13 @@ const App = () => {
                     {/*<Route path="/" element={<LandingPage/>} />*/}
                     <Route path="/artwork/:artworkId/edit" element={<ArtworkEdit />} />
                     <Route path="/artwork/:artworkId" element={<ArtworkView />} />
-                    <Route path="/sections" element={<Sections />} />
-                    <Route path="/subsections" element={<Subsections />} />
 
                     {/*<Route path="/" element={<Artworks />} />*/}
                     <Route path="/" element={<Home />} />
                     <Route path="/artworks/:queryParams" element={<Artworks />} />
                     <Route path="/categories/:collectionName" element={<Categories />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
 
                     {/*<Route path="/:artworkId" element={<ArtworkView />} />*/}
 

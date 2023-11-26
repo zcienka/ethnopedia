@@ -31,7 +31,7 @@ const ArtworkEdit = () => {
             const initialFields = fetchedData.columnNames.map((columnName: string, index: number) => ({
                 id: index,
                 value: fetchedData.artwork[columnName] || "",
-                columnName: columnName
+                columnName: columnName,
             }))
             setTextFields(initialFields)
         }

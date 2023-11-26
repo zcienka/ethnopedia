@@ -1,0 +1,22 @@
+import axios from "axios"
+import { useMutation } from "react-query"
+import { API_URL } from "../config"
+
+type FormValues = {
+    username: string
+    firstName: string,
+    password: string
+}
+
+type LoginValues = {
+    username: string
+    password: string
+}
+
+export const useRegisterMutation = () => {
+    return useMutation((userData: FormValues) => axios.post(`${API_URL}v1/auth/register`, userData))
+}
+
+export const useLoginMutation = () => {
+    return useMutation((userData: LoginValues) => axios.post(`${API_URL}v1/auth/login`, userData))
+}

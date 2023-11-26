@@ -4,7 +4,7 @@ import ToggleTheme from "./ToggleTheme"
 import { useNavigate } from "react-router-dom"
 
 const Navbar = () => {
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
+    const [isUserLoggedIn, ] = useState(false)
     const navigate = useNavigate()
 
     return <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full border-b shadow-md dark:border-gray-700">
@@ -17,14 +17,13 @@ const Navbar = () => {
                                           data-dropdown-toggle="user-dropdown"
                                           data-dropdown-placement="bottom">
                         <span className="sr-only">Open user menu</span>
-                        <img className="w-8 h-8 rounded-full" src={SampleAvatar}
-                             alt="user photo" />
+                        <img className="w-8 h-8 rounded-full" src={SampleAvatar}/>
                     </button> :
                     <>
-                        <button type="button" className="mr-2 bg-sky-500 font-semibold text-white border-none" onClick={() => navigate("/login")}>
+                        <button type="button" className="mr-2 bg-sky-500 hover:bg-sky-400 font-semibold text-white border-none" onClick={() => navigate("/login")}>
                             Zaloguj się
                         </button>
-                        <button type="button" className="bg-sky-500 font-semibold text-white border-none" onClick={() => navigate("/register")}>
+                        <button type="button" className="bg-sky-500 hover:bg-sky-400 font-semibold text-white border-none" onClick={() => navigate("/register")}>
                             Zarejestruj się
                         </button>
                     </>}

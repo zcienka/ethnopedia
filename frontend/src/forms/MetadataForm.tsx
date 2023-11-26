@@ -1,5 +1,3 @@
-import { Formik, Field, Form } from "formik"
-
 const MetadataForm = () => {
     const ipcRenderer = (window as any).ipcRenderer
 

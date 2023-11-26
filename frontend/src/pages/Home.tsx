@@ -1,7 +1,5 @@
 import Navbar from "../components/Navbar"
-import Sidebar from "../components/sidebar/Sidebar"
 import CollectionsPage from "./CollectionsPage"
-import SearchComponent from "../components/search/SearchComponent"
 import React from "react"
 
 const Home = () => {

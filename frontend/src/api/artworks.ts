@@ -1,5 +1,5 @@
 import axios from "axios"
-import { API_URL } from '../config'
+import { API_URL } from "../config"
 
 export const getArtworks = async () => {
     const response = await axios.get(`${API_URL}v1/artwork`)

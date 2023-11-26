@@ -1,29 +1,31 @@
 import { NextFunction, Request, Response } from "express"
-import { verifyJwt } from "../utils/jwt"
 
-const asyncWrapper = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
+const jwt = require("jsonwebtoken")
+
+
+interface ExtendedRequest extends Request {
+    user?: any;
+}
+
+const asyncWrapper = (
+    handler: (req: ExtendedRequest, res: Response, next: NextFunction) => Promise<void>,
 ) => {
-    const accessToken = (req.get("authorization") || "").replace(
-        /^Bearer\s/,
-        "",
-    )
+    return async (req: ExtendedRequest, res: Response, next: NextFunction) => {
+        try {
+            const token = req.headers.authorization?.split(" ")[1]
+            if (!token) throw new Error("No token provided")
 
-    if (!accessToken) {
-        return next()
+            const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string)
+            req.user = decoded
+
+            await handler(req, res, next)
+        } catch (err) {
+            res.status(401).json({ message: "Unauthorized" })
+        }
     }
-
-    const decoded = verifyJwt(accessToken, "accessTokenPublicKey")
-
-    if (decoded) {
-        res.locals.user = decoded
-    }
-
-    return next()
 }
 
 const express = require("express")
 
-export default asyncWrapper
+
+module.exports = asyncWrapper

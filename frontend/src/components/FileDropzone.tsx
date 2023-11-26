@@ -7,8 +7,8 @@ type Props = {
 }
 
 const FileDropzone = ({ onClose }: Props) => {
-    const [isWindowOpen, setWindowOpen] = useState(false)
-    const [uploadedFile, setUploadedFile] = useState(null)
+    const [, setWindowOpen] = useState(false)
+    const [, setUploadedFile] = useState(null)
 
     const handleFileUpload = (event: any) => {
         const file = event.target.files[0]

@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar"
 import React from "react"
 import { v4 as uuidv4 } from "uuid"
 import SearchComponent from "../components/search/SearchComponent"
+
 const Categories = () => {
     const { collectionName } = useParams<string>()
 
@@ -20,7 +21,7 @@ const Categories = () => {
     if (fetchedData === undefined) {
         return <LoadingPage />
     }
-console.log({fetchedData})
+    console.log({ fetchedData })
     const categoryElements = fetchedData.map((category: any, index: number) => (
         <div key={index}>
             <h2 className="mb-2 text-xl font-bold">{category.collectionName}</h2>
@@ -42,7 +43,7 @@ console.log({fetchedData})
         <Navbar />
         <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
             <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                <SearchComponent/>
+                <SearchComponent />
                 {categoryElements}
             </div>
         </section>

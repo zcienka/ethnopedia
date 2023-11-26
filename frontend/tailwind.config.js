@@ -20,6 +20,10 @@ module.exports = {
                 320: "72rem",
             },
             colors: {},
+            animation: {
+                "slide-in": "faceIn 0.3s ease-out forwards",
+                "fade-out": "fadeOut 0.3s ease-out forwards",
+            },
         },
     },
     plugins: ["tailwindcss, autoprefixer", "flowbite/plugin"],

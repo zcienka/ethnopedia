@@ -59,7 +59,8 @@ const getFilteredArtworks = async (req: Request, res: Response, next: NextFuncti
         next(error)
     }
 }
-const createArtwork = async (req: Request, res: Response, next: NextFunction) => {
+
+const createArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const title = req.body.title
     const description = req.body.description
     const img = req.body.img
@@ -75,9 +76,9 @@ const createArtwork = async (req: Request, res: Response, next: NextFunction) =>
     } catch (error) {
         next(error)
     }
-}
+})
 
-const deleteArtwork = async (req: Request, res: Response, next: NextFunction) => {
+const deleteArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const artworkId = req.params.artworkId
 
     try {
@@ -85,25 +86,22 @@ const deleteArtwork = async (req: Request, res: Response, next: NextFunction) =>
             return res.status(400).json("Invalid artwork id")
         }
 
-        const artwork = await Artwork.findById(artworkId).exec()
+        const artwork = await Artwork.findByIdAndRemove(artworkId).exec()
 
         if (!artwork) {
             return res.status(404).json("Artwork not found")
         }
 
-        await artwork.remove()
-
         return res.sendStatus(204)
     } catch (error) {
         next(error)
     }
-}
-
+})
 
 module.exports = {
     getAllArtworks,
     getArtwork,
     createArtwork,
     deleteArtwork,
-    getFilteredArtworks
+    getFilteredArtworks,
 }
