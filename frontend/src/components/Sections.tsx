@@ -3,7 +3,6 @@ import { useQuery } from "react-query"
 import { getSections } from "../api/sections"
 import LoadingPage from "../pages/LoadingPage"
 import { v4 as uuidv4 } from "uuid"
-import Row from "./table/Row"
 
 const Sections = () => {
     const { data: fetchedData } = useQuery(
@@ -21,8 +20,6 @@ const Sections = () => {
                     </td>
                 }
             )[0]
-
-            return <Row columnNames={rowNames} navigationPath={`/section/${section._id}`} />
         })
 
         return <div>

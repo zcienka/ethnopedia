@@ -12,32 +12,13 @@ const getAllArtworks = async (req: Request, res: Response, next: NextFunction) =
     const skip = (page - 1) * limit
 
     // const total = await Artwork.countDocuments()
-    const total = 20
     // const totalPages = Math.ceil(total / limit)
 
-    const artworks = await Artwork.find({}).skip(skip).limit(limit)
+    // const artworks = await Artwork.find({}).skip(skip).limit(limit)
+    const artworks = await Artwork.find({}).exec()
     const columnNames = Object.keys(artworks[0].toObject())
 
-    if (columnNames.indexOf("Kategoria") != -1) {
-        columnNames.splice(columnNames.indexOf("Kategoria"), 1)
-        columnNames.unshift("Kategoria")
-    }
-
     res.status(200).json({ artworks, columnNames })
-}
-
-const getFieldNames = async (req: Request, res: Response, next: NextFunction) => {
-    const pipeline = [
-        { "$project": { "arrayofkeyvalue": { "$objectToArray": "$$ROOT" } } },
-        { "$unwind": "$arrayofkeyvalue" },
-        { "$group": { "_id": null, "allKeys": { "$addToSet": "$arrayofkeyvalue.k" } } },
-    ]
-
-    const result = await Artwork.aggregate(pipeline).toArray()
-
-    const fieldNames = result.length > 0 ? result[0].allKeys : []
-
-    res.json(fieldNames)
 }
 
 const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
@@ -124,6 +105,5 @@ module.exports = {
     getArtwork,
     createArtwork,
     deleteArtwork,
-    getFilteredArtworks,
-    getFieldNames,
+    getFilteredArtworks
 }

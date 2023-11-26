@@ -10,6 +10,7 @@ const artworks = require("./routes/artwork")
 const collections = require("./routes/collection")
 const sections = require("./routes/section")
 const subsections = require("./routes/subsection")
+const categories = require("./routes/category")
 
 
 const connectDB = require("./db/connect")
@@ -25,6 +26,7 @@ app.use("/api/v1/artwork", artworks)
 app.use("/api/v1/collection", collections)
 app.use("/api/v1/sections", sections)
 app.use("/api/v1/subsections", subsections)
+app.use("/api/v1/categories", categories)
 
 const port = process.env.PORT || 5000
 

@@ -2,7 +2,6 @@ import { useQuery } from "react-query"
 import { getSections } from "../api/sections"
 import LoadingPage from "../pages/LoadingPage"
 import { v4 as uuidv4 } from "uuid"
-import Row from "./table/Row"
 import Table from "./Table"
 import { getSubsections } from "../api/subsections"
 
@@ -22,8 +21,6 @@ const Subsections = () => {
                     </td>
                 }
             )[0]
-
-            return <Row columnNames={rowNames} navigationPath={`/subsection/${section._id}`} />
         })
 
         return <Table fetchedData={fetchedData} tableRows={allSections} />

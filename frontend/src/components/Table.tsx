@@ -1,6 +1,6 @@
 import TableForm from "../forms/TableForm"
 import FileDropzone from "./FileDropzone"
-import FilterDropdown from "./search/FilterDropdown"
+import FilterDropdown from "./filter/FilterDropdown"
 import Pagination from "./Pagination"
 import { ReactComponent as FileExportIcon } from "../assets/icons/fileExport.svg"
 import { ReactComponent as FileImportIcon } from "../assets/icons/fileImport.svg"
@@ -16,7 +16,6 @@ type Props = {
     fetchedData: any,
     tableRows: any
 }
-
 const Table = ({ fetchedData, tableRows }: Props) => {
     const exportToExcel = () => {
         const ws = XLSX.utils.json_to_sheet(fetchedData)

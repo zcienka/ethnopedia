@@ -18,8 +18,6 @@ const Artworks = () => {
         enabled: !!queryParams,
     })
 
-    console.log({ queryParams })
-
     useEffect(() => {
         if (searchParams !== undefined) {
             updateParamString(searchParams)
@@ -36,7 +34,7 @@ const Artworks = () => {
         }
         setQueryString(paramString)
     }
-console.log({fetchedData})
+
     const navigate = useNavigate()
 
     if (fetchedData === undefined) {
@@ -49,7 +47,7 @@ console.log({fetchedData})
                  onClick={() => navigate(`/artwork/${artwork._id}`)}>
 
                 <div className="flex flex-row">
-                    <input className="mr-4" type="checkbox" id="exampleCheckbox" name="exampleCheckbox" />
+                    <input className="mr-4" type="checkbox" name="exampleCheckbox" />
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Title}</h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artist}</p>

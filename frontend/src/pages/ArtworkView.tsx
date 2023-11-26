@@ -24,7 +24,7 @@ const ArtworkView = () => {
 
         return <>
             <Navbar />
-            <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
+            <section className=" p-3 sm:p-5">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                     <div className="">
                         <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{Title}</h1>

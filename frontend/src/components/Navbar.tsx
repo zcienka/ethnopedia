@@ -21,10 +21,10 @@ const Navbar = () => {
                              alt="user photo" />
                     </button> :
                     <>
-                        <button type="button" onClick={() => navigate("/login")}>
+                        <button type="button" className="mr-2 bg-sky-500 font-semibold text-white border-none" onClick={() => navigate("/login")}>
                             Zaloguj się
                         </button>
-                        <button type="button" onClick={() => navigate("/register")}>
+                        <button type="button" className="bg-sky-500 font-semibold text-white border-none" onClick={() => navigate("/register")}>
                             Zarejestruj się
                         </button>
                     </>}

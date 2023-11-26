@@ -26,7 +26,7 @@ const SearchComponent = () => {
 
     const navigate = useNavigate()
 
-    return <>
+    return <div className="mb-2">
         {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
 
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200
@@ -35,7 +35,7 @@ const SearchComponent = () => {
                 <div
                     onClick={() => handleTabClick("quickSearch")}
                     className={`inline-block p-2 rounded-t-lg cursor-pointer ${activeTab === "quickSearch" ?
-                        "text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500 border border-gray-300 " +
+                        "text-gray-800 font-semibold bg-gray-100 dark:bg-gray-800 dark:text-gray-200 border border-gray-300 " +
                         "dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600" :
                         "hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"}`}>
                     Szybkie wyszukiwanie
@@ -45,7 +45,7 @@ const SearchComponent = () => {
                 <div
                     onClick={() => handleTabClick("advancedSearch")}
                     className={`inline-block p-2 rounded-t-lg cursor-pointer ${activeTab === "advancedSearch" ?
-                        "text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500 border border-gray-300 " +
+                        "text-gray-800 font-semibold bg-gray-100 dark:bg-gray-800 dark:text-gray-200 border border-gray-300 " +
                         "dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600" :
                         "hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"}`}>
                     Zaawansowane wyszukiwanie
@@ -59,7 +59,7 @@ const SearchComponent = () => {
         <div className="flex items-center space-x-3 w-full md:w-auto">
             <button
                 type="button"
-                className="flex items-center justify-center bg-primary-700 dark:text-white
+                className="flex items-center justify-center dark:text-white bg-white
                                     hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg
                                     text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
                                     dark:focus:ring-primary-800"
@@ -95,7 +95,7 @@ const SearchComponent = () => {
         </div>
         {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
 
-    </>
+    </div>
 }
 
 export default SearchComponent

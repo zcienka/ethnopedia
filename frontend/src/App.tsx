@@ -11,8 +11,10 @@ import Categories from "./pages/Categories"
 import ArtworkView from "./pages/ArtworkView"
 import NotFoundPage from "./pages/NotFoundPage"
 import Artworks from "./components/artwork/Artworks"
+import dotenv from "dotenv"
 
 const queryClient = new QueryClient()
+// dotenv.config()
 
 const App = () => {
     const electron = (window as any).electron
@@ -21,7 +23,7 @@ const App = () => {
     //     homedir: {electron.homeDir()}
     // </div>
 
-    return <div className="dark:text-white">
+    return <div className="dark:text-white min-h-screen bg-gray-50 dark:bg-gray-900">
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
                 <Routes>
@@ -37,9 +39,9 @@ const App = () => {
                     <Route path="/categories/:collectionName" element={<Categories />} />
                     <Route path="/login" element={<LoginPage />} />
 
-                    <Route path="/:artworkId" element={<ArtworkView />} />
+                    {/*<Route path="/:artworkId" element={<ArtworkView />} />*/}
 
-                    <Route path="*" element={<NotFoundPage/>} />
+                    <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </BrowserRouter>
         </QueryClientProvider>

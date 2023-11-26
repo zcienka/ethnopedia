@@ -1,7 +1,7 @@
 const FilterDropdown = () => {
     return <div
         id="filterDropdown"
-        className="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
+        className="z-10 visible w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
     >
         <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">
             Choose brand
