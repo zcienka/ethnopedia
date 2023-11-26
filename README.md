@@ -5,10 +5,33 @@ The Metadata Editor is a desktop and web application inspired by CollectiveAcces
 It is specifically intended to be used by ethnomusicologists and music librarians working with folk music to edit the metadata of their music files.
 This tool will be developed in collaboration with the musicology expert, making sure it works well for folk music needs.
 
+
 ## Features
-- **Metadata Import/Export**: Import and export metadata from Excel files.
-- **Metadata Editing**: Easily edit tags like artist, genre and more.
-- **User-friendly Interface**: Intuitive design for effortless navigation.
+
+### User Account Management
+- **Registering and Logging In**: Secure user account creation and login process.
+- **Creating an Account**: Simple steps for setting up a new account.
+
+***
+
+### Artwork Metadata Management
+- **Import/Export Metadata**: Effortlessly import and export artwork metadata from and to Excel files.
+- **Artworks Metadata Editing**: 
+  - **Creation**: Add new metadata entries for artworks.
+  - **Updating**: Modify existing metadata entries.
+  - **Deleting**: Remove unwanted metadata entries.
+  - **Batch Deleting**: Remove multiple artworks simultaneously for efficient management.
+- **Liking Artworks**: Engage with your favorite artworks by liking them.
+- **Creating Collections**: Organize artwork metadata into collections for easy management.
+- **Managing Collections**: 
+  - **Updating Collections**: Modify the details of existing collections.
+  - **Deleting Collections**: Remove collections as needed.
+
+***
+
+### Advanced Search Features
+- **Advanced Searching**: Utilize comprehensive search options for detailed metadata queries.
+- **Quick Searching**: Quick and efficient search tool for immediate results.
 
 ## Technology stack
 
@@ -24,6 +47,13 @@ The application is built using the following technologies:
 ## Running the application
 
 ### Frontend
+Before running the frontend, `cd frontend`
+
+Make sure to set up your configuration. Create a `.env` file in the backend directory with the following environment variables:
+```
+REACT_APP_API_URL=http://localhost:8080/api/
+```
+
 To run the application run the following command:
 
 ```
@@ -36,20 +66,21 @@ To build the application for production, use the following command:
 ```
 npm run build
 ```
+
 ### Backend 
-1. Before running the backend, make sure to set up your configuration. Create a `.env` file in the backend directory with the following environment variables:
+1. Before running the backend, `cd backend`
+2. Make sure to set up your configuration. Create a `.env` file in the backend directory with the following environment variables:
 
 ```
 PORT=8000
 MONGO_URI=
 ACCESS_TOKEN_SECRET=
 ```
-2. Install Dependencies:
+3. Install Dependencies:
 ```
-cd backend
 npm install
 ```
-3. Run the server:
+4. Run the server:
 ```
 npx nodemon
 ```
