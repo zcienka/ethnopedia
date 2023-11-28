@@ -21,11 +21,11 @@ const Categories = () => {
     if (fetchedData === undefined) {
         return <LoadingPage />
     }
-    console.log({ fetchedData })
+
     const categoryElements = fetchedData.map((category: any, index: number) => (
         <div key={index}>
             <h2 className="mb-2 text-xl font-bold">{category.collectionName}</h2>
-            {category.sections.map((section: any, sectionIndex: number) => (
+            {category.sections.map((section: any) => (
                 <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
                                 cursor-pointer"
                      key={uuidv4()}

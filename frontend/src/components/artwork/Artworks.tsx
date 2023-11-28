@@ -1,44 +1,28 @@
-import {useQuery} from "react-query"
-import {getSearchResult} from "../../api/artworks"
+import { useQuery } from "react-query"
+import { getSearchResult } from "../../api/artworks"
 import LoadingPage from "../../pages/LoadingPage"
-import React, {useEffect, useMemo} from "react"
+import React, { useMemo } from "react"
 import Navbar from "../Navbar"
-import {useLocation, useNavigate} from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import SearchComponent from "../search/SearchComponent"
 
 const Artworks = () => {
     const location = useLocation()
-    const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+    const searchParamsString = useMemo(() => {
+        const params = new URLSearchParams(location.search)
+        return params.toString()
+    }, [location.search])
 
-    const [queryParams, setQueryString] = React.useState<string>("")
-
-    const {data: fetchedData} = useQuery({
-        queryKey: ["artwork", searchParams],
-        queryFn: () => getSearchResult(queryParams as string),
-        enabled: !!queryParams,
+    const { data: fetchedData } = useQuery({
+        queryKey: ["artwork", searchParamsString],
+        queryFn: () => getSearchResult(searchParamsString),
+        enabled: !!searchParamsString,
     })
-
-    useEffect(() => {
-        if (searchParams !== undefined) {
-            updateParamString(searchParams)
-        }
-    }, [searchParams])
-
-    const updateParamString = (searchParams: any) => {
-        let paramString = ""
-        for (const [key, value] of searchParams.entries()) {
-            if (paramString !== "") {
-                paramString += "&"
-            }
-            paramString += `${key}=${value}`
-        }
-        setQueryString(paramString)
-    }
 
     const navigate = useNavigate()
 
     if (fetchedData === undefined) {
-        return <LoadingPage/>
+        return <LoadingPage />
     } else {
         const allArtworks = fetchedData.map((artwork: any) => (
             <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
@@ -47,7 +31,7 @@ const Artworks = () => {
                  onClick={() => navigate(`/artwork/${artwork._id}`)}>
 
                 <div className="flex flex-row">
-                    <input className="mr-4" type="checkbox" name="exampleCheckbox"/>
+                    <input className="mr-4" type="checkbox" name="exampleCheckbox" />
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Title}</h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artist}</p>
@@ -58,11 +42,11 @@ const Artworks = () => {
         ))
 
         return <>
-            <Navbar/>
+            <Navbar />
 
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <SearchComponent/>
+                    <SearchComponent />
                     {allArtworks}
                 </div>
             </section>

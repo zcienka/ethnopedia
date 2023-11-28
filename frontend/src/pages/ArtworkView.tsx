@@ -40,7 +40,7 @@ const ArtworkView = () => {
                     <button
                         type="button"
                         onClick={() => setShowMore(!showMore)}
-                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="mt-4 px-4 py-2 bg-sky-500 text-white hover:bg-sky-400"
                     >
                         {showMore ? "Pokaż mniej" : "Pokaż więcej"}
                     </button>

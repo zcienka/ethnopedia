@@ -1,8 +1,8 @@
 import axios from "axios"
 import { Collection } from "../@types/Collection"
 import { useMutation } from "react-query"
+import { API_URL } from "../config"
 
-const API_URL = "http://localhost:8080/api/"
 export const getCollections = async () => {
     const response = await axios.get(`${API_URL}v1/collection`)
     return response.data.collections as Collection[]
@@ -12,7 +12,7 @@ export const useCreateCollectionMutation = () => {
     return useMutation(async (newCollectionData: Collection) => {
         const res = await axios.post(`${API_URL}v1/collection`, newCollectionData)
         return res.data
-    });
+    })
 }
 
 export const getSingleCollection = async (id: string) => {
