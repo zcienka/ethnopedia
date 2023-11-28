@@ -37,7 +37,7 @@
         dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 dark:bg-gray-800;
     }
 
-    input {
+    input, textarea {
         @apply rounded-lg border border-gray-300 focus:outline-none dark:text-white dark:border-gray-600
         dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 dark:bg-gray-800;
     }

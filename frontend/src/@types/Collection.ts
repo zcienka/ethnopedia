@@ -1,5 +1,5 @@
 export type Collection = {
-    _id: string
+    _id?: string
     description: string
     name: string
 }

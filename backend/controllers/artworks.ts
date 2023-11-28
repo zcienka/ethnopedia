@@ -63,13 +63,11 @@ const getFilteredArtworks = async (req: Request, res: Response, next: NextFuncti
 const createArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const title = req.body.title
     const description = req.body.description
-    const img = req.body.img
 
     try {
         const newArtwork = await Artwork.create({
             title: title,
-            description: description,
-            img: img,
+            description: description
         })
 
         return res.status(201).json(newArtwork)

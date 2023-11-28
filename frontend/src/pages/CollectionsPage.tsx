@@ -4,13 +4,16 @@ import LoadingPage from "./LoadingPage"
 import { Collection } from "../@types/Collection"
 import { useNavigate } from "react-router-dom"
 import SearchComponent from "../components/search/SearchComponent"
-import React from "react"
+import React, { useState } from "react"
+import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg"
+import NewCollectionPopup from "../components/NewCollectionPopup"
 
 const CollectionsPage = () => {
     const { data: fetchedData } = useQuery(
         ["collection"],
         getCollections,
     )
+    const [showPopup, setShowNewCollectionPopup] = useState(false)
 
     const navigate = useNavigate()
 
@@ -34,9 +37,18 @@ const CollectionsPage = () => {
         ))
 
         return <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
+            {showPopup && <NewCollectionPopup onClose={() => setShowNewCollectionPopup(!showPopup)} />}
             <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                <SearchComponent />
-
+                <button
+                    type="button"
+                    className="flex items-center justify-center dark:text-white bg-white
+                                    hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg
+                                    text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
+                                    dark:focus:ring-primary-800 mb-2"
+                    onClick={() => setShowNewCollectionPopup(!showPopup)}>
+                    <PlusIcon />
+                    Dodaj nową kolekcję
+                </button>
                 {allCollections}
             </div>
         </section>

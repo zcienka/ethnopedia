@@ -1,7 +1,8 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
 
 const Collection = require("../models/collection")
+const asyncWrapper = require("../middleware/async")
 
 const getAllCollections = async (req: Request, res: Response, next: any) => {
     const collections = await Collection.find({})
@@ -30,7 +31,24 @@ const getCollection = async (req: Request, res: Response, next: any) => {
     }
 }
 
+const createCollection = async (req: Request, res: Response, next: NextFunction) => {
+    const name = req.body.name
+    const description = req.body.description
+
+    try {
+        const newCollection = await Collection.create({
+            name: name,
+            description: description,
+        })
+
+        return res.status(201).json(newCollection)
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getAllCollections,
-    getCollection
+    getCollection,
+    createCollection,
 }
