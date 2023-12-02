@@ -7,7 +7,7 @@ const {
     getArtwork,
     createArtwork,
     deleteArtwork,
-    getFilteredArtworks
+    getFilteredArtworks,
 } = require("../controllers/artworks")
 
 router.get("/filter", getFilteredArtworks)

@@ -1,4 +1,4 @@
-import SampleAvatar from "../assets/images/sample-avatar.jpg"
+import SampleAvatar from "../../assets/images/sample-avatar.jpg"
 import {useState} from "react"
 import ToggleTheme from "./ToggleTheme"
 import {useNavigate} from "react-router-dom"

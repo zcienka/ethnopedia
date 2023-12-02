@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom"
 import { useQuery } from "react-query"
 import { getArtwork } from "../../api/artworks"
 import LoadingPage from "../../pages/LoadingPage"
-import Navbar from "../Navbar"
+import Navbar from "../navbar/Navbar"
 import CustomTextField from "../CustomTextField"
 import React, { useEffect, useState } from "react"
 

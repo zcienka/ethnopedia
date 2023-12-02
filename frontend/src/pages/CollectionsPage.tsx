@@ -5,7 +5,7 @@ import { Collection } from "../@types/Collection"
 import { useNavigate } from "react-router-dom"
 import React, { useState } from "react"
 import { ReactComponent as PlusIcon } from "../assets/icons/plus.svg"
-import NewCollectionPopup from "../components/NewCollectionPopup"
+import CreateCollection from "../components/CreateCollection"
 
 const CollectionsPage = () => {
     const { data: fetchedData } = useQuery(
@@ -36,7 +36,7 @@ const CollectionsPage = () => {
         ))
 
         return <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
-            {showPopup && <NewCollectionPopup onClose={() => setShowNewCollectionPopup(!showPopup)} />}
+            {showPopup && <CreateCollection onClose={() => setShowNewCollectionPopup(!showPopup)} />}
             <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                 <button
                     type="button"

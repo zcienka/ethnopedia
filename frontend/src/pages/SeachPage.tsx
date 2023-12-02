@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar"
+import Navbar from "../components/navbar/Navbar"
 import SearchComponent from "../components/search/SearchComponent"
 
 const SeachPage = () => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { ReactComponent as SunIcon } from "../assets/icons/sun.svg"
-import { ReactComponent as MoonIcon } from "../assets/icons/moon.svg"
+import { ReactComponent as SunIcon } from "../../assets/icons/sun.svg"
+import { ReactComponent as MoonIcon } from "../../assets/icons/moon.svg"
 
 const ToggleTheme = () => {
     const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark")

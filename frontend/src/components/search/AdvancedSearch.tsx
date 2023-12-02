@@ -107,7 +107,7 @@ const AdvancedSearch = () => {
                             onClick={handleSearch}
                     >
                         <SearchLoopIcon />
-                        Search
+                        Wyszukaj
                     </button>
                     {showValidationMessage && <span className="text-red-500 ml-2">
                         All fields are required to add a rule.
@@ -120,13 +120,13 @@ const AdvancedSearch = () => {
                     <button onClick={() => deleteRule(rule.id)} className="border-none p-0 mr-2">
                         <CloseIcon />
                     </button>
-                    <span className="border-2 border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
+                    <span className="border border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
                         {rule.field}
                     </span>
-                    <span className="border-2 border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
+                    <span className="border border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
                         {rule.operator}
                     </span>
-                    <span className="border-2 border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
+                    <span className="border border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
                         {rule.value}
                     </span>
                 </div>

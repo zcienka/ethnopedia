@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar"
+import Navbar from "../components/navbar/Navbar"
 import CollectionsPage from "./CollectionsPage"
 import React from "react"
 

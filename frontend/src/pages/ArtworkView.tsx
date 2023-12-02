@@ -3,7 +3,7 @@ import { useQuery } from "react-query"
 import { getArtwork } from "../api/artworks"
 import LoadingPage from "./LoadingPage"
 import React, { useState } from "react"
-import Navbar from "../components/Navbar"
+import Navbar from "../components/navbar/Navbar"
 import { v4 as uuidv4 } from "uuid"
 
 const ArtworkView = () => {
@@ -15,7 +15,7 @@ const ArtworkView = () => {
         queryFn: () => getArtwork(artworkId as string),
         enabled: !!artworkId,
     })
-    console.log({ fetchedData })
+
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {

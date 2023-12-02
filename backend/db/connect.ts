@@ -5,3 +5,5 @@ const connectDB = (url: any) => {
 }
 
 module.exports = connectDB
+
+export default connectDB

@@ -1,8 +1,8 @@
 import { useQuery } from "react-query"
-import { getSearchResult } from "../../api/artworks"
+import { getAdvancedSearchResult } from "../../api/artworks"
 import LoadingPage from "../../pages/LoadingPage"
 import React, { useMemo } from "react"
-import Navbar from "../Navbar"
+import Navbar from "../navbar/Navbar"
 import { useLocation, useNavigate } from "react-router-dom"
 import SearchComponent from "../search/SearchComponent"
 
@@ -15,7 +15,7 @@ const Artworks = () => {
 
     const { data: fetchedData } = useQuery({
         queryKey: ["artwork", searchParamsString],
-        queryFn: () => getSearchResult(searchParamsString),
+        queryFn: () => getAdvancedSearchResult(searchParamsString),
         enabled: !!searchParamsString,
     })
 

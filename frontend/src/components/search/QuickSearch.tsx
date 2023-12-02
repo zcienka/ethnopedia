@@ -1,7 +1,37 @@
 import React from "react"
+import { useFormik } from "formik"
+import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
 
-const QuickSearch: React.FC = () => {
-    return <>QuickSearch</>
+const QuickSearch = () => {
+    const formik = useFormik({
+        initialValues: {
+            searchText: "",
+        },
+        onSubmit: values => {
+            console.log(values.searchText)
+        },
+    })
+
+    return <>
+        <div className="my-2">
+            <form onSubmit={formik.handleSubmit} className="flex space-x-2">
+                <input
+                    type="text"
+                    name="searchText"
+                    onChange={formik.handleChange}
+                    value={formik.values.searchText}
+                    className="border border-gray-300 p-2 rounded-lg"
+                />
+                <button type="submit" className="bg-sky-500 hover:bg-sky-400 text-white p-2 flex items-center">
+                    <SearchLoopIcon />
+                    Wyszukaj
+                </button>
+
+            </form>
+        </div>
+        <hr className="border-t border-gray-200 my-4 dark:border-gray-700" />
+    </>
 }
 
 export default QuickSearch
+

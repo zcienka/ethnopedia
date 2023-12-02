@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 
 
 interface ExtendedRequest extends Request {
-    user?: any;
+    user?: any
 }
 
 const asyncWrapper = (
