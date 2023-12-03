@@ -203,111 +203,161 @@ const Temp: React.FC = () => {
         setSelectedCategories(updatedCategories)
     }
 
+    const removeCategory = (catIndex: number) => {
+        const updatedCategories = selectedCategories.filter((_, index) => index !== catIndex)
+        setSelectedCategories(updatedCategories)
+    }
+
     const addCategory = () => {
         setSelectedCategories([...selectedCategories, ""])
     }
 
-    return (
-        <div className="p-4 max-w-screen-md">
-            {jsonData.map((item, index) => (
-                <div key={`${item._id}-${index}`}>
-                    <h2 className="font-bold">{item.collection}</h2>
+    return <div className="p-4 max-w-screen-md">
+        {jsonData.map((item, index) => (
+            <div key={`${item._id}-${index}`}>
+                <h2 className="font-bold">{item.collection}</h2>
 
-                    <div className="ml-2 pl-4 border-l-2 border-gray-300">
-                        {selectedCategories.map((selectedCategory, catIndex) => (
-                            <CategorySelector
-                                key={catIndex}
-                                item={item}
-                                selectedCategory={selectedCategory}
-                                handleCategoryChange={handleCategoryChange}
-                                index={index}
-                                catIndex={catIndex}
-                            />
-                        ))}
-                    </div>
-                    <button onClick={addCategory} className="p-2 border rounded">
+                <div className="ml-2 border-l-2 border-gray-300">
+                    {selectedCategories.map((selectedCategory, catIndex) => (
+                        <CategoryAndValueSelector
+                            key={catIndex}
+                            item={item}
+                            selectedCategory={selectedCategory}
+                            handleCategoryChange={handleCategoryChange}
+                            handleCategoryDeletion={() => removeCategory(catIndex)}
+                            index={index}
+                            catIndex={catIndex}
+                        />
+                    ))}
+                </div>
+
+                <div className="ml-2 flex flex-row relative">
+                    <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
+
+                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+                    <button onClick={addCategory} className="p-2 border-gray-300 shadow-md">
                         +
                     </button>
                 </div>
-            ))}
+
+
+            </div>
+        ))}
+
+
+    </div>
+}
+
+interface CategorySelectorProps {
+    item: JSONTree
+    selectedCategory: string
+    handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>, itemIndex: number, catIndex: number) => void
+    handleCategoryDeletion: () => void
+    index: number
+    catIndex: number
+}
+
+const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
+                                                                       item,
+                                                                       selectedCategory,
+                                                                       handleCategoryChange,
+                                                                       handleCategoryDeletion,
+                                                                       index,
+                                                                       catIndex,
+                                                                   }) => {
+    const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([])
+
+    const addSubcategorySelect = () => {
+        setSelectedSubcategories([...selectedSubcategories, ""])
+    }
+
+    const handleSubcategoryChange = (subcatIndex: number, newName: string) => {
+        const updatedSubcategories = [...selectedSubcategories]
+        updatedSubcategories[subcatIndex] = newName
+        setSelectedSubcategories(updatedSubcategories)
+    }
+
+    const removeSubcategorySelect = (subcatIndex: number) => {
+        const updatedSubcategories = selectedSubcategories.filter((_, index) => index !== subcatIndex)
+        setSelectedSubcategories(updatedSubcategories)
+    }
+
+    return (
+        <div className="flex flex-col pb-2">
+            <div className="flex flex-row">
+
+                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+                <div className="p-2 border shadow-md rounded-md mt-2">
+                    <select
+                        className="p-2 border rounded"
+                        onChange={(e) => handleCategoryChange(e, index, catIndex)}
+                        value={selectedCategory.startsWith(`cat-${index}-`) ? selectedCategory.split("-")[2] : ""}
+                    >
+                        <option value="">Select a Category</option>
+                        {item.categories.map((category, categoryIndex) => (
+                            <option key={`${category.category}-${categoryIndex}`} value={categoryIndex}>
+                                {category.category}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="flex items-center">
+                    <button onClick={addSubcategorySelect} className="mx-2 p-2 shadow-md">
+                        +
+                    </button>
+                    <button onClick={handleCategoryDeletion} className="p-2 shadow-md">
+                        -
+                    </button>
+                </div>
+            </div>
+
+
+            {selectedSubcategories.length !== 0 && <div className="flex flex-col">
+                <div className="ml-8 flex flex-row relative">
+                    {/*<span className="absolute bg-gray-300 h-1/2 w-0.5"></span>*/}
+
+                    {/*<hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />*/}
+                    <div>
+                        {selectedSubcategories.map((subcatName, subcatIndex) => (
+                            <div className="flex flex-row items-center relative">
+
+                                {subcatIndex !== selectedSubcategories.length - 1 ?
+                                    <span className="absolute bg-gray-300 h-full w-0.5"></span>
+                                    : <span className="top-0 absolute bg-gray-300 h-1/2 w-0.5"></span>
+                                }
+                                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+
+                                <div key={subcatIndex}
+                                     className="flex flex-row items-center p-2 border shadow-md rounded-md mt-2">
+                                    <select
+                                        className="p-2 border rounded"
+                                        value={subcatName}
+                                        onChange={(e) => handleSubcategoryChange(subcatIndex, e.target.value)}
+                                    >
+                                        <option value="">Select a Subcategory</option>
+                                        {item.categories.map((category, categoryIndex) => (
+                                            category.subcategories?.map((subcat, subcatIdx) => (
+                                                <option key={`subcat-${subcatIdx}`} value={subcat.name}>
+                                                    {subcat.name}
+                                                </option>
+                                            ))
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <button onClick={() => removeSubcategorySelect(subcatIndex)}
+                                        className="ml-2 border shadow-md p-2">
+                                    -
+                                </button>
+                            </div>
+                        ))}
+
+                    </div>
+                </div>
+            </div>}
         </div>
     )
 }
 
-const Value: React.FC<ValueProps> = ({ category, subcategories }) => {
-    const [selectedValues, setSelectedValues] = useState<any[]>([])
-    const [selectedName, setSelectedNames] = useState<string>("")
-
-    const handleSelectNameChange = (selectedName: string) => {
-        setSelectedNames(selectedName)
-        const selectedSubcat = subcategories?.find(subcat => subcat.name === selectedName)
-        setSelectedValues(selectedSubcat?.values ? selectedSubcat.values : [])
-    }
-
-    const handleSelectChange = (subcategoryName: string, value: string) => {
-        setSelectedValues({ ...selectedValues, [subcategoryName]: value })
-    }
-
-    return (
-        <>
-            <select
-                className="p-2 border rounded ml-2"
-                value={selectedName}
-                onChange={(e) => handleSelectNameChange(e.target.value)}
-            >
-                {subcategories?.map((subcat, index) => (
-                    <option key={`subcat-${index}`} className="font-bold">{subcat.name}</option>
-                ))}
-            </select>
-
-            <hr className="ml-2 border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
-
-            <select
-                className="p-2 border rounded ml-2"
-                value={selectedName}
-                onChange={(e) => handleSelectChange(selectedName, e.target.value)}
-            >
-                {selectedValues?.map((value, index) => (
-                    <option key={`subcat-val-${index}`} value={value}>{value}</option>
-                ))}
-            </select>
-        </>
-    )
-}
-
-const CategorySelector: React.FC<CategorySelectorProps> = ({
-                                                               item,
-                                                               selectedCategory,
-                                                               handleCategoryChange,
-                                                               index,
-                                                               catIndex,
-                                                           }) => {
-    return (
-        <div className="flex flex-row items-start p-2 border shadow-md rounded-md mt-2">
-            <select
-                className="p-2 border rounded"
-                onChange={(e) => handleCategoryChange(e, index, catIndex)}
-                value={selectedCategory.startsWith(`cat-${index}-`) ? selectedCategory.split("-")[2] : ""}
-            >
-                <option value="">Select a Category</option>
-                {item.categories.map((category, categoryIndex) => (
-                    <option key={`${category.category}-${categoryIndex}`} value={categoryIndex}>
-                        {category.category}
-                    </option>
-                ))}
-            </select>
-
-            {item.categories.map((category, categoryIndex) => {
-                const categoryKey = `cat-${index}-${categoryIndex}`
-                return (
-                    selectedCategory === categoryKey && (
-                        <Value key={`${category.category}-${categoryIndex}`}
-                               category={category.category}
-                               subcategories={category.subcategories} />
-                    )
-                )
-            })}
-        </div>
-    )
-}
 export default Temp
