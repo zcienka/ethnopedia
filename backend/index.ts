@@ -1,5 +1,7 @@
 import express from "express"
 
+require("dotenv").config()
+
 const app = express()
 const cors = require("cors")
 
@@ -14,7 +16,6 @@ const general = require("./routes/general")
 
 import connectDB from "./db/connect"
 
-require("dotenv").config()
 
 app.use(cors())
 app.use(express.json())

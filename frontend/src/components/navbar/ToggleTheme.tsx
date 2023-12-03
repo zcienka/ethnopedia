@@ -3,7 +3,7 @@ import { ReactComponent as SunIcon } from "../../assets/icons/sun.svg"
 import { ReactComponent as MoonIcon } from "../../assets/icons/moon.svg"
 
 const ToggleTheme = () => {
-    const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark")
+    const [theme, setTheme] = useState(localStorage.getItem("theme") || "light")
 
     useEffect(() => {
         localStorage.setItem("theme", theme)
@@ -26,7 +26,7 @@ const ToggleTheme = () => {
                            p-2.5 mr-2 dark:bg-gray-800 dark:text-white dark:border-gray-600
                            dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                 onClick={toggleTheme}>
-            {theme === "light" ? <MoonIcon className="w-5 h-5" /> : <SunIcon className="w-5 h-5" />}
+            {theme === "light" ? <MoonIcon className="w-4 h-4 m-0.5" /> : <SunIcon className="w-4 h-4 m-0.5" />}
         </button>
     )
 }

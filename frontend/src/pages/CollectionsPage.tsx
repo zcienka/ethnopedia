@@ -12,8 +12,8 @@ const CollectionsPage = () => {
         ["collection"],
         getCollections,
     )
-    const [showPopup, setShowNewCollectionPopup] = useState(false)
 
+    const [showPopup, setShowNewCollectionPopup] = useState(false)
     const navigate = useNavigate()
 
     if (fetchedData === undefined) {
@@ -23,7 +23,7 @@ const CollectionsPage = () => {
             <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
             cursor-pointer"
                  key={collection._id}
-                 onClick={() => navigate(`/categories/${collection.name}`)}>
+                 onClick={() => navigate(`/artworks/search?Kategoria=${collection.name}`)}>
 
                 <div className="flex flex-row">
                     <input className="mr-4" type="checkbox" id="exampleCheckbox" name="exampleCheckbox" />
@@ -45,7 +45,9 @@ const CollectionsPage = () => {
                                     text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
                                     dark:focus:ring-primary-800 mb-2"
                     onClick={() => setShowNewCollectionPopup(!showPopup)}>
-                    <PlusIcon />
+                    <span className="mr-2">
+                        <PlusIcon />
+                    </span>
                     Dodaj nową kolekcję
                 </button>
                 {allCollections}

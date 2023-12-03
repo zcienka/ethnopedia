@@ -10,7 +10,7 @@ import ArtworkView from "./pages/ArtworkView"
 import NotFoundPage from "./pages/NotFoundPage"
 import Artworks from "./components/artwork/Artworks"
 import RegisterPage from "./pages/RegisterPage"
-import Temp from "./components/artwork/Temp"
+// import Temp from "./components/artwork/Temp"
 
 const queryClient = new QueryClient()
 
@@ -30,7 +30,7 @@ const App = () => {
                     <Route path="/artwork/:artworkId" element={<ArtworkView />} />
 
                     {/*<Route path="/" element={<Artworks />} />*/}
-                    <Route path="/" element={<Temp />} />
+                    <Route path="/" element={<Home />} />
                     <Route path="/artworks/:queryParams" element={<Artworks />} />
                     <Route path="/categories/:collectionName" element={<Categories />} />
                     <Route path="/login" element={<LoginPage />} />

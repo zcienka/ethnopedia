@@ -1,16 +1,16 @@
 import SampleAvatar from "../../assets/images/sample-avatar.jpg"
-import {useState} from "react"
+import { useState } from "react"
 import ToggleTheme from "./ToggleTheme"
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const Navbar = () => {
-    const [isUserLoggedIn,] = useState(false)
+    const [isUserLoggedIn] = useState(false)
     const navigate = useNavigate()
 
     return <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full border-b shadow-md dark:border-gray-700">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div className="flex items-center md:order-2">
-                <ToggleTheme/>
+                <ToggleTheme />
                 {isUserLoggedIn ? <button type="button"
                                           className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                                           id="user-menu-button" aria-expanded="false"
@@ -72,7 +72,7 @@ const Navbar = () => {
                     <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                          viewBox="0 0 17 14">
                         <path stroke="currentColor"
-                              d="M1 1h15M1 7h15M1 13h15"/>
+                              d="M1 1h15M1 7h15M1 13h15" />
                     </svg>
                 </button>
             </div>

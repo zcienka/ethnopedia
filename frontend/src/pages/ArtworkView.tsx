@@ -19,7 +19,7 @@ const ArtworkView = () => {
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const { Title, Artist, Year, ...otherDetails } = fetchedData.artwork
+        const { Tytuł, Artyści, Rok, ...otherDetails } = fetchedData.artwork
         const detailsToShow = showMore ? otherDetails : {}
 
         return <>
@@ -27,11 +27,11 @@ const ArtworkView = () => {
             <section className="p-3 sm:p-5">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                     <div className="">
-                        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{Title}</h1>
-                        <p className="text-xl text-gray-600 dark:text-gray-400 mt-2">Artyści: {Artist}</p>
-                        <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Year}</p>
+                        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{Tytuł}</h1>
+                        <p className="text-xl text-gray-600 dark:text-gray-400 mt-2">Artyści: {Artyści}</p>
+                        <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok}</p>
                         {Object.entries(detailsToShow).map(([columName, value]: any) => (
-                            <div key={uuidv4()} className="py-2 font-medium">
+                            columName !== "_id" && <div key={uuidv4()} className="py-2 font-medium">
                                 <span className="mr-2">{columName}:</span>
                                 {value}
                             </div>

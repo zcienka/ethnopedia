@@ -99,14 +99,19 @@ const AdvancedSearch = () => {
 
                     <button type="submit" className="flex items-center bg-teal-500 hover:bg-teal-400 text-white p-2
                             font-semibold">
-                        <PlusIcon />
-                        Add Rule
+                        <span className="mr-1">
+                            <PlusIcon />
+                        </span>
+
+                        Dodaj regułę
                     </button>
                     <button className="flex items-center font-semibold bg-sky-500 hover:bg-sky-400
                             text-white p-2"
                             onClick={handleSearch}
                     >
-                        <SearchLoopIcon />
+                        <span className="mr-1">
+                            <SearchLoopIcon />
+                        </span>
                         Wyszukaj
                     </button>
                     {showValidationMessage && <span className="text-red-500 ml-2">

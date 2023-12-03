@@ -59,17 +59,21 @@ const SearchComponent = () => {
             <button
                 type="button"
                 className="flex items-center justify-center dark:text-white bg-white
-                                    hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg
+                                    hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium
                                     text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
                                     dark:focus:ring-primary-800"
                 onClick={() => setShowCreateArtwork(showCreateArtwork => !showCreateArtwork)}>
-                <PlusIcon />
+
+                <span className="mr-2 text-gray-500 dark:text-gray-400">
+                    <PlusIcon />
+                </span>
+
                 Dodaj nowy rekord
             </button>
             <button
                 className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
                                         font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
+                                        hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
                                         focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-50
                                         dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 type="button"
@@ -82,7 +86,7 @@ const SearchComponent = () => {
             <button
                 className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
                                         font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
+                                        hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
                                         focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-50
                                         dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 type="button"

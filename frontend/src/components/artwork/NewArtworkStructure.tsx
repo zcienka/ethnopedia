@@ -1,4 +1,6 @@
 import React, { useState } from "react"
+import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
+import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg"
 
 type Subcategory = {
     name: string
@@ -19,24 +21,23 @@ type JSONTree = {
 }
 
 interface CategorySelectorProps {
-    item: JSONTree;
-    selectedCategory: string;
-    handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>, itemIndex: number, catIndex: number) => void;
-    index: number;
-    catIndex: number;
+    item: JSONTree
+    selectedCategory: string
+    handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>, itemIndex: number, catIndex: number) => void
+    index: number
+    catIndex: number
 }
 
-interface ValueProps {
-    category: string;
-    subcategories?: Subcategory[] | undefined;
-}
+// interface ValueProps {
+//     category: string;
+//     subcategories?: Subcategory[] | undefined;
+// }
 
 const jsonData: JSONTree[] = [
     {
         "_id": "6562758966826fe944b0fc2f",
         "collection": "Wielkopolska",
         "categories": [
-            // ... existing categories ...
             {
                 "category": "Sygnatura nagrania",
                 "subcategories": [
@@ -190,7 +191,7 @@ const jsonData: JSONTree[] = [
     },
 ]
 
-const Temp: React.FC = () => {
+const NewArtworkStructure: React.FC = () => {
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
     const handleCategoryChange = (
@@ -235,16 +236,12 @@ const Temp: React.FC = () => {
                     <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
 
                     <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
-                    <button onClick={addCategory} className="p-2 border-gray-300 shadow-md">
-                        +
+                    <button onClick={addCategory} className="p-2 border-gray-300 shadow-md" type="button">
+                        <PlusIcon />
                     </button>
                 </div>
-
-
             </div>
         ))}
-
-
     </div>
 }
 
@@ -303,11 +300,11 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
                 </div>
 
                 <div className="flex items-center">
-                    <button onClick={addSubcategorySelect} className="mx-2 p-2 shadow-md">
-                        +
+                    <button onClick={addSubcategorySelect} className="mx-2 p-2 shadow-md" type="button">
+                        <PlusIcon />
                     </button>
-                    <button onClick={handleCategoryDeletion} className="p-2 shadow-md">
-                        -
+                    <button onClick={handleCategoryDeletion} className="p-2 shadow-md" type="button">
+                        <MinusIcon />
                     </button>
                 </div>
             </div>
@@ -347,8 +344,8 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
                                 </div>
 
                                 <button onClick={() => removeSubcategorySelect(subcatIndex)}
-                                        className="ml-2 border shadow-md p-2">
-                                    -
+                                        className="ml-2 border shadow-md p-2" type="button">
+                                    <MinusIcon />
                                 </button>
                             </div>
                         ))}
@@ -360,4 +357,4 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
     )
 }
 
-export default Temp
+export default NewArtworkStructure

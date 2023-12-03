@@ -33,9 +33,9 @@ const Artworks = () => {
                 <div className="flex flex-row">
                     <input className="mr-4" type="checkbox" name="exampleCheckbox" />
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Title}</h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artist}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-300">{artwork.Year}</p>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Tytuł}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artyści}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-300">{artwork.Rok}</p>
                     </div>
                 </div>
             </div>

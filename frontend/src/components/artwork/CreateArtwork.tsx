@@ -2,9 +2,10 @@ import React from "react"
 import { useQuery, useQueryClient } from "react-query"
 import { getCategories } from "../../api/categories"
 import { ReactComponent as Close } from "../../assets/icons/close.svg"
-import { ErrorMessage, Field, Form, Formik } from "formik"
+import { Form, Formik } from "formik"
 import { useCreateCollectionMutation } from "../../api/collections"
 import LoadingPage from "../../pages/LoadingPage"
+import NewArtworkStructure from "./NewArtworkStructure"
 
 type Props = {
     onClose: () => void
@@ -22,8 +23,6 @@ const CreateArtwork = ({ onClose }: Props) => {
     if (categoriesData === undefined) {
         return <LoadingPage />
     }
-
-    console.log({ categoriesData })
 
     return <div
         id="default-modal"
@@ -53,14 +52,15 @@ const CreateArtwork = ({ onClose }: Props) => {
                     {({ isSubmitting }) => (
                         <Form
                             className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border dark:border-gray-700">
-                            <div className="flex items-start justify-between p-4 pb-0 rounded-t">
+                            <div className="flex items-start justify-between p-4 pb-0 rounded-t border-b pb-2">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                                     Dodaj nowy rekord
                                 </h3>
 
                                 <button
                                     type="button"
-                                    className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 text-sm dark:hover:bg-gray-600 dark:hover:text-white p-2 rounded-lg"
+                                    className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 text-sm
+                                    dark:hover:bg-gray-600 dark:hover:text-white p-2 border-none"
                                     onClick={onClose}
                                 >
                                     <Close />
@@ -93,17 +93,19 @@ const CreateArtwork = ({ onClose }: Props) => {
                             {/*<ErrorMessage name="description" component="div" className="text-red-500 text-sm" />*/}
                             {/*</div>*/}
 
-                            <div className="flex justify-end px-4 pb-4">
+                            <NewArtworkStructure />
+
+                            <div className="flex justify-end px-4 pb-4 border-t pt-4">
                                 <button
                                     type="button"
-                                    className="px-4 py-2 bg-sky-500 text-white hover:bg-sky-400"
+                                    className="px-4 py-2 border-gray-300 dark:text-white text-gray-600 font-semibold"
                                     onClick={onClose}
                                 >
                                     Anuluj
                                 </button>
                                 <button
                                     type="submit"
-                                    className="ml-2 px-4 py-2 bg-sky-500 text-white hover:bg-sky-400"
+                                    className="ml-2 px-4 py-2 bg-sky-500 text-white hover:bg-sky-400 font-semibold"
                                     disabled={isSubmitting}
                                 >
                                     Utwórz
