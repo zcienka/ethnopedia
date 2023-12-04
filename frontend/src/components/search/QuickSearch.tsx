@@ -23,7 +23,10 @@ const QuickSearch = () => {
                     className="border border-gray-300 p-2 rounded-lg"
                 />
                 <button type="submit" className="bg-sky-500 hover:bg-sky-400 text-white p-2 flex items-center">
-                    <SearchLoopIcon />
+                    <span className="mr-1">
+                        <SearchLoopIcon />
+                    </span>
+
                     Wyszukaj
                 </button>
 

@@ -68,19 +68,19 @@ const SearchComponent = () => {
                     <PlusIcon />
                 </span>
 
-                Dodaj nowy rekord
+                Nowy rekord
             </button>
             <button
                 className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
                                         font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
                                         hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
-                                        focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-50
                                         dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                 type="button"
                 onClick={() => exportToExcel()}
             >
-                <FileExportIcon />
-
+                <span className="text-gray-400 dark:text-gray-400">
+                    <FileExportIcon />
+                </span>
                 Eksportuj plik
             </button>
             <button
@@ -92,7 +92,9 @@ const SearchComponent = () => {
                 type="button"
                 onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
             >
-                <FileImportIcon />
+                <span className="text-gray-400 dark:text-gray-400">
+                    <FileImportIcon />
+                </span>
                 Importuj plik
             </button>
         </div>

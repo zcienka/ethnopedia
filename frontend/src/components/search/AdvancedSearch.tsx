@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useFormik } from "formik"
-import FilterButtons from "../filter/FilterButtons"
+// import FilterButtons from "../filter/FilterButtons"
 import { useQuery } from "react-query"
 import { getCategories } from "../../api/categories"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
@@ -86,8 +86,8 @@ const AdvancedSearch = () => {
                         value={formik.values.operator}
                         className="border p-2"
                     >
-                        <option value="equals">is equal to</option>
-                        <option value="contains">contains</option>
+                        <option value="jest równy">jest równy</option>
+                        <option value="zawiera słowo">zawiera słowo</option>
                     </select>
                     <input
                         name="value"
@@ -97,7 +97,7 @@ const AdvancedSearch = () => {
                         className="border p-2 rounded-lg"
                     />
 
-                    <button type="submit" className="flex items-center bg-teal-500 hover:bg-teal-400 text-white p-2
+                    <button type="submit" className="flex items-center bg-zinc-700 hover:bg-zinc-600 text-white p-2
                             font-semibold">
                         <span className="mr-1">
                             <PlusIcon />
@@ -138,8 +138,8 @@ const AdvancedSearch = () => {
             ))}
 
             <hr className="border-t border-gray-200 my-4 dark:border-gray-700" />
-            <h2 className="mb-2">Filters</h2>
-            <FilterButtons />
+            {/*<h2 className="mb-2">Filters</h2>*/}
+            {/*<FilterButtons />*/}
         </div>
     )
 }

@@ -8,6 +8,7 @@ import SearchComponent from "../search/SearchComponent"
 
 const Artworks = () => {
     const location = useLocation()
+
     const searchParamsString = useMemo(() => {
         const params = new URLSearchParams(location.search)
         return params.toString()
