@@ -59,7 +59,7 @@ const CollectionsPage = () => {
 
                 <div className="flex flex-row justify-between">
                     <div className="flex">
-                        <input className="mr-4" type="checkbox" id="exampleCheckbox" name="exampleCheckbox" />
+                        <input className="mr-4" type="checkbox" id="exampleCheckbox" name="exampleCheckbox" onClick={(e) => e.stopPropagation()}/>
                         <div className="flex-grow">
                             <h2 className="text-lg font-semibold">{collection.name}</h2>
                             <p className="text-gray-600 dark:text-gray-300">{collection.description}</p>

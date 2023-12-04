@@ -32,7 +32,7 @@ const Artworks = () => {
                  onClick={() => navigate(`/artwork/${artwork._id}`)}>
 
                 <div className="flex flex-row">
-                    <input className="mr-4" type="checkbox" name="exampleCheckbox" />
+                    <input className="mr-4" type="checkbox" name="exampleCheckbox" onClick={(e) => e.stopPropagation()}/>
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Tytuł}</h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artyści}</p>
