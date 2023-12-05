@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { getCollections } from "../api/collections"
+import { getCollections, useBatchDeleteCollectionMutation } from "../api/collections"
 import LoadingPage from "./LoadingPage"
 import { Collection } from "../@types/Collection"
 import { useNavigate } from "react-router-dom"
@@ -21,6 +21,9 @@ const CollectionsPage = () => {
     const [, setToken] = useState<string | null>(null)
     const [firstName, setFirstName] = useState<string | null>(null)
     const [, setShowFileDropzone] = useState<boolean>(false)
+    const [checkedCollections, setCheckedCollections] = useState<{ [key: string]: boolean }>({})
+
+    const batchDeleteMutation = useBatchDeleteCollectionMutation()
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token") as string
@@ -33,16 +36,44 @@ const CollectionsPage = () => {
         }
     }, [])
 
-    const { data: fetchedData } = useQuery(
-        ["collection"],
-        getCollections,
-    )
-
     const exportToExcel = () => {
         // const ws = XLSX.utils.json_to_sheet(fetchedData)
         // const wb = XLSX.utils.book_new()
         // XLSX.utils.book_append_sheet(wb, ws, "DataSheet")
         // XLSX.writeFile(wb, "DataExport.xlsx")
+    }
+
+    const { data: fetchedData } = useQuery<Collection[], Error>(
+        ["collection"],
+        getCollections,
+    )
+
+    const checkAll = () => {
+        const newCheckedCollections = fetchedData?.reduce(
+            (acc, collection) => ({
+                ...acc,
+                [collection.id!]: true,
+            }),
+            {},
+        ) as Record<string, boolean>
+
+        setCheckedCollections(newCheckedCollections)
+    }
+
+    const uncheckAll = () => {
+        setCheckedCollections({})
+    }
+
+    const handleCheck = (id: string) => {
+        setCheckedCollections((prev) => ({ ...prev, [id]: !prev[id] }))
+    }
+
+    const deleteSelected = () => {
+        const selectedIds = Object.keys(checkedCollections).filter(id => checkedCollections[id])
+
+        if (selectedIds.length > 0) {
+            batchDeleteMutation.mutate(selectedIds)
+        }
     }
 
     const [showPopup, setShowNewCollectionPopup] = useState(false)
@@ -54,12 +85,22 @@ const CollectionsPage = () => {
         const allCollections = fetchedData.map((collection: Collection) => (
             <div
                 className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700 cursor-pointer"
-                key={collection._id}
-                onClick={() => navigate(`/artworks/search?Kategoria=${collection.name}`)}>
+                key={collection.id}
+                onClick={() => navigate(`/artworks/search?Kategoria=${collection.name}`)}
+            >
 
                 <div className="flex flex-row justify-between">
                     <div className="flex">
-                        <input className="mr-4" type="checkbox" id="exampleCheckbox" name="exampleCheckbox" onClick={(e) => e.stopPropagation()}/>
+                        <span className="mr-4 items-center flex">
+                            <input
+                                type="checkbox"
+                                checked={checkedCollections[collection.id!] || false}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => {
+                                    handleCheck(collection.id!)
+                                }} />
+                        </span>
+
                         <div className="flex-grow">
                             <h2 className="text-lg font-semibold">{collection.name}</h2>
                             <p className="text-gray-600 dark:text-gray-300">{collection.description}</p>
@@ -131,17 +172,19 @@ const CollectionsPage = () => {
                     </div>
                 </div>
 
-
                 <div className="flex flex-row">
-                    <button type="button" className="px-4 py-2 mb-2 bg-white">
+                    <button type="button" className="px-4 py-2 mb-2 bg-white"
+                            onClick={checkAll}>
                         Zaznacz wszystkie
                     </button>
 
-                    <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white">
+                    <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white"
+                            onClick={uncheckAll}>
                         Odznacz wszystkie
                     </button>
 
-                    <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white">
+                    <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white"
+                            onClick={deleteSelected}>
                         Usuń zaznaczone
                     </button>
                 </div>

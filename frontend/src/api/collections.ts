@@ -14,6 +14,15 @@ export const useCreateCollectionMutation = () => {
         return res.data
     })
 }
+export const useBatchDeleteCollectionMutation = () => {
+    return useMutation(async (collections: string[]) => {
+        const collectionIds = collections.join(",")
+        const url = `${API_URL}v1/collection/${collectionIds}`
+
+        const res = await axios.delete(url)
+        return res.data
+    })
+}
 
 export const getSingleCollection = async (id: string) => {
     const response = await axios.get(`${API_URL}v1/collection/${id}`)

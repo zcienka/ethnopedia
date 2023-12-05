@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
+import { ObjectId } from "mongodb"
 
 const Collection = require("../models/collection")
 const Artwork = require("../models/artwork")
@@ -82,8 +83,31 @@ const createCollection = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
+const batchDeleteCollections = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const collectionsToDelete = req.params.collection
+
+        if (!collectionsToDelete) {
+            return res.status(400).send({ message: "Collections not found" })
+        }
+        const collectionsToDeleteList = collectionsToDelete.split(",")
+        const existingCollections = await Collection.find({ _id: { $in: collectionsToDeleteList }});
+
+        if (existingCollections.length === 0) {
+            return res.status(404).send({ message: "Collections not found" })
+        }
+
+        const result =  await Collection.deleteMany({ _id: { $in: collectionsToDeleteList } })
+
+        res.status(200).json({ message: req.params.collection, deletedCount:  result.deletedCount})
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getAllCollections,
     getCollection,
     createCollection,
+    batchDeleteCollections,
 }
