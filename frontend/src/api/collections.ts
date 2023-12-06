@@ -16,12 +16,12 @@ export const useCreateCollectionMutation = () => {
 }
 export const useBatchDeleteCollectionMutation = () => {
     return useMutation(async (collections: string[]) => {
-        const collectionIds = collections.join(",")
-        const url = `${API_URL}v1/collection/${collectionIds}`
+            const collectionIds = collections.join(",")
+            const url = `${API_URL}v1/collection/${collectionIds}`
 
-        const res = await axios.delete(url)
-        return res.data
-    })
+            const res = await axios.delete(url)
+            return res.data
+        })
 }
 
 export const getSingleCollection = async (id: string) => {

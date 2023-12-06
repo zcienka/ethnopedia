@@ -21,12 +21,12 @@ const Navbar = () => {
                     </button> :
                     <>
                         <button type="button"
-                                className="mr-2 bg-sky-500 hover:bg-sky-400 font-semibold text-white border-none"
+                                className="mr-2 bg-blue-800 hover:bg-blue-700 font-semibold text-white border-none"
                                 onClick={() => navigate("/login")}>
                             Zaloguj się
                         </button>
                         <button type="button"
-                                className="bg-sky-500 hover:bg-sky-400 font-semibold text-white border-none"
+                                className="bg-blue-800 hover:bg-blue-700 font-semibold text-white border-none"
                                 onClick={() => navigate("/register")}>
                             Zarejestruj się
                         </button>

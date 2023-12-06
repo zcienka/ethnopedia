@@ -26,13 +26,16 @@ const Artworks = () => {
         return <LoadingPage />
     } else {
         const allArtworks = fetchedData.map((artwork: any) => (
-            <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
+            <div className="px-4 py-4 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
             cursor-pointer"
                  key={artwork._id}
                  onClick={() => navigate(`/artwork/${artwork._id}`)}>
 
                 <div className="flex flex-row">
-                    <input className="mr-4" type="checkbox" name="exampleCheckbox" onClick={(e) => e.stopPropagation()}/>
+                    <span className="mr-4 flex items-center" >
+                        <input type="checkbox" name="exampleCheckbox" onClick={(e) => e.stopPropagation()}/>
+                    </span>
+
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Tytuł}</h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artyści}</p>
