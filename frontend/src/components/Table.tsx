@@ -33,7 +33,7 @@ const Table = ({ fetchedData, tableRows }: Props) => {
         <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
             <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                 <div className="bg-white dark:bg-gray-800 shadow-md border sm:rounded-lg overflow-hidden
-                        dark:border-gray-700">
+                        dark:border-gray-600">
                     <div
                         className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0
                             md:space-x-4 p-4">

@@ -7,7 +7,7 @@ const Navbar = () => {
     const [isUserLoggedIn] = useState(false)
     const navigate = useNavigate()
 
-    return <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full border-b shadow-md dark:border-gray-700">
+    return <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full border-b shadow-md dark:border-gray-600">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div className="flex items-center md:order-2">
                 <ToggleTheme />
@@ -21,12 +21,12 @@ const Navbar = () => {
                     </button> :
                     <>
                         <button type="button"
-                                className="mr-2 bg-sky-500 hover:bg-sky-400 font-semibold text-white border-none"
+                                className="mr-2 bg-blue-800 hover:bg-blue-700 font-semibold text-white border-none"
                                 onClick={() => navigate("/login")}>
                             Zaloguj się
                         </button>
                         <button type="button"
-                                className="bg-sky-500 hover:bg-sky-400 font-semibold text-white border-none"
+                                className="bg-blue-800 hover:bg-blue-700 font-semibold text-white border-none"
                                 onClick={() => navigate("/register")}>
                             Zarejestruj się
                         </button>

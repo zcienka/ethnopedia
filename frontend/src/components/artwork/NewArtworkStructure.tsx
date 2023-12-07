@@ -323,7 +323,7 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
                                     <span className="absolute bg-gray-300 h-full w-0.5"></span>
                                     : <span className="top-0 absolute bg-gray-300 h-1/2 w-0.5"></span>
                                 }
-                                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+                                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center" />
 
                                 <div key={subcatIndex}
                                      className="flex flex-row items-center p-2 border shadow-md rounded-md mt-2">

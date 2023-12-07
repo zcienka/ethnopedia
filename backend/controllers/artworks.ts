@@ -97,10 +97,32 @@ const deleteArtwork = asyncWrapper(async (req: Request, res: Response, next: Nex
     }
 })
 
+const batchDeleteArtworks = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const artworksToDelete = req.params.artwork
+
+        if (!artworksToDelete) {
+            return res.status(400).send({ message: "Artworks not found" })
+        }
+        const artworksToDeleteList = artworksToDelete.split(",")
+        const existingArtworks = await Artwork.find({ _id: { $in: artworksToDeleteList }});
+
+        if (existingArtworks.length === 0) {
+            return res.status(404).send({ message: "Artworks not found" })
+        }
+
+        const result =  await Artwork.deleteMany({ _id: { $in: artworksToDeleteList } })
+
+        res.status(200).json({ message: req.params.artwork, deletedCount:  result.deletedCount})
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getAllArtworks,
     getArtwork,
     createArtwork,
-    deleteArtwork,
     getFilteredArtworks,
+    batchDeleteArtworks
 }

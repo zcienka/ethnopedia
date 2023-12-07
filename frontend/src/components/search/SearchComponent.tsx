@@ -1,35 +1,17 @@
 import React, { useState } from "react"
 import QuickSearch from "./QuickSearch"
 import AdvancedSearch from "./AdvancedSearch"
-import FileDropzone from "../FileDropzone"
-import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
-import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.svg"
-import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
-import CreateArtwork from "../artwork/CreateArtwork"
-
 
 const SearchComponent = () => {
     const [activeTab, setActiveTab] = useState<string>("advancedSearch")
-    const [showFileDropzone, setShowFileDropzone] = useState<boolean>(false)
-    const [showCreateArtwork, setShowCreateArtwork] = useState<boolean>(false)
 
     const handleTabClick = (tabName: string) => {
         setActiveTab(tabName)
     }
 
-    const exportToExcel = () => {
-        // const ws = XLSX.utils.json_to_sheet(fetchedData)
-        // const wb = XLSX.utils.book_new()
-        // XLSX.utils.book_append_sheet(wb, ws, "DataSheet")
-        // XLSX.writeFile(wb, "DataExport.xlsx")
-    }
-
     return <div className="mb-2">
-        {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
-        {showCreateArtwork && <CreateArtwork onClose={() => setShowCreateArtwork(false)} />}
-
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200
-        dark:border-gray-700 dark:text-gray-300">
+        dark:border-gray-600 dark:text-gray-300">
             <li className="me-2">
                 <div
                     onClick={() => handleTabClick("advancedSearch")}
@@ -54,52 +36,6 @@ const SearchComponent = () => {
 
         {activeTab === "quickSearch" && <QuickSearch />}
         {activeTab === "advancedSearch" && <AdvancedSearch />}
-
-        <div className="flex items-center space-x-3 w-full md:w-auto">
-            <button
-                type="button"
-                className="flex items-center justify-center dark:text-white bg-white
-                                    hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium
-                                    text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
-                                    dark:focus:ring-primary-800"
-                onClick={() => setShowCreateArtwork(showCreateArtwork => !showCreateArtwork)}>
-
-                <span className="mr-2 text-gray-500 dark:text-gray-400">
-                    <PlusIcon />
-                </span>
-
-                Nowy rekord
-            </button>
-            <button
-                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                type="button"
-                onClick={() => exportToExcel()}
-            >
-                <span className="text-gray-400 dark:text-gray-400">
-                    <FileExportIcon />
-                </span>
-                Eksportuj plik
-            </button>
-            <button
-                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
-                                        focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-50
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                type="button"
-                onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
-            >
-                <span className="text-gray-400 dark:text-gray-400">
-                    <FileImportIcon />
-                </span>
-                Importuj plik
-            </button>
-        </div>
-        {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
-
     </div>
 }
 

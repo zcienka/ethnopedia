@@ -28,7 +28,7 @@ const TableForm = ({ onClose }: Props) => {
         <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
             <div className="fixed inset-0 bg-black opacity-50" />
             <div className="relative w-full max-w-2xl max-h-full">
-                <div className="relative bg-white rounded-lg shadow dark:bg-gray-800 border dark:border-gray-700">
+                <div className="relative bg-white rounded-lg shadow dark:bg-gray-800 border dark:border-gray-600">
                     <div className="relative  justify-end h-8 w-8">
                         <button type="button"
                                 onClick={onClose}

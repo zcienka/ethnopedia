@@ -1,5 +1,5 @@
 import Navbar from "../components/navbar/Navbar"
-import CollectionsPage from "./CollectionsPage"
+import CollectionsPage from "./collections/CollectionsPage"
 import React from "react"
 
 const Home = () => {

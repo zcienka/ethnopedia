@@ -1,5 +1,6 @@
 import axios from "axios"
 import { API_URL } from "../config"
+import { useMutation } from "react-query"
 
 export const getArtworks = async () => {
     const response = await axios.get(`${API_URL}v1/artwork`)
@@ -34,6 +35,17 @@ export const updateArtwork = async ({ id, artwork }: {
     const response = await axios.patch(`${API_URL}v1/artwork/${id}`, artwork)
     return response.data
 }
+
+export const useBatchDeleteArtworkMutation = () => {
+    return useMutation(async (artworks: string[]) => {
+        const artworkIds = artworks.join(",")
+        const url = `${API_URL}v1/artwork/${artworkIds}`
+
+        const res = await axios.delete(url)
+        return res.data
+    })
+}
+
 
 export const deleteArtwork = async (id: string) => {
     const response = await axios.delete(`${API_URL}v1/artwork/${id}`)

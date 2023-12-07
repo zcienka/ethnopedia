@@ -105,7 +105,7 @@ const AdvancedSearch = () => {
 
                         Dodaj regułę
                     </button>
-                    <button className="flex items-center font-semibold bg-sky-500 hover:bg-sky-400
+                    <button className="flex items-center font-semibold bg-blue-800 hover:bg-blue-700
                             text-white p-2"
                             onClick={handleSearch}
                     >
@@ -125,19 +125,19 @@ const AdvancedSearch = () => {
                     <button onClick={() => deleteRule(rule.id)} className="border-none p-0 mr-2">
                         <CloseIcon />
                     </button>
-                    <span className="border border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
+                    <span className="border border-blue-300 p-2 rounded-lg bg-blue-100 text-blue-500 font-semibold">
                         {rule.field}
                     </span>
-                    <span className="border border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
+                    <span className="border border-blue-300 p-2 rounded-lg bg-blue-100 text-blue-500 font-semibold">
                         {rule.operator}
                     </span>
-                    <span className="border border-sky-300 p-2 rounded-lg bg-sky-100 text-sky-500 font-semibold">
+                    <span className="border border-blue-300 p-2 rounded-lg bg-blue-100 text-blue-500 font-semibold">
                         {rule.value}
                     </span>
                 </div>
             ))}
 
-            <hr className="border-t border-gray-200 my-4 dark:border-gray-700" />
+            <hr className="border-t border-gray-200 my-4 dark:border-gray-600" />
             {/*<h2 className="mb-2">Filters</h2>*/}
             {/*<FilterButtons />*/}
         </div>
