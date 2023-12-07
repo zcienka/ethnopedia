@@ -105,7 +105,7 @@ const AdvancedSearch = () => {
 
                         Dodaj regułę
                     </button>
-                    <button className="flex items-center font-semibold bg-blue-500 hover:bg-blue-400
+                    <button className="flex items-center font-semibold bg-blue-800 hover:bg-blue-700
                             text-white p-2"
                             onClick={handleSearch}
                     >
@@ -137,7 +137,7 @@ const AdvancedSearch = () => {
                 </div>
             ))}
 
-            <hr className="border-t border-gray-200 my-4 dark:border-gray-700" />
+            <hr className="border-t border-gray-200 my-4 dark:border-gray-600" />
             {/*<h2 className="mb-2">Filters</h2>*/}
             {/*<FilterButtons />*/}
         </div>

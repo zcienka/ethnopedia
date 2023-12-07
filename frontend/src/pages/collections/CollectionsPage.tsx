@@ -27,7 +27,7 @@ const CollectionsPage = () => {
 
     const queryClient = useQueryClient()
 
-    const {mutate: batchDeleteMutation} = useBatchDeleteCollectionMutation()
+    const { mutate: batchDeleteMutation } = useBatchDeleteCollectionMutation()
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token") as string
@@ -77,10 +77,12 @@ const CollectionsPage = () => {
 
         if (selectedIds.length > 0) {
             batchDeleteMutation(selectedIds,
-                {onSuccess: () => {
-                queryClient.invalidateQueries(["collection"])
-                setShowWarningPopup(!showWarningPopup)
-            }})
+                {
+                    onSuccess: () => {
+                        queryClient.invalidateQueries(["collection"])
+                        setShowWarningPopup(!showWarningPopup)
+                    },
+                })
         }
     }
 
@@ -92,7 +94,7 @@ const CollectionsPage = () => {
     } else {
         const allCollections = fetchedData.map((collection: Collection) => (
             <div
-                className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700 cursor-pointer"
+                className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border border-gray-300 dark:border-gray-600 cursor-pointer"
                 key={collection.id}
                 onClick={() => navigate(`/artworks/search?Kategoria=${collection.name}`)}
             >
@@ -130,7 +132,8 @@ const CollectionsPage = () => {
         return <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
             {showPopup && <CreateCollection onClose={() => setShowNewCollectionPopup(!showPopup)} />}
             {showWarningPopup && <WarningPopup onClose={() => setShowWarningPopup(!showWarningPopup)}
-                                               deleteSelected={deleteSelected}/>}
+                                               deleteSelected={deleteSelected}
+                                               warningMessage={"Czy na pewno chcesz usunąć zaznaczone kolekcje?"} />}
             <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                 <div className="flex flex-row">
                     <div className="w-full">
@@ -196,7 +199,8 @@ const CollectionsPage = () => {
                     <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white"
                             onClick={() => {
                                 if (Object.keys(checkedCollections).length !== 0)
-                                    setShowWarningPopup(!showWarningPopup)}}>
+                                    setShowWarningPopup(!showWarningPopup)
+                            }}>
                         Usuń zaznaczone
                     </button>
                 </div>

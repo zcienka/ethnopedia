@@ -38,7 +38,7 @@ const CreateCollection = ({ onClose }: Props) => {
                     }}>
                     {({ isSubmitting }) => (
                         <Form
-                            className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border dark:border-gray-700">
+                            className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border dark:border-gray-600">
                             <div className="flex items-start justify-between p-4 pb-0 rounded-t">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                                     Dodaj nową kolekcję
@@ -54,7 +54,7 @@ const CreateCollection = ({ onClose }: Props) => {
                             </div>
                             <div className="px-4 pb-4">
                                 <label htmlFor="name"
-                                       className="text-sm font-bold text-gray-700 dark:text-white dark:border-gray-700 block my-2">
+                                       className="text-sm font-bold text-gray-700 dark:text-white dark:border-gray-600 block my-2">
                                     Nazwa
                                 </label>
                                 <Field
@@ -66,7 +66,7 @@ const CreateCollection = ({ onClose }: Props) => {
                                 <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
 
                                 <label htmlFor="description"
-                                       className="text-sm font-bold text-gray-700 dark:text-white dark:border-gray-700 block my-2">
+                                       className="text-sm font-bold text-gray-700 dark:text-white dark:border-gray-600 block my-2">
                                     Opis
                                 </label>
                                 <Field
@@ -74,7 +74,7 @@ const CreateCollection = ({ onClose }: Props) => {
                                     id="description"
                                     name="description"
                                     rows={4}
-                                    className="w-full resize-y min-h-[12rem] px-4 py-2 border rounded-lg focus:outline-none dark:border-gray-700 dark:bg-gray-800"
+                                    className="w-full resize-y min-h-[12rem] px-4 py-2 border rounded-lg focus:outline-none dark:border-gray-600 dark:bg-gray-800"
                                 />
                                 <ErrorMessage name="description" component="div" className="text-red-500 text-sm" />
                             </div>

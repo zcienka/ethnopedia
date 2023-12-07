@@ -51,7 +51,7 @@ const CreateArtwork = ({ onClose }: Props) => {
                     }}>
                     {({ isSubmitting }) => (
                         <Form
-                            className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border dark:border-gray-700">
+                            className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border dark:border-gray-600">
                             <div className="flex items-start justify-between p-4 pb-0 rounded-t border-b pb-2">
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                                     Dodaj nowy rekord

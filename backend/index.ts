@@ -16,7 +16,6 @@ const general = require("./routes/general")
 
 import connectDB from "./db/connect"
 
-
 app.use(cors())
 app.use(express.json())
 

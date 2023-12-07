@@ -53,7 +53,7 @@ const ArtworkEdit = () => {
             <Navbar />
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <div className="shadow-sm border dark:border-gray-700 border-gray-200 rounded-lg">
+                    <div className="shadow-sm border dark:border-gray-600 border-gray-200 rounded-lg">
                         {fetchedData._id}
                         <div className="flex flex-col">
                             {artwork}

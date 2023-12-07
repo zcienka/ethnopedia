@@ -4,9 +4,10 @@ import React from "react"
 type Props = {
     onClose: () => void
     deleteSelected: () => void
+    warningMessage: string
 }
 
-const WarningPopup = ({ onClose, deleteSelected }: Props) => {
+const WarningPopup = ({ onClose, deleteSelected, warningMessage }: Props) => {
     return <div id="popup-modal"
                 className="overflow-y-auto flex items-center overflow-x-hidden fixed z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full ">
         <div className="fixed inset-0 bg-black opacity-50" />
@@ -20,11 +21,12 @@ const WarningPopup = ({ onClose, deleteSelected }: Props) => {
                     </button>
                 </div>
 
-                <hr className="border-t border-gray-200 dark:border-gray-700 w-8 self-center w-full" />
+                <hr className="border-t border-gray-200 dark:border-gray-600 w-8 self-center w-full" />
 
                 <div className="p-4 md:p-5 text-center">
                     <h3 className="mb-5 text-lg font-normal text-gray-700 font-semibold dark:text-gray-400">
-                        Czy na pewno chcesz usunąć wybrane kolekcje?
+
+                        {warningMessage}
                     </h3>
                     <button data-modal-hide="popup-modal" type="button"
                             className="text-white bg-red-600 font-semibold hover:bg-red-800 focus:ring-4

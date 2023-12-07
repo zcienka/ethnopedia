@@ -5,7 +5,6 @@ import LoadingPage from "./LoadingPage"
 import Navbar from "../components/navbar/Navbar"
 import React from "react"
 import { v4 as uuidv4 } from "uuid"
-import SearchComponent from "../components/search/SearchComponent"
 
 const Categories = () => {
     const { collectionName } = useParams<string>()
@@ -26,7 +25,7 @@ const Categories = () => {
         <div key={index}>
             <h2 className="mb-2 text-xl font-bold">{category.collectionName}</h2>
             {category.sections.map((section: any) => (
-                <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-700
+                <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-600
                                 cursor-pointer"
                      key={uuidv4()}
                      onClick={() => navigate(`/artworks/search?Kategoria=${category.collectionName}`)}>
@@ -43,7 +42,7 @@ const Categories = () => {
         <Navbar />
         <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
             <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                <SearchComponent />
+                {/*<SearchComponent />*/}
                 {categoryElements}
             </div>
         </section>

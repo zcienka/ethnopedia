@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
-import { ObjectId } from "mongodb"
 
 const Collection = require("../models/collection")
 const Artwork = require("../models/artwork")
