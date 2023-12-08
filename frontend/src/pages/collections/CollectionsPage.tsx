@@ -10,12 +10,18 @@ import { jwtDecode } from "jwt-decode"
 import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.svg"
 import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
 import WarningPopup from "./WarningPopup"
+import CustomDropdown from "../../components/CustomDropdown"
 
 type JwtPayload = {
     username: string
     firstName: string
     iat: number
     exp: number
+}
+
+interface Option {
+    value: string;
+    label: string;
 }
 
 const CollectionsPage = () => {
@@ -87,12 +93,26 @@ const CollectionsPage = () => {
     }
 
     const [showPopup, setShowNewCollectionPopup] = useState(false)
+    const [sortOrder, setSortOrder] = useState("A-Z")
+
     const navigate = useNavigate()
 
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const allCollections = fetchedData.map((collection: Collection) => (
+        const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+            setSortOrder(event.target.value)
+        }
+
+        const sortedCollections = fetchedData ? [...fetchedData].sort((a, b) => {
+            if (sortOrder === "A-Z") {
+                return a.name.localeCompare(b.name)
+            } else {
+                return b.name.localeCompare(a.name)
+            }
+        }) : []
+
+        const allCollections = sortedCollections.map((collection: Collection) => (
             <div
                 className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border border-gray-300 dark:border-gray-600 cursor-pointer"
                 key={collection.id}
@@ -128,6 +148,11 @@ const CollectionsPage = () => {
                 </div>
             </div>
         ))
+
+        const sortOptions: Option[] = [
+            { value: "A-Z", label: "Kolekcja rosnąco" },
+            { value: "Z-A", label: "Kolekcja malejąco" },
+        ]
 
         return <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
             {showPopup && <CreateCollection onClose={() => setShowNewCollectionPopup(!showPopup)} />}
@@ -174,7 +199,7 @@ const CollectionsPage = () => {
                         </button>
                         <button
                             className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900  dark:bg-gray-800 dark:text-gray-50
+                                        font-medium text-gray-900 dark:bg-gray-800 dark:text-gray-50
                                         dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 mb-2 ml-2 hover:bg-zinc-800 bg-zinc-700 text-white"
                             type="button"
                             onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
@@ -182,27 +207,34 @@ const CollectionsPage = () => {
                             <FileImportIcon />
                             Importuj plik
                         </button>
+
                     </div>
                 </div>
 
                 <div className="flex flex-row">
-                    <button type="button" className="px-4 py-2 mb-2 bg-white"
-                            onClick={checkAll}>
-                        Zaznacz wszystkie
-                    </button>
+                    <div className="flex flex-1">
+                        <button type="button" className="px-4 py-2 mb-2 bg-white"
+                                onClick={checkAll}>
+                            Zaznacz wszystkie
+                        </button>
 
-                    <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white"
-                            onClick={uncheckAll}>
-                        Odznacz wszystkie
-                    </button>
+                        <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white"
+                                onClick={uncheckAll}>
+                            Odznacz wszystkie
+                        </button>
 
-                    <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white"
-                            onClick={() => {
-                                if (Object.keys(checkedCollections).length !== 0)
-                                    setShowWarningPopup(!showWarningPopup)
-                            }}>
-                        Usuń zaznaczone
-                    </button>
+                        <button type="button" className="px-4 py-2 mb-2 ml-2 bg-white"
+                                onClick={() => {
+                                    if (Object.keys(checkedCollections).length !== 0)
+                                        setShowWarningPopup(!showWarningPopup)
+                                }}>
+                            Usuń zaznaczone
+                        </button>
+                    </div>
+                    <CustomDropdown
+                        options={sortOptions}
+                        onSelect={(value: string) => setSortOrder(value)}
+                    />
                 </div>
 
                 {allCollections}
