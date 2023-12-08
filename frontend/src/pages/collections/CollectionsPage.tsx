@@ -100,10 +100,6 @@ const CollectionsPage = () => {
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-            setSortOrder(event.target.value)
-        }
-
         const sortedCollections = fetchedData ? [...fetchedData].sort((a, b) => {
             if (sortOrder === "A-Z") {
                 return a.name.localeCompare(b.name)
