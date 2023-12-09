@@ -20,7 +20,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/api/v1/auth", auth)
-app.use("/api/v1/artwork", artworks)
+app.use("/api/v1/artworks", artworks)
 app.use("/api/v1/collection", collections)
 app.use("/api/v1/sections", sections)
 app.use("/api/v1/subsections", subsections)

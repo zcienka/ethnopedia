@@ -28,7 +28,7 @@ const Categories = () => {
                 <div className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border dark:border-gray-600
                                 cursor-pointer"
                      key={uuidv4()}
-                     onClick={() => navigate(`/artworks/search?Kategoria=${category.collectionName}`)}>
+                     onClick={() => navigate(`/artworks/filter?Kategoria=${category.collectionName}`)}>
                     <div className="flex flex-row">
                         <input type="checkbox" id="exampleCheckbox" name="exampleCheckbox" />
                         <h2 className="text-lg font-semibold ml-4">{section}</h2>

@@ -20,8 +20,8 @@ type JwtPayload = {
 }
 
 interface Option {
-    value: string;
-    label: string;
+    value: string
+    label: string
 }
 
 const CollectionsPage = () => {
@@ -112,7 +112,7 @@ const CollectionsPage = () => {
             <div
                 className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border border-gray-300 dark:border-gray-600 cursor-pointer"
                 key={collection.id}
-                onClick={() => navigate(`/artworks/search?Kategoria=${collection.name}`)}
+                onClick={() => navigate(`/artworks/filter?Kategoria=${collection.name}`)}
             >
 
                 <div className="flex flex-row justify-between">
