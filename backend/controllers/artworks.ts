@@ -60,6 +60,15 @@ const getFilteredArtworks = async (req: Request, res: Response, next: NextFuncti
     }
 }
 
+const getArtworksByCategory = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        let query = JSON.parse(JSON.stringify(req.query))
+        const records = await Artwork.find(query).exec()
+        return res.status(200).json(records)
+    } catch (error) {
+        next(error)
+    }
+}
 
 const createArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const title = req.body.title
@@ -111,7 +120,7 @@ const batchDeleteArtworks = async (req: Request, res: Response, next: NextFuncti
             return res.status(404).send({ message: "Artworks not found" })
         }
 
-        const result =  await Artwork.deleteMany({ _id: { $in: artworksToDeleteList } })
+        const result = await Artwork.deleteMany({ _id: { $in: artworksToDeleteList } })
 
         res.status(200).json({ message: req.params.artwork, deletedCount:  result.deletedCount})
     } catch (error) {
@@ -124,5 +133,6 @@ module.exports = {
     getArtwork,
     createArtwork,
     getFilteredArtworks,
-    batchDeleteArtworks
+    batchDeleteArtworks,
+    getArtworksByCategory
 }

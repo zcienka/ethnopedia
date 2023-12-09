@@ -26,5 +26,5 @@ export const useBatchDeleteCollectionMutation = () => {
 
 export const getSingleCollection = async (id: string) => {
     const response = await axios.get(`${API_URL}v1/collection/${id}`)
-    return response.data.collection as Collection
+    return response.data as Collection
 }

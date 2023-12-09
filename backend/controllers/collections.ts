@@ -44,21 +44,19 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
 }
 
 const getCollection = async (req: Request, res: Response, next: any) => {
-    const collectionId = req.params.collectionId
+    const collectionId = req.params.id
 
     try {
-        if (!mongoose.isValidObjectId(collectionId)) {
-            return res.status(400).json(`Invalid collection id: ${collectionId}`)
-        }
+        // if (!mongoose.isValidObjectId(collectionId)) {
+        //     return res.status(400).json(`Invalid collection id: ${collectionId}`)
+        // }
 
-        const collection = await Collection.findById(collectionId).exec()
-        const columnNames = Object.keys(collection.toObject())
-
+        const collection = await Collection.find({ name: collectionId }).exec()
 
         if (!collection) {
             return res.status(404).json("Collection not found")
         } else {
-            return res.status(200).json({ collection, columnNames })
+            return res.status(200).json(collection[0])
         }
 
     } catch (error) {
@@ -90,15 +88,15 @@ const batchDeleteCollections = async (req: Request, res: Response, next: NextFun
             return res.status(400).send({ message: "Collections not found" })
         }
         const collectionsToDeleteList = collectionsToDelete.split(",")
-        const existingCollections = await Collection.find({ _id: { $in: collectionsToDeleteList }});
+        const existingCollections = await Collection.find({ _id: { $in: collectionsToDeleteList } })
 
         if (existingCollections.length === 0) {
             return res.status(404).send({ message: "Collections not found" })
         }
 
-        const result =  await Collection.deleteMany({ _id: { $in: collectionsToDeleteList } })
+        const result = await Collection.deleteMany({ _id: { $in: collectionsToDeleteList } })
 
-        res.status(200).json({ message: req.params.collection, deletedCount:  result.deletedCount})
+        res.status(200).json({ message: req.params.collection, deletedCount: result.deletedCount })
     } catch (error) {
         next(error)
     }

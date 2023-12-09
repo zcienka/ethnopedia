@@ -12,6 +12,7 @@ import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.
 import CreateArtwork from "./CreateArtwork"
 import WarningPopup from "../../pages/collections/WarningPopup"
 import CustomDropdown from "../CustomDropdown"
+import { getSingleCollection } from "../../api/collections"
 
 const Artworks = () => {
     const location = useLocation()
@@ -20,14 +21,25 @@ const Artworks = () => {
     const [showCreateArtwork, setShowCreateArtwork] = useState<boolean>(false)
     const [showWarningPopup, setShowWarningPopup] = useState(false)
     const [sortOrder, setSortOrder] = useState<string>("default")
+    const [collectionName, setCollectionName] = useState<string | undefined>()
+
     const queryClient = useQueryClient()
 
     const { mutate: batchDeleteMutation } = useBatchDeleteArtworkMutation()
 
     const searchParamsString = useMemo(() => {
-        const params = new URLSearchParams(location.search)
-        return params.toString()
-    }, [location.search])
+        console.log(location.search)
+        console.log(location.pathname)
+        console.log(location.pathname + location.search)
+        console.log(location)
+
+        if (location.search.startsWith("?Kategoria=")) {
+            const collectionName = location.search.replace("?Kategoria=", "")
+            setCollectionName(collectionName)
+        }
+
+        return location.pathname + location.search
+    }, [location])
 
     const sortOptions = [
         { value: "title-asc", label: "Tytuł rosnąco" },
@@ -36,15 +48,19 @@ const Artworks = () => {
         { value: "year-desc", label: "Rok malejąco" },
     ]
 
-    const { data: fetchedData } = useQuery({
-        queryKey: ["artwork", searchParamsString],
+    const { data: artworkData } = useQuery({
+        queryKey: ["artwork"],
         queryFn: () => getAdvancedSearchResult(searchParamsString),
         enabled: !!searchParamsString,
     })
 
+    const { data: collectionData } = useQuery({
+        enabled: !!collectionName,
+        queryFn: () => getSingleCollection(collectionName as string),
+    })
+
     const selectAll = () => {
-        console.log("selectAll")
-        const newSelection = fetchedData.reduce((acc: any, artwork: any) => {
+        const newSelection = artworkData.reduce((acc: any, artwork: any) => {
             acc[artwork._id] = true
             return acc
         }, {})
@@ -52,7 +68,7 @@ const Artworks = () => {
     }
 
     const exportToExcel = () => {
-        // const ws = XLSX.utils.json_to_sheet(fetchedData)
+        // const ws = XLSX.utils.json_to_sheet(artworkData)
         // const wb = XLSX.utils.book_new()
         // XLSX.utils.book_append_sheet(wb, ws, "DataSheet")
         // XLSX.writeFile(wb, "DataExport.xlsx")
@@ -74,8 +90,8 @@ const Artworks = () => {
     }
 
     const sortedArtworks = useMemo(() => {
-        return sortArtworks([...(fetchedData || [])], sortOrder)
-    }, [fetchedData, sortOrder])
+        return sortArtworks([...(artworkData || [])], sortOrder)
+    }, [artworkData, sortOrder])
 
     const handleCheck = (id: string) => {
         setSelectedArtworks((prev) => ({ ...prev, [id]: !prev[id] }))
@@ -98,10 +114,11 @@ const Artworks = () => {
                 })
         }
     }
-
+    console.log({ collectionData })
+    console.log(collectionData?.description)
     const navigate = useNavigate()
 
-    if (fetchedData === undefined) {
+    if (artworkData === undefined) {
         return <LoadingPage />
     } else {
         const allArtworks = sortedArtworks.map((artwork: any) => (
@@ -139,6 +156,14 @@ const Artworks = () => {
                                                warningMessage={"Czy na pewno chcesz usunąć zaznaczone rekordy?"} />}
             <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
                 <div className="mx-auto max-w-screen-xl lg:px-12">
+                    <div className="mb-4">
+                        <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
+                            {collectionData?.name}
+                        </h2>
+                        <p className="text-lg text-gray-600 dark:text-gray-300">
+                            {collectionData?.description}
+                        </p>
+                    </div>
                     <SearchComponent />
                     <div className="flex  w-full md:w-auto mb-4">
                         <div className="flex flex-1 space-x-3">
@@ -175,9 +200,9 @@ const Artworks = () => {
                                 type="button"
                                 onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
                             >
-                        <span className="text-gray-400 dark:text-gray-400">
-                            <FileImportIcon />
-                        </span>
+                            <span className="text-gray-400 dark:text-gray-400">
+                                <FileImportIcon />
+                            </span>
                                 Importuj plik
                             </button>
 
