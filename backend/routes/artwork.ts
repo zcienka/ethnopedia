@@ -6,13 +6,13 @@ const {
     getAllArtworks,
     getArtwork,
     createArtwork,
-    getFilteredArtworks,
+    searchArtworks,
     batchDeleteArtworks,
-    getArtworksByCategory
+    filterArtworks
 } = require("../controllers/artworks")
 
-router.get("/search", getFilteredArtworks)
-router.route("/filter").get(getArtworksByCategory)
+router.get("/search", searchArtworks)
+router.route("/filter").get(filterArtworks)
 router.route("/").get(getAllArtworks)
 router.route("/:artworkId").get(getArtwork)
 router.route("/:artwork").delete(batchDeleteArtworks)

@@ -51,7 +51,6 @@ export const useBatchDeleteArtworkMutation = () => {
     })
 }
 
-
 export const deleteArtwork = async (id: string) => {
     const response = await axios.delete(`${API_URL}v1/artworks/${id}`)
     return response.data
