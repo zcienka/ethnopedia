@@ -14,7 +14,6 @@ const Categories = () => {
         queryFn: () => getCategory(collectionName as string),
         enabled: !!collectionName,
     })
-
     const navigate = useNavigate()
 
     if (fetchedData === undefined) {

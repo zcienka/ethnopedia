@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useFormik, Formik, Form } from "formik"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
 import { useActionData, useNavigate } from "react-router-dom"
-import { getQuickSearchResult } from "../../api/artworks"
+import { getQuickSearchResult, getAdvancedSearchResult } from "../../api/artworks"
 
 
 const QuickSearch = () => {
@@ -11,7 +11,7 @@ const QuickSearch = () => {
     const [showValidationMessage, setShowValidationMessage] = useState<boolean>(false)
     
     const searchParams = new URLSearchParams(document.location.search)   
-    const collectionName = searchParams.get("Kategoria")
+    const categoryText = searchParams.get("Kategoria")
 
     const formik = useFormik({
         initialValues: {
@@ -19,8 +19,8 @@ const QuickSearch = () => {
         },
         onSubmit: (values, actions) => {
             setSearchText(values.searchText) 
-            if(typeof collectionName === "string") {
-                handleSearch(collectionName, values.searchText)
+            if(typeof categoryText === "string") {
+                handleSearch(categoryText, values.searchText)
             }
             actions.setSubmitting(false)
         },
@@ -31,10 +31,8 @@ const QuickSearch = () => {
 
     const handleSearch = (cn: string, v: string) => {
         navigate(`/artworks/search?Kategoria=${cn}&searchText=${v}`)
-        console.log(v)
-        getQuickSearchResult(`?Kategoria=${cn}&searchText=${v}`)
+        getAdvancedSearchResult(`Kategoria=${cn}&searchText=${v}`)
         setShowValidationMessage(() => false)
-
     }
 
     return <>

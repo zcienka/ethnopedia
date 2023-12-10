@@ -1,9 +1,19 @@
 import mongoose from "mongoose"
+import {MongoClient} from 'mongodb';
 
-const connectDB = (url: any) => {
+const client = new MongoClient(process.env.MONGO_URI ?? "mongodb://")
+
+export const connectDB = (url: any) => {
     return mongoose.connect(url ?? "mongodb://")
 }
 
-module.exports = connectDB
+export const getMongoClient = () => {
+    return client
+}
 
-export default connectDB
+export const connectDBNative = () => {
+    const client = getMongoClient()
+    return client.connect();
+}
+
+module.exports = {connectDB, connectDBNative, getMongoClient}

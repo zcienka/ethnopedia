@@ -8,18 +8,21 @@ export const getArtworks = async () => {
 }
 
 export const getArtwork = async (id: string) => {
-    return await axios.get(`${API_URL}v1/artwork/${id}`)
+    const response = await axios.get(`${API_URL}v1/artwork/${id}`)
         .then(res => res.data)
+    return response
 }
 
 export const getAdvancedSearchResult = async (queryParameters: string) => {
-    return await axios.get(`${API_URL}v1/artwork/filter?${queryParameters}`)
+    const response = await axios.get(`${API_URL}v1/artwork/filter?${queryParameters}`)
         .then(res => res.data)
+    return response
 }
 
 export const getQuickSearchResult = async (queryParameters: string) => {
-    return await axios.get(`${API_URL}v1/artwork/search?${queryParameters}`)
-        .then(res => res.data)
+    const response = await axios.get(`${API_URL}v1/artwork/search?${queryParameters}`)
+           .then(res => res.data)
+    return response
 }
 
 export const createArtwork = async () => {

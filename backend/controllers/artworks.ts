@@ -1,19 +1,23 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
+const {MongoClient} = require('mongodb');
+
+import {getMongoClient} from "../db/connect"
 
 const asyncWrapper = require("../middleware/async")
 
 const Artwork = require("../models/artwork")
+const customArtwork = require("../models/customArtwork")
 
 const getAllArtworks = async (req: Request, res: Response, next: NextFunction) => {
     const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1
     const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 5
 
     const skip = (page - 1) * limit
-
+    
     // const total = await Artwork.countDocuments()
     // const totalPages = Math.ceil(total / limit)
-
+    
     // const artworks = await Artwork.find({}).skip(skip).limit(limit)
     const artworks = await Artwork.find({}).exec()
     const columnNames = Object.keys(artworks[0].toObject())
@@ -43,17 +47,52 @@ const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
+const getArtworksQuickSearch = async (req: Request, res: Response, next: NextFunction) => {
+    // console.log(req.query.Kategoria, req.query.searchText)
+    // console.log(typeof req.query.Kategoria, typeof req.query.searchText)
+    try {
+        const client = getMongoClient()//new MongoClient(process.env.MONGO_URI)
+        const fInfo = await client.db().collection('artworks').find({Kategoria: req.query.Kategoria, Tytuł: {"$regex": req.query.searchText, "$options": "i" }}).toArray() 
+        await client.close()
+        //console.log(fInfo)
+        return res.status(200).json(fInfo)
+
+
+        // let searchQuery = req.query.searchQuery
+        // console.log("TRYING")
+        // if (typeof searchQuery === "string" && searchQuery.trim() !== "") {
+        //     const records = await Artwork.find({ $search: searchQuery }).exec()
+        //     return res.status(200).json(records)
+        // } else {
+        //     return res.status(400).json({ message: "Invalid search query" })
+        // }
+    } catch (error) {
+        console.log("ERROR")
+        next(error)
+    }
+}
+
 const getFilteredArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let query = JSON.parse(JSON.stringify(req.query))
+        const client = new MongoClient(process.env.MONGO_URI)
+        
+        const records = await client.db().collection('artworks').find({Kategoria: query["Kategoria"]}).toArray() 
+        if("searchText" in query) {
+            let query_json: any = {Kategoria: query["Kategoria"], $or: []}
+            const artworks = await client.db().collection('artworks').find({Kategoria: query["Kategoria"]});
+            artworks.forEach(function (entry: any) {
+                for (const [k, v] of Object.entries(entry)) {
+                    query_json.$or.push({[k]: {"$regex": query["searchText"], "$options": "i"} })
+                }
+            });
+            const quicksearchRecords = await client.db().collection('artworks').find(query_json).toArray() 
+            await client.close()
+            return res.status(200).json(quicksearchRecords)
+        }
 
-        Object.keys(query).forEach(key => {
-            if (typeof query[key] === "string") {
-                query[key] = new RegExp(query[key], "i")
-            }
-        })
 
-        const records = await Artwork.find(query).exec()
+        await client.close()
         return res.status(200).json(records)
     } catch (error) {
         next(error)
@@ -123,6 +162,7 @@ module.exports = {
     getAllArtworks,
     getArtwork,
     createArtwork,
+    getArtworksQuickSearch,
     getFilteredArtworks,
     batchDeleteArtworks
 }

@@ -5,6 +5,7 @@ import { API_URL } from "../config"
 
 export const getCollections = async () => {
     const response = await axios.get(`${API_URL}v1/collection`)
+    // console.log(response.data.collections)
     return response.data.collections as Collection[]
 }
 
