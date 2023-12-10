@@ -13,6 +13,7 @@ import CreateArtwork from "./CreateArtwork"
 import WarningPopup from "../../pages/collections/WarningPopup"
 import CustomDropdown from "../CustomDropdown"
 import { getSingleCollection } from "../../api/collections"
+import FilterDropdown from "../filter/FilterDropdown"
 
 const Artworks = () => {
     const location = useLocation()
@@ -24,7 +25,6 @@ const Artworks = () => {
     const [collectionName, setCollectionName] = useState<string | undefined>()
 
     const queryClient = useQueryClient()
-
     const { mutate: batchDeleteMutation } = useBatchDeleteArtworkMutation()
 
     const searchParamsString = useMemo(() => {
@@ -114,28 +114,27 @@ const Artworks = () => {
                 })
         }
     }
-    console.log({ collectionData })
-    console.log(collectionData?.description)
+
     const navigate = useNavigate()
 
     if (artworkData === undefined) {
         return <LoadingPage />
     } else {
         const allArtworks = sortedArtworks.map((artwork: any) => (
-            <div className="px-4 py-4 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border border-gray-300 dark:border-gray-600
-            cursor-pointer"
+            <div className="px-4 max-w-screen-xl py-4 bg-white dark:bg-gray-800 shadow-md w-full rounded-lg mb-4
+                border border-gray-300 dark:border-gray-600 cursor-pointer"
                  key={artwork._id}
                  onClick={() => navigate(`/artwork/${artwork._id}`)}>
 
                 <div className="flex flex-row">
-                    <span className="mr-4 flex items-center">
-                        <input type="checkbox"
-                               checked={selectedArtworks[artwork._id!] || false}
-                               onClick={(e) => e.stopPropagation()}
-                               onChange={() => {
-                                   handleCheck(artwork._id!)
-                               }} />
-                    </span>
+                        <span className="mr-4 flex items-center">
+                            <input type="checkbox"
+                                   checked={selectedArtworks[artwork._id!] || false}
+                                   onClick={(e) => e.stopPropagation()}
+                                   onChange={() => {
+                                       handleCheck(artwork._id!)
+                                   }} />
+                        </span>
 
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Tytuł}</h3>
@@ -154,62 +153,64 @@ const Artworks = () => {
             {showWarningPopup && <WarningPopup onClose={() => setShowWarningPopup(!showWarningPopup)}
                                                deleteSelected={deleteSelected}
                                                warningMessage={"Czy na pewno chcesz usunąć zaznaczone rekordy?"} />}
-            <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
-                <div className="mx-auto max-w-screen-xl lg:px-12">
+
+            <div className="flex flex-col w-full items-center bg-gray-50 dark:bg-gray-900 p-2 sm:p-4">
+                <div className="flex flex-col  max-w-screen-xl  w-full lg:px-6">
                     <div className="mb-4">
-                        <h2 className="text-3xl font-bold text-gray-800 dark:text-white">
+                        <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
                             {collectionData?.name}
                         </h2>
-                        <p className="text-lg text-gray-600 dark:text-gray-300">
+                        <p className="text-xl text-gray-600 dark:text-gray-300">
                             {collectionData?.description}
                         </p>
                     </div>
                     <SearchComponent />
-                    <div className="flex  w-full md:w-auto mb-4">
-                        <div className="flex flex-1 space-x-3">
+
+                    <div className="flex w-full md:w-auto mb-4">
+                        <div className="flex flex-1 space-x-2">
                             <button
                                 type="button"
                                 className="flex items-center justify-center dark:text-white bg-white
-                                    hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium
-                                    text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
-                                    dark:focus:ring-primary-800"
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium
+                                        text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
+                                        dark:focus:ring-primary-800"
                                 onClick={() => setShowCreateArtwork(showCreateArtwork => !showCreateArtwork)}>
 
-                        <span className="mr-2 text-gray-500 dark:text-gray-400">
-                            <PlusIcon />
-                        </span>
+                                    <span className="mr-2 text-gray-500 dark:text-gray-400">
+                                        <PlusIcon />
+                                    </span>
                                 Nowy rekord
                             </button>
                             <button
                                 className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
+                                            hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 type="button"
                                 onClick={() => exportToExcel()}
                             >
-                        <span className="text-gray-400 dark:text-gray-400">
-                            <FileExportIcon />
-                        </span>
+                            <span className="text-gray-400 dark:text-gray-400">
+                                <FileExportIcon />
+                            </span>
                                 Eksportuj plik
                             </button>
                             <button
                                 className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 type="button"
                                 onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
                             >
-                            <span className="text-gray-400 dark:text-gray-400">
-                                <FileImportIcon />
-                            </span>
+                                <span className="text-gray-400 dark:text-gray-400">
+                                    <FileImportIcon />
+                                </span>
                                 Importuj plik
                             </button>
 
                             <button
                                 className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 type="button"
                                 onClick={selectAll}
                             >
@@ -218,8 +219,8 @@ const Artworks = () => {
 
                             <button
                                 className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 type="button"
                                 onClick={deselectAll}
                             >
@@ -228,8 +229,8 @@ const Artworks = () => {
 
                             <button
                                 className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                                 type="button"
                                 onClick={() => {
                                     if (Object.keys(selectedArtworks).length !== 0)
@@ -241,16 +242,31 @@ const Artworks = () => {
                         </div>
 
                         <span className="">
-                            <CustomDropdown
-                                options={sortOptions}
-                                onSelect={(value) => setSortOrder(value)}
-                            />
-                        </span>
+                                <CustomDropdown
+                                    options={sortOptions}
+                                    onSelect={(value) => setSortOrder(value)}
+                                />
+                            </span>
                     </div>
                     {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
-                    {allArtworks}
                 </div>
-            </section>
+            </div>
+
+            <div className="flex flex-row">
+                <div
+                    className="flex mx-auto flex-1 justify-end w-full">
+                    <div>
+                        <FilterDropdown />
+                    </div>
+                </div>
+                <div className="w-full flex-2 lg:px-6 max-w-screen-xl">
+
+                    {allArtworks}
+
+                </div>
+                <div className="mx-auto w-full flex-1">
+                </div>
+            </div>
         </>
     }
 }

@@ -11,6 +11,7 @@ import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.
 import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
 import WarningPopup from "./WarningPopup"
 import CustomDropdown from "../../components/CustomDropdown"
+import FilterDropdown from "../../components/filter/FilterDropdown"
 
 type JwtPayload = {
     username: string
@@ -158,7 +159,7 @@ const CollectionsPage = () => {
             <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                 <div className="flex flex-row">
                     <div className="w-full">
-                        <h1 className="font-semibold text-4xl mb-4">
+                        <h1 className="font-bold text-4xl mb-4">
                             Witaj {firstName}!
                         </h1>
                         <h2 className="mb-2 text-lg">

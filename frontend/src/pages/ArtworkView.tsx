@@ -27,8 +27,8 @@ const ArtworkView = () => {
             <section className="p-3 sm:p-5">
                 <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
                     <div className="">
-                        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{Tytuł}</h1>
-                        <p className="text-xl text-gray-600 dark:text-gray-400 mt-2">Artyści: {Artyści}</p>
+                        <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł}</h1>
+                        <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści}</p>
                         <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok}</p>
                         {Object.entries(detailsToShow).map(([columName, value]: any) => (
                             columName !== "_id" && <div key={uuidv4()} className="py-2 font-medium">
