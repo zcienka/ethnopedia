@@ -43,7 +43,7 @@ const AdvancedSearch = () => {
     const formik = useFormik({
         initialValues: initialRule,
         onSubmit: (values, { resetForm }) => {
-            if (values.field && values.operator && values.value) {
+            if (values.field  && values.value) {
                 setRules([...rules, { ...values, id: Date.now() }])
                 resetForm()
                 setShowValidationMessage(() => false)
@@ -80,15 +80,6 @@ const AdvancedSearch = () => {
                             <option value={subcategory.category} key={uuidv4()}>{subcategory.category}</option>
                         ))}
                     </select>
-                    <select
-                        name="operator"
-                        onChange={formik.handleChange}
-                        value={formik.values.operator}
-                        className="border p-2"
-                    >
-                        <option value="jest równy">jest równy</option>
-                        <option value="zawiera słowo">zawiera słowo</option>
-                    </select>
                     <input
                         name="value"
                         type="text"
@@ -97,7 +88,7 @@ const AdvancedSearch = () => {
                         className="border p-2 rounded-lg"
                     />
 
-                    <button type="submit" className="flex items-center bg-zinc-700 hover:bg-zinc-600 text-white p-2
+                    <button type="submit" className="flex items-center bg-zinc-800 hover:bg-zinc-700 text-white p-2
                             font-semibold">
                         <span className="mr-1">
                             <PlusIcon />
@@ -105,7 +96,7 @@ const AdvancedSearch = () => {
 
                         Dodaj regułę
                     </button>
-                    <button className="flex items-center font-semibold bg-blue-800 hover:bg-blue-700
+                    <button className="flex items-center font-semibold bg-blue-500 hover:bg-blue-700
                             text-white p-2"
                             onClick={handleSearch}
                     >
@@ -129,17 +120,12 @@ const AdvancedSearch = () => {
                         {rule.field}
                     </span>
                     <span className="border border-blue-300 p-2 rounded-lg bg-blue-100 text-blue-500 font-semibold">
-                        {rule.operator}
-                    </span>
-                    <span className="border border-blue-300 p-2 rounded-lg bg-blue-100 text-blue-500 font-semibold">
                         {rule.value}
                     </span>
                 </div>
             ))}
 
             <hr className="border-t border-gray-200 my-4 dark:border-gray-600" />
-            {/*<h2 className="mb-2">Filters</h2>*/}
-            {/*<FilterButtons />*/}
         </div>
     )
 }

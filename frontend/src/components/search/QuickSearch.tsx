@@ -22,14 +22,13 @@ const QuickSearch = () => {
                     value={formik.values.searchText}
                     className="border border-gray-300 p-2 rounded-lg"
                 />
-                <button type="submit" className="bg-blue-800 hover:bg-blue-700 text-white p-2 flex items-center">
+                <button type="submit" className="bg-blue-500 hover:bg-blue-400 text-white p-2 flex items-center">
                     <span className="mr-1">
                         <SearchLoopIcon />
                     </span>
 
                     Wyszukaj
                 </button>
-
             </form>
         </div>
         <hr className="border-t border-gray-200 my-4 dark:border-gray-600" />

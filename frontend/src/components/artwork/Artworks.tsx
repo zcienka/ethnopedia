@@ -28,11 +28,6 @@ const Artworks = () => {
     const { mutate: batchDeleteMutation } = useBatchDeleteArtworkMutation()
 
     const searchParamsString = useMemo(() => {
-        console.log(location.search)
-        console.log(location.pathname)
-        console.log(location.pathname + location.search)
-        console.log(location)
-
         if (location.search.startsWith("?Kategoria=")) {
             const collectionName = location.search.replace("?Kategoria=", "")
             setCollectionName(collectionName)
@@ -155,7 +150,7 @@ const Artworks = () => {
                                                warningMessage={"Czy na pewno chcesz usunąć zaznaczone rekordy?"} />}
 
             <div className="flex flex-col w-full items-center bg-gray-50 dark:bg-gray-900 p-2 sm:p-4">
-                <div className="flex flex-col  max-w-screen-xl  w-full lg:px-6">
+                <div className="flex flex-col  max-w-screen-xl w-full lg:px-6">
                     <div className="mb-4">
                         <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
                             {collectionData?.name}
@@ -166,51 +161,51 @@ const Artworks = () => {
                     </div>
                     <SearchComponent />
 
-                    <div className="flex w-full md:w-auto mb-4">
+                    <div className="flex w-full md:w-auto">
                         <div className="flex flex-1 space-x-2">
                             <button
                                 type="button"
                                 className="flex items-center justify-center dark:text-white bg-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium
                                         text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
-                                        dark:focus:ring-primary-800"
+                                        dark:focus:ring-primary-800 font-semibold text-white  bg-zinc-800 hover:bg-zinc-700"
                                 onClick={() => setShowCreateArtwork(showCreateArtwork => !showCreateArtwork)}>
 
-                                    <span className="mr-2 text-gray-500 dark:text-gray-400">
+                                    <span className="mr-2 text-white dark:text-gray-400">
                                         <PlusIcon />
                                     </span>
                                 Nowy rekord
                             </button>
                             <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                            hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm text-white
+                                            font-medium text-white focus:outline-none bg-white rounded-lg
+                                            hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 font-semibold bg-zinc-800 hover:bg-zinc-700
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 "
                                 type="button"
                                 onClick={() => exportToExcel()}
                             >
-                            <span className="text-gray-400 dark:text-gray-400">
+                            <span className="text-white dark:text-gray-400">
                                 <FileExportIcon />
                             </span>
                                 Eksportuj plik
                             </button>
                             <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-semibold
+                                            font-medium text-white focus:outline-none bg-white rounded-lg
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-white bg-zinc-800 hover:bg-zinc-700"
                                 type="button"
                                 onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
                             >
-                                <span className="text-gray-400 dark:text-gray-400">
+                                <span className="text-white dark:text-gray-400">
                                     <FileImportIcon />
                                 </span>
                                 Importuj plik
                             </button>
 
                             <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-semibold
+                                            font-medium text-white focus:outline-none bg-white rounded-lg
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-white bg-zinc-800 hover:bg-zinc-700"
                                 type="button"
                                 onClick={selectAll}
                             >
@@ -218,9 +213,9 @@ const Artworks = () => {
                             </button>
 
                             <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-semibold
+                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-white bg-zinc-800 hover:bg-zinc-700"
                                 type="button"
                                 onClick={deselectAll}
                             >
@@ -228,9 +223,9 @@ const Artworks = () => {
                             </button>
 
                             <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
+                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-semibold
                                             font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-white bg-zinc-800 hover:bg-zinc-700"
                                 type="button"
                                 onClick={() => {
                                     if (Object.keys(selectedArtworks).length !== 0)
@@ -255,14 +250,10 @@ const Artworks = () => {
             <div className="flex flex-row">
                 <div
                     className="flex mx-auto flex-1 justify-end w-full">
-                    <div>
-                        <FilterDropdown />
-                    </div>
+                    <FilterDropdown />
                 </div>
                 <div className="w-full flex-2 lg:px-6 max-w-screen-xl">
-
                     {allArtworks}
-
                 </div>
                 <div className="mx-auto w-full flex-1">
                 </div>

@@ -43,7 +43,7 @@ const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-const getFilteredArtworks = async (req: Request, res: Response, next: NextFunction) => {
+const searchArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let query = JSON.parse(JSON.stringify(req.query))
 
@@ -59,13 +59,12 @@ const getFilteredArtworks = async (req: Request, res: Response, next: NextFuncti
         next(error)
     }
 }
-
-const getArtworksByCategory = async (req: Request, res: Response, next: NextFunction) => {
+const filterArtworks = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        let query = JSON.parse(JSON.stringify(req.query))
-        const records = await Artwork.find(query).exec()
-        return res.status(200).json(records)
-    } catch (error) {
+        const records = await Artwork.find(req.query).exec()
+
+        return res.json(records)
+    } catch (error: any) {
         next(error)
     }
 }
@@ -114,7 +113,7 @@ const batchDeleteArtworks = async (req: Request, res: Response, next: NextFuncti
             return res.status(400).send({ message: "Artworks not found" })
         }
         const artworksToDeleteList = artworksToDelete.split(",")
-        const existingArtworks = await Artwork.find({ _id: { $in: artworksToDeleteList }});
+        const existingArtworks = await Artwork.find({ _id: { $in: artworksToDeleteList } })
 
         if (existingArtworks.length === 0) {
             return res.status(404).send({ message: "Artworks not found" })
@@ -122,7 +121,7 @@ const batchDeleteArtworks = async (req: Request, res: Response, next: NextFuncti
 
         const result = await Artwork.deleteMany({ _id: { $in: artworksToDeleteList } })
 
-        res.status(200).json({ message: req.params.artwork, deletedCount:  result.deletedCount})
+        res.status(200).json({ message: req.params.artwork, deletedCount: result.deletedCount })
     } catch (error) {
         next(error)
     }
@@ -132,7 +131,7 @@ module.exports = {
     getAllArtworks,
     getArtwork,
     createArtwork,
-    getFilteredArtworks,
+    searchArtworks,
     batchDeleteArtworks,
-    getArtworksByCategory
+    filterArtworks,
 }
