@@ -6,9 +6,11 @@ const {
     getAllCollections,
     getCollection,
     createCollection,
-    batchDeleteCollections
+    batchDeleteCollections,
+    artworksInCategory
 } = require("../controllers/collections")
 
+router.route("/:category/artworks").get(artworksInCategory)
 router.route("/").get(getAllCollections)
 router.route("/").post(createCollection)
 router.route("/:id").get(getCollection)

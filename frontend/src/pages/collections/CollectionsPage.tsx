@@ -12,6 +12,7 @@ import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.
 import WarningPopup from "./WarningPopup"
 import CustomDropdown from "../../components/CustomDropdown"
 import FilterDropdown from "../../components/filter/FilterDropdown"
+import Navigation from "../../components/Navigation"
 
 type JwtPayload = {
     username: string
@@ -113,7 +114,7 @@ const CollectionsPage = () => {
             <div
                 className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border border-gray-300 dark:border-gray-600 cursor-pointer"
                 key={collection.id}
-                onClick={() => navigate(`/artworks/filter?Kategoria=${collection.name}`)}
+                onClick={() => navigate(`/collections/${collection.name}/artworks`)}
             >
 
                 <div className="flex flex-row justify-between">

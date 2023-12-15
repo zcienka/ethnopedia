@@ -25,18 +25,14 @@ const App = () => {
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
                 <Routes>
-                    {/*<Route path="/" element={<LandingPage/>} />*/}
                     <Route path="/artwork/:artworkId/edit" element={<ArtworkEdit />} />
-                    <Route path="/artwork/:artworkId" element={<ArtworkView />} />
+                    <Route path="/collections/:collection/artworks/:artworkId" element={<ArtworkView />} />
 
-                    {/*<Route path="/" element={<Artworks />} />*/}
                     <Route path="/" element={<Home />} />
-                    <Route path="/artworks/:queryParams" element={<Artworks />} />
+                    <Route path="/collections/:collection/artworks" element={<Artworks />} />
                     <Route path="/categories/:collectionName" element={<Categories />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
-
-                    {/*<Route path="/:artworkId" element={<ArtworkView />} />*/}
 
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>

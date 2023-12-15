@@ -312,9 +312,6 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
 
             {selectedSubcategories.length !== 0 && <div className="flex flex-col">
                 <div className="ml-8 flex flex-row relative">
-                    {/*<span className="absolute bg-gray-300 h-1/2 w-0.5"></span>*/}
-
-                    {/*<hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />*/}
                     <div>
                         {selectedSubcategories.map((subcatName, subcatIndex) => (
                             <div className="flex flex-row items-center relative">
