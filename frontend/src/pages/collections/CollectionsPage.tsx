@@ -11,8 +11,6 @@ import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.
 import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
 import WarningPopup from "./WarningPopup"
 import CustomDropdown from "../../components/CustomDropdown"
-import FilterDropdown from "../../components/filter/FilterDropdown"
-import Navigation from "../../components/Navigation"
 
 type JwtPayload = {
     username: string
