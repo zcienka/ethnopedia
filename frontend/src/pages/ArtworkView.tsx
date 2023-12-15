@@ -5,6 +5,7 @@ import LoadingPage from "./LoadingPage"
 import React, { useState } from "react"
 import Navbar from "../components/navbar/Navbar"
 import { v4 as uuidv4 } from "uuid"
+import Navigation from "../components/Navigation"
 
 const ArtworkView = () => {
     const { artworkId } = useParams<string>()
@@ -24,9 +25,10 @@ const ArtworkView = () => {
 
         return <>
             <Navbar />
-            <section className="p-3 sm:p-5">
-                <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                    <div className="">
+            <section className="p-2 sm:p-4">
+                <div className="mx-auto max-w-screen-xl lg:px-6">
+                    <Navigation />
+                    <div className="mt-2">
                         <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł}</h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści}</p>
                         <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok}</p>
@@ -40,7 +42,7 @@ const ArtworkView = () => {
                     <button
                         type="button"
                         onClick={() => setShowMore(!showMore)}
-                        className="mt-4 px-4 py-2 bg-sky-500 text-white hover:bg-sky-400"
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold border-none"
                     >
                         {showMore ? "Pokaż mniej" : "Pokaż więcej"}
                     </button>

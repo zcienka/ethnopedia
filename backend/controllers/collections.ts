@@ -43,6 +43,16 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
     res.status(200).json({ collections: combinedArray })
 }
 
+const artworksInCategory = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+    try {
+        const records = await Artwork.find({ Kategoria: req.params.category }).exec()
+
+        return res.json(records)
+    } catch (error: any) {
+        next(error)
+    }
+}
+
 const getCollection = async (req: Request, res: Response, next: any) => {
     const collectionId = req.params.id
 
@@ -107,4 +117,5 @@ module.exports = {
     getCollection,
     createCollection,
     batchDeleteCollections,
+    artworksInCategory
 }

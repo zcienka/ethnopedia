@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from "react-query"
-import { getAdvancedSearchResult, useBatchDeleteArtworkMutation } from "../../api/artworks"
+import { getArtworksByCategory, useBatchDeleteArtworkMutation } from "../../api/artworks"
 import LoadingPage from "../../pages/LoadingPage"
 import React, { useMemo, useState } from "react"
 import Navbar from "../navbar/Navbar"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import SearchComponent from "../search/SearchComponent"
 import FileDropzone from "../FileDropzone"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
@@ -14,27 +14,18 @@ import WarningPopup from "../../pages/collections/WarningPopup"
 import CustomDropdown from "../CustomDropdown"
 import { getSingleCollection } from "../../api/collections"
 import FilterDropdown from "../filter/FilterDropdown"
+import Navigation from "../Navigation"
 
 const Artworks = () => {
-    const location = useLocation()
     const [selectedArtworks, setSelectedArtworks] = useState<{ [key: string]: boolean }>({})
     const [showFileDropzone, setShowFileDropzone] = useState<boolean>(false)
     const [showCreateArtwork, setShowCreateArtwork] = useState<boolean>(false)
     const [showWarningPopup, setShowWarningPopup] = useState(false)
     const [sortOrder, setSortOrder] = useState<string>("default")
-    const [collectionName, setCollectionName] = useState<string | undefined>()
 
+    const { collection } = useParams()
     const queryClient = useQueryClient()
     const { mutate: batchDeleteMutation } = useBatchDeleteArtworkMutation()
-
-    const searchParamsString = useMemo(() => {
-        if (location.search.startsWith("?Kategoria=")) {
-            const collectionName = location.search.replace("?Kategoria=", "")
-            setCollectionName(collectionName)
-        }
-
-        return location.pathname + location.search
-    }, [location])
 
     const sortOptions = [
         { value: "title-asc", label: "Tytuł rosnąco" },
@@ -45,13 +36,13 @@ const Artworks = () => {
 
     const { data: artworkData } = useQuery({
         queryKey: ["artwork"],
-        queryFn: () => getAdvancedSearchResult(searchParamsString),
-        enabled: !!searchParamsString,
+        queryFn: () => getArtworksByCategory(collection as string),
+        enabled: !!collection,
     })
 
     const { data: collectionData } = useQuery({
-        enabled: !!collectionName,
-        queryFn: () => getSingleCollection(collectionName as string),
+        enabled: !!collection,
+        queryFn: () => getSingleCollection(collection as string),
     })
 
     const selectAll = () => {
@@ -110,6 +101,8 @@ const Artworks = () => {
         }
     }
 
+    console.log({ collectionData })
+
     const navigate = useNavigate()
 
     if (artworkData === undefined) {
@@ -119,7 +112,7 @@ const Artworks = () => {
             <div className="px-4 max-w-screen-xl py-4 bg-white dark:bg-gray-800 shadow-md w-full rounded-lg mb-4
                 border border-gray-300 dark:border-gray-600 cursor-pointer"
                  key={artwork._id}
-                 onClick={() => navigate(`/artwork/${artwork._id}`)}>
+                 onClick={() => navigate(`/collections/${collection}/artworks/${artwork._id}`)}>
 
                 <div className="flex flex-row">
                         <span className="mr-4 flex items-center">
@@ -150,8 +143,9 @@ const Artworks = () => {
                                                warningMessage={"Czy na pewno chcesz usunąć zaznaczone rekordy?"} />}
 
             <div className="flex flex-col w-full items-center bg-gray-50 dark:bg-gray-900 p-2 sm:p-4">
-                <div className="flex flex-col  max-w-screen-xl w-full lg:px-6">
-                    <div className="mb-4">
+                <div className="flex flex-col max-w-screen-xl w-full lg:px-6">
+                    <Navigation />
+                    <div className="mb-4 mt-2">
                         <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
                             {collectionData?.name}
                         </h2>
