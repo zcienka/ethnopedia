@@ -13,13 +13,12 @@ const Navbar = () => {
     const [showDeleteAccountWarning, setShowDeleteAccountWarning] = useState(false)
     const navigate = useNavigate()
     const { setUserData } = useUser()
-console.log(jwtToken)
-console.log({ userId })
     const handleLogout = () => {
         setIsDropdownOpen(false)
+        setShowDeleteAccountWarning(false)
         localStorage.removeItem("token")
-        navigate("/")
         setUserData(false, "", "", "")
+        navigate("/")
     }
 
     const handleAccountDeletion = () => {
@@ -38,7 +37,7 @@ console.log({ userId })
     return <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full border-b dark:border-gray-600">
         {showDeleteAccountWarning && <WarningPopup onClose={() => setShowDeleteAccountWarning(!showDeleteAccountWarning) }
                                                    deleteSelected={handleAccountDeletion}
-                                                   warningMessage={"Czy "}/>}
+                                                   warningMessage={"Czy na pewno chcesz usunąć konto?"}/>}
         <div className="max-w-screen-xl flex flex-wrap justify-between mx-auto p-4">
             <div className="flex items-center md:order-2">
                 <ToggleTheme />
