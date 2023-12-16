@@ -5,9 +5,12 @@ import { useNavigate } from "react-router-dom"
 import { Toast, ToastToggle } from "flowbite-react"
 import { HiExclamation } from "react-icons/hi"
 import { useLoginMutation } from "../api/auth"
+import { JWT, useUser } from "../providers/UserProvider"
+import { jwtDecode } from "jwt-decode"
 
 const LoginPage = () => {
     const loginMutation = useLoginMutation()
+    const { setUserData } = useUser()
 
     const [showErrorToast, setShowErrorToast] = useState(false)
     const validationSchema = Yup.object().shape({
@@ -62,9 +65,9 @@ const LoginPage = () => {
                             loginUser({ username, password }, {
                                 onSuccess: (response) => {
                                     const { token } = response.data
-
                                     localStorage.setItem("token", token)
-
+                                    const decodedToken = jwtDecode<JWT>(token)
+                                    setUserData(true, decodedToken.firstName, token, decodedToken.userId)
                                     navigate("/")
                                 },
                                 onError: (error: any) => {

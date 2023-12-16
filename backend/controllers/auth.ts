@@ -1,9 +1,12 @@
-// import User from "../models/user"
+import mongoose from "mongoose"
+
+const asyncWrapper = require("../middleware/async")
+
 const User = require("../models/user")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 
 const registerUser = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -23,7 +26,7 @@ const registerUser = async (req: Request, res: Response): Promise<Response> => {
 
         const user = await newUser.save()
 
-        const token = jwt.sign({ username: user.username, firstName: user.firstName },
+        const token = jwt.sign({ username: user.username, firstName: user.firstName, userId: user._id },
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: process.env.EXPIRATION_TIME })
 
@@ -47,7 +50,7 @@ const loginUser = async (req: Request, res: Response): Promise<Response> => {
             return res.status(404).json("Invalid username or password")
         }
 
-        const token = jwt.sign({ username: user.username, firstName: user.firstName },
+        const token = jwt.sign({ username: user.username, firstName: user.firstName, userId: user._id },
             process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: process.env.EXPIRATION_TIME })
         return res.status(200).json({ token })
@@ -57,7 +60,28 @@ const loginUser = async (req: Request, res: Response): Promise<Response> => {
     }
 }
 
+const deleteUser = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.userId
+
+    try {
+        if (!mongoose.isValidObjectId(userId)) {
+            return res.status(400).json(`Invalid user id: ${userId}`)
+        }
+
+        const isSuccess = await User.findByIdAndRemove(userId).exec()
+
+        if (!isSuccess) {
+            return res.status(404).json("User not found")
+        }
+
+        return res.sendStatus(204)
+    } catch (error) {
+        next(error)
+    }
+})
+
 module.exports = {
     registerUser,
     loginUser,
+    deleteUser,
 }

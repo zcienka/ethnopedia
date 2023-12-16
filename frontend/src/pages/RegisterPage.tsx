@@ -5,10 +5,13 @@ import { useNavigate } from "react-router-dom"
 import { useRegisterMutation } from "../api/auth"
 import { Toast, ToastToggle } from "flowbite-react"
 import { HiExclamation } from "react-icons/hi"
+import { jwtDecode } from "jwt-decode"
+import { JWT, useUser } from "../providers/UserProvider"
 
 const RegisterPage = () => {
     const registerMutation = useRegisterMutation()
     const [showErrorToast, setShowErrorToast] = useState(false)
+    const { setUserData } = useUser()
 
     const validationSchema = Yup.object().shape({
         firstName: Yup.string()
@@ -71,9 +74,9 @@ const RegisterPage = () => {
                             registerUser({ username, firstName, password }, {
                                 onSuccess: (response) => {
                                     const { token } = response.data
-
                                     localStorage.setItem("token", token)
-
+                                    const decodedToken = jwtDecode<JWT>(token)
+                                    setUserData(true, decodedToken.firstName, token, decodedToken.userId)
                                     navigate("/")
                                 },
                                 onError: (error: any) => {

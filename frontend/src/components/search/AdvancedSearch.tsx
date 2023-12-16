@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { useFormik } from "formik"
-// import FilterButtons from "../filter/FilterButtons"
 import { useQuery } from "react-query"
 import { getCategories } from "../../api/categories"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
