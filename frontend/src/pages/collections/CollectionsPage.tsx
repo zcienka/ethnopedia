@@ -141,7 +141,7 @@ const CollectionsPage = () => {
                 <div className="flex flex-row">
                     <div className="w-full">
                         <h1 className="font-bold text-4xl mb-4">
-                            Witaj{firstName ?? " " + firstName}!
+                            Witaj{firstName ? ` ${firstName}` : ""}!
                         </h1>
                         <h2 className="mb-2 text-lg">
                             Twoje kolekcje:
