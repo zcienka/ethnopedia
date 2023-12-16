@@ -17,10 +17,6 @@ export const getAdvancedSearchResult = async (queryParameters: string) => {
         .then(res => res.data)
 }
 
-// export const getArtworksByCategory = async (queryParameters: string) => {
-//     return await axios.get(`${API_URL}v1/artwork/filter?${queryParameters}`)
-//         .then(res => res.data)
-// }
 
 export const getArtworksByCategory = async (collection: string) => {
     return await axios.get(`${API_URL}v1/collection/${collection}/artworks`)
@@ -57,6 +53,6 @@ export const useBatchDeleteArtworkMutation = () => {
 }
 
 export const deleteArtwork = async (id: string) => {
-    const response = await axios.delete(`${API_URL}v1/artworks/${id}`)
+    const response = await axios.delete(`${API_URL}v1/artworks/${id}`,  )
     return response.data
 }

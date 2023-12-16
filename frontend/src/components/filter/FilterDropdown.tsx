@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useQuery } from "react-query"
 import { getCategories } from "../../api/categories"
 import LoadingPage from "../../pages/LoadingPage"

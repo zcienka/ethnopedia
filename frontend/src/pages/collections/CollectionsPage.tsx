@@ -1,23 +1,16 @@
-import { useQuery, useQueryClient } from "react-query"
-import { getCollections, useBatchDeleteCollectionMutation } from "../../api/collections"
-import LoadingPage from "../LoadingPage"
-import { Collection } from "../../@types/Collection"
-import { useNavigate } from "react-router-dom"
-import React, { useEffect, useState } from "react"
-import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import CreateCollection from "../../components/CreateCollection"
-import { jwtDecode } from "jwt-decode"
-import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.svg"
-import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
-import WarningPopup from "./WarningPopup"
 import CustomDropdown from "../../components/CustomDropdown"
-
-type JwtPayload = {
-    username: string
-    firstName: string
-    iat: number
-    exp: number
-}
+import LoadingPage from "../LoadingPage"
+import React, { useState } from "react"
+import WarningPopup from "./WarningPopup"
+import { Collection } from "../../@types/Collection"
+import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
+import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.svg"
+import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
+import { getCollections, useBatchDeleteCollectionMutation } from "../../api/collections"
+import { useNavigate } from "react-router-dom"
+import { useQuery, useQueryClient } from "react-query"
+import { useUser } from "../../providers/UserProvider"
 
 interface Option {
     value: string
@@ -25,8 +18,7 @@ interface Option {
 }
 
 const CollectionsPage = () => {
-    const [, setToken] = useState<string | null>(null)
-    const [firstName, setFirstName] = useState<string | null>(null)
+    const { firstName } = useUser()
     const [, setShowFileDropzone] = useState<boolean>(false)
     const [checkedCollections, setCheckedCollections] = useState<{ [key: string]: boolean }>({})
     const [showWarningPopup, setShowWarningPopup] = useState(false)
@@ -35,16 +27,6 @@ const CollectionsPage = () => {
 
     const { mutate: batchDeleteMutation } = useBatchDeleteCollectionMutation()
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem("token") as string
-
-        if (storedToken) {
-            setToken(storedToken)
-
-            const decoded = jwtDecode<JwtPayload>(storedToken)
-            setFirstName(decoded.firstName)
-        }
-    }, [])
 
     const exportToExcel = () => {
         // const ws = XLSX.utils.json_to_sheet(fetchedData)
@@ -122,7 +104,7 @@ const CollectionsPage = () => {
                                 type="checkbox"
                                 checked={checkedCollections[collection.id!] || false}
                                 onClick={(e) => e.stopPropagation()}
-                                onChange={(e) => {
+                                onChange={() => {
                                     handleCheck(collection.id!)
                                 }} />
                         </span>
@@ -159,7 +141,7 @@ const CollectionsPage = () => {
                 <div className="flex flex-row">
                     <div className="w-full">
                         <h1 className="font-bold text-4xl mb-4">
-                            Witaj {firstName}!
+                            Witaj{firstName ?? " " + firstName}!
                         </h1>
                         <h2 className="mb-2 text-lg">
                             Twoje kolekcje:
