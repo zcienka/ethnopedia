@@ -127,7 +127,7 @@ const Artworks = () => {
                     <div>
                         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Tytuł}</h3>
                         <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artyści}</p>
-                        <p className="text-sm text-gray-500 dark:text-gray-300">{artwork.Rok}</p>
+                        <p className=" text-gray-500 dark:text-gray-300">{artwork.Rok}</p>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@ const Artworks = () => {
                 <div className="flex flex-col max-w-screen-xl w-full lg:px-6">
                     <Navigation />
                     <div className="mb-4 mt-2">
-                        <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
+                        <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-1">
                             {collectionData?.name}
                         </h2>
                         <p className="text-xl text-gray-600 dark:text-gray-300">
@@ -157,12 +157,10 @@ const Artworks = () => {
 
                     <div className="flex w-full md:w-auto">
                         <div className="flex flex-1 space-x-2">
-                            <button
+                            <button className="flex items-center justify-center dark:text-white
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                 type="button"
-                                className="flex items-center justify-center dark:text-white bg-white
-                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium
-                                        text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
-                                        dark:focus:ring-primary-800 font-semibold text-white  bg-zinc-800 hover:bg-zinc-700"
                                 onClick={() => setShowCreateArtwork(showCreateArtwork => !showCreateArtwork)}>
 
                                     <span className="mr-2 text-white dark:text-gray-400">
@@ -170,11 +168,9 @@ const Artworks = () => {
                                     </span>
                                 Nowy rekord
                             </button>
-                            <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm text-white
-                                            font-medium text-white focus:outline-none bg-white rounded-lg
-                                            hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 font-semibold bg-zinc-800 hover:bg-zinc-700
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 "
+                            <button className="flex items-center justify-center dark:text-white
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                 type="button"
                                 onClick={() => exportToExcel()}
                             >
@@ -183,10 +179,9 @@ const Artworks = () => {
                             </span>
                                 Eksportuj plik
                             </button>
-                            <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-semibold
-                                            font-medium text-white focus:outline-none bg-white rounded-lg
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-white bg-zinc-800 hover:bg-zinc-700"
+                            <button className="flex items-center justify-center dark:text-white
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                 type="button"
                                 onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
                             >
@@ -196,30 +191,27 @@ const Artworks = () => {
                                 Importuj plik
                             </button>
 
-                            <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-semibold
-                                            font-medium text-white focus:outline-none bg-white rounded-lg
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-white bg-zinc-800 hover:bg-zinc-700"
+                            <button className="flex items-center justify-center dark:text-white
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                 type="button"
                                 onClick={selectAll}
                             >
                                 Zaznacz wszystkie
                             </button>
 
-                            <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-semibold
-                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-white bg-zinc-800 hover:bg-zinc-700"
+                            <button className="flex items-center justify-center dark:text-white
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                 type="button"
                                 onClick={deselectAll}
                             >
                                 Odznacz wszystkie
                             </button>
 
-                            <button
-                                className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-semibold
-                                            font-medium text-gray-900 focus:outline-none bg-white rounded-lg border
-                                            dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-white bg-zinc-800 hover:bg-zinc-700"
+                            <button className="flex items-center justify-center dark:text-white
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                 type="button"
                                 onClick={() => {
                                     if (Object.keys(selectedArtworks).length !== 0)

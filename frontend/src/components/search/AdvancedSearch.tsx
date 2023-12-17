@@ -87,15 +87,14 @@ const AdvancedSearch = () => {
                         className="border p-2 rounded-lg"
                     />
 
-                    <button type="submit" className="flex items-center bg-zinc-800 hover:bg-zinc-700 text-white p-2
+                    <button type="submit" className="border-gray-800 flex items-center bg-gray-800 hover:bg-gray-700 text-white p-2
                             font-semibold">
                         <span className="mr-1">
                             <PlusIcon />
                         </span>
-
                         Dodaj regułę
                     </button>
-                    <button className="flex items-center font-semibold bg-blue-500 hover:bg-blue-700
+                    <button className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
                             text-white p-2"
                             onClick={handleSearch}
                     >

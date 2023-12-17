@@ -154,7 +154,7 @@ const CollectionsPage = () => {
                             className="flex items-center justify-center dark:text-white
                                     hover:bg-primary-800 focus:ring-4 focus:ring-primary-300
                                     text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none
-                                    dark:focus:ring-primary-800 mb-2 hover:bg-zinc-800 bg-zinc-700 text-white"
+                                    dark:focus:ring-primary-800 mb-2 hover:bg-zinc-800 bg-gray-800 text-white border-none font-semibold"
                             onClick={() => setShowNewCollectionPopup(!showPopup)}>
                             <span className="mr-2">
                                 <PlusIcon />
@@ -164,8 +164,9 @@ const CollectionsPage = () => {
 
                         <button
                             className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900  dark:bg-gray-800 dark:text-gray-50
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 mb-2 ml-2 hover:bg-zinc-600 bg-zinc-700 text-white"
+                                        font-medium text-gray-900 dark:bg-gray-800 dark:text-gray-50
+                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 mb-2 ml-2
+                                        hover:bg-zinc-600 bg-gray-800 text-white border-none font-semibold"
                             type="button"
                             onClick={() => exportToExcel()}
                         >
@@ -177,8 +178,9 @@ const CollectionsPage = () => {
                         </button>
                         <button
                             className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm
-                                        font-medium text-gray-900 dark:bg-gray-800 dark:text-gray-50
-                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 mb-2 ml-2 hover:bg-zinc-800 bg-zinc-700 text-white"
+                                        font-medium dark:bg-gray-800 dark:text-gray-50
+                                        dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 mb-2 ml-2
+                                        hover:bg-zinc-800 bg-gray-800 text-white border-none font-semibold"
                             type="button"
                             onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
                         >

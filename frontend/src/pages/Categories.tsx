@@ -42,7 +42,6 @@ const Categories = () => {
         <Navbar />
         <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
             <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-                {/*<SearchComponent />*/}
                 {categoryElements}
             </div>
         </section>
