@@ -34,11 +34,12 @@ export const createArtwork = async () => {
         .then(res => res.data)
 }
 
-export const updateArtwork = async ({ id, artwork }: {
+export const updateArtwork = async ({ id, artwork, jwtToken}: {
     id: string
     artwork: any
+    jwtToken: string
 }) => {
-    const response = await axios.patch(`${API_URL}v1/artworks/${id}`, artwork)
+    const response = await axios.put(`${API_URL}v1/artworks/${id}`, artwork, { headers: { "Authorization": `Bearer ${jwtToken}` }})
     return response.data
 }
 
