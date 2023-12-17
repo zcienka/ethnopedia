@@ -3,7 +3,6 @@ import { Route, BrowserRouter, Routes } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "react-query"
 import LoginPage from "./pages/LoginPage"
 import Home from "./pages/Home"
-import ArtworkEdit from "./components/artwork/ArtworkEdit"
 import "./index.css"
 import Categories from "./pages/Categories"
 import ArtworkPage from "./pages/artworks/ArtworkPage"
@@ -26,7 +25,6 @@ const App = () => {
             <QueryClientProvider client={queryClient}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/artwork/:artworkId/edit" element={<ArtworkEdit />} />
                         <Route path="/collections/:collection/artworks/:artworkId" element={<ArtworkPage />} />
 
                         <Route path="/" element={<Home />} />
