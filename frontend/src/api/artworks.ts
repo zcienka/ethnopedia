@@ -52,7 +52,7 @@ export const useBatchDeleteArtworkMutation = () => {
     })
 }
 
-export const deleteArtwork = async (id: string) => {
-    const response = await axios.delete(`${API_URL}v1/artworks/${id}`,  )
+export const deleteArtwork = async (artworkId: string, jwtToken: string) => {
+    const response = await axios.delete(`${API_URL}v1/artworks/${artworkId}`, { headers: { "Authorization": `Bearer ${jwtToken}` } })
     return response.data
 }
