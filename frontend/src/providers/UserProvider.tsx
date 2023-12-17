@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode"
 
 export interface JWT {
     exp: number;
+    username: string;
     firstName: string;
     userId: string;
 }
