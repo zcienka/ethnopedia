@@ -8,6 +8,9 @@ const ArtworkSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collection",
     },
+
+},{
+    strict: false
 })
 
-module.exports = mongoose.model("Artworks", ArtworkSchema)
+module.exports = mongoose.model("Artworks", ArtworkSchema, )
