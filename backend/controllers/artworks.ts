@@ -133,5 +133,5 @@ module.exports = {
     createArtwork,
     searchArtworks,
     batchDeleteArtworks,
-    filterArtworks,
+    filterArtworks
 }
