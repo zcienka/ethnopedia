@@ -2,36 +2,23 @@ import React, { useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg"
 
-type Subcategory = {
-    name: string
-    values?: string[]
-    subcategories?: Subcategory[]
+interface Category {
+  category: string;
+  values?: string[];
+  subcategories?: Subcategory[];
 }
 
-type Category = {
-    category: string
-    subcategories?: Subcategory[]
-    values?: string[]
+interface Subcategory {
+  name: string;
+  values: string[];
 }
 
-type JSONTree = {
-    _id: string
-    collection: string
-    categories: Category[]
+interface JSONTree {
+  _id: string;
+  collection: string;
+  categories: Category[];
 }
 
-interface CategorySelectorProps {
-    item: JSONTree
-    selectedCategory: string
-    handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>, itemIndex: number, catIndex: number) => void
-    index: number
-    catIndex: number
-}
-
-// interface ValueProps {
-//     category: string;
-//     subcategories?: Subcategory[] | undefined;
-// }
 
 const jsonData: JSONTree[] = [
     {
@@ -192,7 +179,7 @@ const jsonData: JSONTree[] = [
 ]
 
 const NewArtworkStructure: React.FC = () => {
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+    const [selectedCategories, setSelectedCategories] = useState<string[]>(jsonData.map((item, index) => `cat-${index}-${item.collection}`))
 
     const handleCategoryChange = (
         event: React.ChangeEvent<HTMLSelectElement>,
@@ -231,6 +218,7 @@ const NewArtworkStructure: React.FC = () => {
                         />
                     ))}
                 </div>
+                
 
                 <div className="ml-2 flex flex-row relative">
                     <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
@@ -249,7 +237,7 @@ interface CategorySelectorProps {
     item: JSONTree
     selectedCategory: string
     handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>, itemIndex: number, catIndex: number) => void
-    handleCategoryDeletion: () => void
+    handleCategoryDeletion: (catIndex: number) => void
     index: number
     catIndex: number
 }
@@ -262,7 +250,13 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
                                                                        index,
                                                                        catIndex,
                                                                    }) => {
-    const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([])
+    const [categoryValue, setCategoryValue] = useState<string>('')
+    const [subcategoryValues, setSubcategoryValues] = useState<{ [key: string]: string }>({})
+
+    const selectedCategoryIndex = selectedCategory.startsWith(`cat-${index}-`) ? Number(selectedCategory.split("-")[2]) : null
+    const selectedCategoryData = selectedCategoryIndex !== null ? item.categories[selectedCategoryIndex] : null
+    
+    const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>(selectedCategoryData && selectedCategoryData.subcategories ? selectedCategoryData.subcategories.map(subcat => subcat.name) : [])
 
     const addSubcategorySelect = () => {
         setSelectedSubcategories([...selectedSubcategories, ""])
@@ -278,6 +272,10 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
         const updatedSubcategories = selectedSubcategories.filter((_, index) => index !== subcatIndex)
         setSelectedSubcategories(updatedSubcategories)
     }
+
+    // Find the selected category
+    // const selectedCategoryIndex = selectedCategory.startsWith(`cat-${index}-`) ? Number(selectedCategory.split("-")[2]) : null;
+    // const selectedCategoryData = selectedCategoryIndex !== null ? item.categories[selectedCategoryIndex] : null;
 
     return (
         <div className="flex flex-col pb-2">
@@ -297,20 +295,27 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
                             </option>
                         ))}
                     </select>
+                    <input
+                        type="text"
+                        className="p-2 border rounded ml-2"
+                        placeholder="Enter category value"
+                        value={categoryValue}
+                        onChange={(e) => setCategoryValue(e.target.value)}
+                    />
                 </div>
 
                 <div className="flex items-center">
                     <button onClick={addSubcategorySelect} className="mx-2 p-2 shadow-md" type="button">
                         <PlusIcon />
                     </button>
-                    <button onClick={handleCategoryDeletion} className="p-2 shadow-md" type="button">
+                    <button onClick={() => handleCategoryDeletion(catIndex)} className="p-2 shadow-md" type="button">
                         <MinusIcon />
                     </button>
                 </div>
             </div>
 
 
-            {selectedSubcategories.length !== 0 && <div className="flex flex-col">
+            {selectedSubcategories.length !== 0 && selectedCategoryData && <div className="flex flex-col">
                 <div className="ml-8 flex flex-row relative">
                     <div>
                         {selectedSubcategories.map((subcatName, subcatIndex) => (
@@ -323,21 +328,26 @@ const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
                                 <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center" />
 
                                 <div key={subcatIndex}
-                                     className="flex flex-row items-center p-2 border shadow-md rounded-md mt-2">
+                                    className="flex flex-row items-center p-2 border shadow-md rounded-md mt-2">
                                     <select
                                         className="p-2 border rounded"
                                         value={subcatName}
                                         onChange={(e) => handleSubcategoryChange(subcatIndex, e.target.value)}
-                                    >
+                                        >
                                         <option value="">Select a Subcategory</option>
-                                        {item.categories.map((category, categoryIndex) => (
-                                            category.subcategories?.map((subcat, subcatIdx) => (
-                                                <option key={`subcat-${subcatIdx}`} value={subcat.name}>
-                                                    {subcat.name}
-                                                </option>
-                                            ))
+                                        {selectedCategoryData.subcategories?.map((subcat, subcatIdx) => (
+                                            <option key={`subcat-${subcatIdx}`} value={subcat.name}>
+                                                {subcat.name}
+                                            </option>
                                         ))}
                                     </select>
+                                    <input
+                                        type="text"
+                                        className="p-2 border rounded ml-2"
+                                        placeholder="Enter subcategory value"
+                                        value={subcategoryValues[subcatIndex] || ''}
+                                        onChange={(e) => setSubcategoryValues({ ...subcategoryValues, [subcatIndex]: e.target.value })}
+                                    />
                                 </div>
 
                                 <button onClick={() => removeSubcategorySelect(subcatIndex)}
