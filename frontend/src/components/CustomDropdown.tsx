@@ -19,15 +19,15 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({ options, onSelect }) =>
         onSelect(value)
     }
 
-    return <div className="flex flex-row items-center ml-2 custom-dropdown  text-sm">
+    return <div className="flex flex-row items-center ml-2 custom-dropdown text-sm">
         <p className="pr-2">Sortuj:</p>
         <select
             value={selectedOption}
             onChange={handleChange}
-            className="py-2 px-4 border bg-white border border-gray-300 rounded-lg"
+            className="py-2 px-4 border bg-white border border-gray-300 rounded-lg cursor-pointer"
         >
             {options.map((option, index) => (
-                <option key={index} value={option.value} className="py-2 px-4">
+                <option key={index} value={option.value} className="py-2 px-4 cursor-pointer">
                     {option.label}
                 </option>
             ))}

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
+import { ObjectId } from "mongodb"
 
 const asyncWrapper = require("../middleware/async")
 
@@ -43,6 +44,33 @@ const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
+const patchArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const artworkId = req.params.artworkId;
+    const updateData = req.body;
+
+    if (!mongoose.isValidObjectId(artworkId)) {
+        return res.status(400).json({ message: "Invalid artwork ID" });
+    }
+
+    try {
+        const result = await Artwork.updateOne({ _id: new ObjectId(artworkId) }, { $set: updateData }, {upsert: true});
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: `Artwork with id ${artworkId} not found` });
+        }
+
+        if (result.modifiedCount === 0) {
+            return res.status(200).json({ message: "No changes made to the artwork" });
+        }
+
+        const updatedArtwork = await Artwork.findById(artworkId); // Fetch the updated document
+        return res.status(200).json(updatedArtwork);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
 const searchArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let query = JSON.parse(JSON.stringify(req.query))
@@ -59,6 +87,7 @@ const searchArtworks = async (req: Request, res: Response, next: NextFunction) =
         next(error)
     }
 }
+
 const filterArtworks = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const records = await Artwork.find(req.query).exec()
@@ -134,4 +163,5 @@ module.exports = {
     searchArtworks,
     batchDeleteArtworks,
     filterArtworks,
+    patchArtwork,
 }

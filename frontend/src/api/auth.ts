@@ -21,7 +21,7 @@ export const useLoginMutation = () => {
     return useMutation((userData: LoginValues) => axios.post(`${API_URL}v1/auth/login`, userData))
 }
 
-export const deleteAccount  = async (id: string, jwtToken: string) => {
-    const response = await axios.delete(`${API_URL}v1/auth/${id}`, { headers: {"Authorization" : `Bearer ${jwtToken}`}})
+export const deleteAccount = async (id: string, jwtToken: string) => {
+    const response = await axios.delete(`${API_URL}v1/auth/${id}`, { headers: { "Authorization": `Bearer ${jwtToken}` } })
     return response.data
 }

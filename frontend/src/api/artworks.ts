@@ -34,11 +34,12 @@ export const createArtwork = async () => {
         .then(res => res.data)
 }
 
-export const updateArtwork = async ({ id, artwork }: {
+export const updateArtwork = async ({ id, artwork, jwtToken}: {
     id: string
     artwork: any
+    jwtToken: string
 }) => {
-    const response = await axios.patch(`${API_URL}v1/artworks/${id}`, artwork)
+    const response = await axios.put(`${API_URL}v1/artworks/${id}`, artwork, { headers: { "Authorization": `Bearer ${jwtToken}` }})
     return response.data
 }
 
@@ -52,7 +53,7 @@ export const useBatchDeleteArtworkMutation = () => {
     })
 }
 
-export const deleteArtwork = async (id: string) => {
-    const response = await axios.delete(`${API_URL}v1/artworks/${id}`,  )
+export const deleteArtwork = async (artworkId: string, jwtToken: string) => {
+    const response = await axios.delete(`${API_URL}v1/artworks/${artworkId}`, { headers: { "Authorization": `Bearer ${jwtToken}` } })
     return response.data
 }
