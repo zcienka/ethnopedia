@@ -3,7 +3,7 @@ import express from "express"
 const router = express.Router()
 
 const {
-    getAllCategories
+    getAllCategories,
 } = require("../controllers/categories")
 
 router.route("/").get(getAllCategories)

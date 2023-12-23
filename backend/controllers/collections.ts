@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express"
+import mongoose from "mongoose"
+import { ObjectId } from "mongodb"
 
 const Collection = require("../models/collection")
 const Artwork = require("../models/artwork")
@@ -42,9 +44,9 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
     res.status(200).json({ collections: combinedArray })
 }
 
-const artworksInCategory = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+const artworksInCollection = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        const records = await Artwork.find({ Kategoria: req.params.category }).exec()
+        const records = await Artwork.find({ Kategoria: req.params.collection }).exec()
 
         return res.json(records)
     } catch (error: any) {
@@ -111,10 +113,37 @@ const batchDeleteCollections = async (req: Request, res: Response, next: NextFun
     }
 }
 
+const patchCollection = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
+    const CollectionId = req.params.id
+    const updateData = req.body
+
+    if (!mongoose.isValidObjectId(CollectionId)) {
+        return res.status(400).json({ message: "Invalid Collection ID" })
+    }
+
+    try {
+        const result = await Collection.updateOne({ _id: new ObjectId(CollectionId) }, { $set: updateData }, { upsert: true })
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ message: `Collection with id ${CollectionId} not found` })
+        }
+
+        if (result.modifiedCount === 0) {
+            return res.status(200).json({ message: "No changes made to the Collection" })
+        }
+
+        const updatedCollection = await Collection.findById(CollectionId)
+        return res.status(200).json(updatedCollection)
+    } catch (error) {
+        next(error)
+    }
+})
+
 module.exports = {
     getAllCollections,
     getCollection,
     createCollection,
     batchDeleteCollections,
-    artworksInCategory
+    artworksInCollection,
+    patchCollection
 }

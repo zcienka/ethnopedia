@@ -1,4 +1,4 @@
-import CreateCollection from "../../components/CreateCollection"
+import CreateCollection from "./CreateCollection"
 import CustomDropdown from "../../components/CustomDropdown"
 import LoadingPage from "../LoadingPage"
 import React, { useState } from "react"

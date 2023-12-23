@@ -1,15 +1,18 @@
-import { ReactComponent as Close } from "../assets/icons/close.svg"
+import { ReactComponent as Close } from "../../assets/icons/close.svg"
 import { Formik, Form, Field, ErrorMessage } from "formik"
-import { useCreateCollectionMutation } from "../api/collections"
 import { useQueryClient } from "react-query"
+import { updateCollection } from "../../api/collections"
+import { useUser } from "../../providers/UserProvider"
 
 type Props = {
-    onClose: () => void
+    onClose: () => void,
+    collectionData: any
 }
 
-const CreateCollection = ({ onClose }: Props) => {
-    const { mutate: createCollection } = useCreateCollectionMutation()
+const EditCollection = ({ onClose, collectionData }: Props) => {
     const queryClient = useQueryClient()
+    const { jwtToken } = useUser()
+
 
     return <div
         id="default-modal"
@@ -21,27 +24,29 @@ const CreateCollection = ({ onClose }: Props) => {
             <div className="fixed inset-0 bg-black opacity-50" />
             <div className="relative w-full max-w-2xl max-h-full">
                 <Formik
-                    initialValues={{ name: "", description: "" }}
+                    initialValues={collectionData}
                     onSubmit={(values, { setSubmitting }) => {
                         const { name, description } = values
 
-                        createCollection({ name, description }, {
-                            onSuccess: () => {
-                                queryClient.invalidateQueries(["collection"])
-                                onClose()
-                            },
-                            onError: (error) => {
-                                console.error(error)
-                                setSubmitting(false)
-                            },
+                        updateCollection({
+                            id: collectionData._id,
+                            collectionData: { name, description },
+                            jwtToken: jwtToken,
+                        }).then(() => {
+                            queryClient.invalidateQueries(["collection"])
+                            onClose()
+                        }).catch((error: any) => {
+                            console.error(error)
+                            setSubmitting(false)
                         })
-                    }}>
+                    }}
+                >
                     {({ isSubmitting }) => (
                         <Form
                             className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border dark:border-gray-600">
                             <div className="flex items-start justify-between p-4 pb-0 rounded-t">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                                    Dodaj nową kolekcję
+                                    Edytuj kolekcję
                                 </h3>
 
                                 <button
@@ -81,17 +86,17 @@ const CreateCollection = ({ onClose }: Props) => {
                             <div className="flex justify-end px-4 pb-4">
                                 <button
                                     type="button"
-                                    className="px-4 py-2 bg-sky-500 text-white hover:bg-sky-400"
+                                    className="px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold"
                                     onClick={onClose}
                                 >
                                     Anuluj
                                 </button>
                                 <button
                                     type="submit"
-                                    className="ml-2 px-4 py-2 bg-sky-500 text-white hover:bg-sky-400"
+                                    className="ml-2 px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold"
                                     disabled={isSubmitting}
                                 >
-                                    Utwórz
+                                    Zapisz
                                 </button>
                             </div>
                         </Form>
@@ -102,4 +107,4 @@ const CreateCollection = ({ onClose }: Props) => {
     </div>
 }
 
-export default CreateCollection
+export default EditCollection

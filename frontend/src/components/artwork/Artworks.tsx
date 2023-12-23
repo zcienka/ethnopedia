@@ -15,6 +15,7 @@ import CustomDropdown from "../CustomDropdown"
 import { getSingleCollection } from "../../api/collections"
 import FilterDropdown from "../filter/FilterDropdown"
 import Navigation from "../Navigation"
+import EditCollection from "../../pages/collections/EditCollection"
 
 const Artworks = () => {
     const [selectedArtworks, setSelectedArtworks] = useState<{ [key: string]: boolean }>({})
@@ -22,6 +23,7 @@ const Artworks = () => {
     const [showCreateArtwork, setShowCreateArtwork] = useState<boolean>(false)
     const [showWarningPopup, setShowWarningPopup] = useState(false)
     const [sortOrder, setSortOrder] = useState<string>("default")
+    const [showEditCollection, setShowEditCollection] = useState<boolean>(false)
 
     const { collection } = useParams()
     const queryClient = useQueryClient()
@@ -145,14 +147,31 @@ const Artworks = () => {
             <div className="flex flex-col w-full items-center bg-gray-50 dark:bg-gray-900 p-2 sm:p-4">
                 <div className="flex flex-col max-w-screen-xl w-full lg:px-6">
                     <Navigation />
-                    <div className="mb-4 mt-2">
-                        <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-1">
-                            {collectionData?.name}
-                        </h2>
-                        <p className="text-xl text-gray-600 dark:text-gray-300">
-                            {collectionData?.description}
-                        </p>
+
+                    <div className="flex flex-row mb-4 mt-2">
+                        <div className="flex flex-col w-full">
+                            <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-1">
+                                {collectionData?.name}
+                            </h2>
+                            <p className="text-xl text-gray-600 dark:text-gray-300">
+                                {collectionData?.description}
+                            </p>
+                        </div>
+
+                        <div className="flex items-center">
+                            <button className="h-fit font-semibold" onClick={() => setShowEditCollection(true)}>
+                                Edytuj
+                            </button>
+                        </div>
+
+                        {showEditCollection && (
+                            <EditCollection
+                                onClose={() => setShowEditCollection(false)}
+                                collectionData={collectionData}
+                            />
+                        )}
                     </div>
+
                     <SearchComponent />
 
                     <div className="flex w-full md:w-auto">
@@ -160,8 +179,8 @@ const Artworks = () => {
                             <button className="flex items-center justify-center dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                type="button"
-                                onClick={() => setShowCreateArtwork(showCreateArtwork => !showCreateArtwork)}>
+                                    type="button"
+                                    onClick={() => setShowCreateArtwork(showCreateArtwork => !showCreateArtwork)}>
 
                                     <span className="mr-2 text-white dark:text-gray-400">
                                         <PlusIcon />
@@ -171,8 +190,8 @@ const Artworks = () => {
                             <button className="flex items-center justify-center dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                type="button"
-                                onClick={() => exportToExcel()}
+                                    type="button"
+                                    onClick={() => exportToExcel()}
                             >
                             <span className="text-white dark:text-gray-400">
                                 <FileExportIcon />
@@ -182,8 +201,8 @@ const Artworks = () => {
                             <button className="flex items-center justify-center dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                type="button"
-                                onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
+                                    type="button"
+                                    onClick={() => setShowFileDropzone(showFileDropzone => !showFileDropzone)}
                             >
                                 <span className="text-white dark:text-gray-400">
                                     <FileImportIcon />
@@ -194,8 +213,8 @@ const Artworks = () => {
                             <button className="flex items-center justify-center dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                type="button"
-                                onClick={selectAll}
+                                    type="button"
+                                    onClick={selectAll}
                             >
                                 Zaznacz wszystkie
                             </button>
@@ -203,8 +222,8 @@ const Artworks = () => {
                             <button className="flex items-center justify-center dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                type="button"
-                                onClick={deselectAll}
+                                    type="button"
+                                    onClick={deselectAll}
                             >
                                 Odznacz wszystkie
                             </button>
@@ -212,11 +231,11 @@ const Artworks = () => {
                             <button className="flex items-center justify-center dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                type="button"
-                                onClick={() => {
-                                    if (Object.keys(selectedArtworks).length !== 0)
-                                        setShowWarningPopup(!showWarningPopup)
-                                }}
+                                    type="button"
+                                    onClick={() => {
+                                        if (Object.keys(selectedArtworks).length !== 0)
+                                            setShowWarningPopup(!showWarningPopup)
+                                    }}
                             >
                                 Usuń zaznaczone
                             </button>
