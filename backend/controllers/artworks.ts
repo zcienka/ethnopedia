@@ -44,31 +44,32 @@ const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
+
 const patchArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-    const artworkId = req.params.artworkId;
-    const updateData = req.body;
+    const artworkId = req.params.artworkId
+    const updateData = req.body
 
     if (!mongoose.isValidObjectId(artworkId)) {
-        return res.status(400).json({ message: "Invalid artwork ID" });
+        return res.status(400).json({ message: "Invalid artwork ID" })
     }
 
     try {
-        const result = await Artwork.updateOne({ _id: new ObjectId(artworkId) }, { $set: updateData }, {upsert: true});
+        const result = await Artwork.updateOne({ _id: new ObjectId(artworkId) }, { $set: updateData }, { upsert: true })
 
         if (result.matchedCount === 0) {
-            return res.status(404).json({ message: `Artwork with id ${artworkId} not found` });
+            return res.status(404).json({ message: `Artwork with id ${artworkId} not found` })
         }
 
         if (result.modifiedCount === 0) {
-            return res.status(200).json({ message: "No changes made to the artwork" });
+            return res.status(200).json({ message: "No changes made to the artwork" })
         }
 
-        const updatedArtwork = await Artwork.findById(artworkId); // Fetch the updated document
-        return res.status(200).json(updatedArtwork);
+        const updatedArtwork = await Artwork.findById(artworkId)
+        return res.status(200).json(updatedArtwork)
     } catch (error) {
-        next(error);
+        next(error)
     }
-});
+})
 
 
 const searchArtworks = async (req: Request, res: Response, next: NextFunction) => {
