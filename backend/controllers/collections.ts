@@ -7,7 +7,15 @@ const Artwork = require("../models/artwork")
 const asyncWrapper = require("../middleware/async")
 
 const getAllCollections = async (req: Request, res: Response, next: any) => {
+    const page = parseInt(req.query.page as string) || 1
+    const pageSize = parseInt(req.query.pageSize as string) || 10
+
     const collections = await Collection.find({})
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+
+    const totalCollections = await Collection.countDocuments({})
+
     const pipeline = [
         {
             $match: { "Kategoria": { $exists: true } },
@@ -41,7 +49,12 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
 
     let combinedArray = Array.from(combinedData.values())
 
-    res.status(200).json({ collections: combinedArray })
+    res.status(200).json({
+        collections: combinedArray,
+        total: totalCollections,
+        currentPage: page,
+        pageSize: pageSize,
+    })
 }
 
 const artworksInCollection = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
@@ -145,5 +158,5 @@ module.exports = {
     createCollection,
     batchDeleteCollections,
     artworksInCollection,
-    patchCollection
+    patchCollection,
 }
