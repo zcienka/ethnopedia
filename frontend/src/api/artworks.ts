@@ -18,8 +18,13 @@ export const getAdvancedSearchResult = async (queryParameters: string) => {
 }
 
 
-export const getArtworksByCategory = async (collection: string) => {
-    return await axios.get(`${API_URL}v1/collection/${collection}/artworks`)
+export const getArtworksByCategory = async (collection: string, page: number, pageSize: number) => {
+    return await axios.get(`${API_URL}v1/collection/${collection}/artworks`, {
+        params: {
+            page: page,
+            pageSize: pageSize,
+        },
+    })
         .then(res => res.data)
 }
 
@@ -34,12 +39,12 @@ export const createArtwork = async () => {
         .then(res => res.data)
 }
 
-export const updateArtwork = async ({ id, artwork, jwtToken}: {
+export const updateArtwork = async ({ id, artwork, jwtToken }: {
     id: string
     artwork: any
     jwtToken: string
 }) => {
-    const response = await axios.put(`${API_URL}v1/artworks/${id}`, artwork, { headers: { "Authorization": `Bearer ${jwtToken}` }})
+    const response = await axios.put(`${API_URL}v1/artworks/${id}`, artwork, { headers: { "Authorization": `Bearer ${jwtToken}` } })
     return response.data
 }
 

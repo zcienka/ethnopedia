@@ -7,19 +7,24 @@ const asyncWrapper = require("../middleware/async")
 const Artwork = require("../models/artwork")
 
 const getAllArtworks = async (req: Request, res: Response, next: NextFunction) => {
-    const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1
-    const limit = typeof req.query.limit === "string" ? parseInt(req.query.limit) : 5
+    const page = parseInt(req.query.page as string) || 1
+    const pageSize = parseInt(req.query.pageSize as string) || 10
 
-    const skip = (page - 1) * limit
+    const totalArtworks = await Artwork.countDocuments({})
 
-    // const total = await Artwork.countDocuments()
-    // const totalPages = Math.ceil(total / limit)
+    const artworks = await Artwork.find({})
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
 
-    // const artworks = await Artwork.find({}).skip(skip).limit(limit)
-    const artworks = await Artwork.find({}).exec()
-    const columnNames = Object.keys(artworks[0].toObject())
+    const columnNames = artworks.length > 0 ? Object.keys(artworks[0].toObject()) : []
 
-    res.status(200).json({ artworks, columnNames })
+    res.status(200).json({
+        artworks: artworks,
+        total: totalArtworks,
+        currentPage: page,
+        pageSize: pageSize,
+        columnNames: columnNames,
+    })
 }
 
 const getArtwork = async (req: Request, res: Response, next: NextFunction) => {

@@ -59,9 +59,22 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
 
 const artworksInCollection = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        const records = await Artwork.find({ Kategoria: req.params.collection }).exec()
+        const page = parseInt(req.query.page as string) || 1
+        const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        return res.json(records)
+        const totalArtworks = await Artwork.countDocuments({ Kategoria: req.params.collection })
+
+        const records = await Artwork.find({ Kategoria: req.params.collection })
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .exec()
+
+        return res.json({
+            artworks: records,
+            total: totalArtworks,
+            currentPage: page,
+            pageSize: pageSize,
+        })
     } catch (error: any) {
         next(error)
     }
