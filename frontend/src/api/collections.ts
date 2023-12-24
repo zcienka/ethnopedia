@@ -3,9 +3,21 @@ import { Collection } from "../@types/Collection"
 import { useMutation } from "react-query"
 import { API_URL } from "../config"
 
-export const getCollections = async () => {
-    const response = await axios.get(`${API_URL}v1/collection`)
-    return response.data.collections as Collection[]
+interface CollectionsResponse {
+    collections: Collection[];
+    total: number;
+    currentPage: number;
+    pageSize: number;
+}
+
+export const getCollections = async (page: number = 1, pageSize: number = 10): Promise<CollectionsResponse> => {
+    const response = await axios.get(`${API_URL}v1/collection`, {
+        params: {
+            page: page,
+            pageSize: pageSize,
+        },
+    })
+    return response.data as CollectionsResponse
 }
 
 export const useCreateCollectionMutation = () => {

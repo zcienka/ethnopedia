@@ -11,6 +11,8 @@ import { getCollections, useBatchDeleteCollectionMutation } from "../../api/coll
 import { useNavigate } from "react-router-dom"
 import { useQuery, useQueryClient } from "react-query"
 import { useUser } from "../../providers/UserProvider"
+import Pagination from "../../components/Pagination"
+// import { CustomFlowbiteTheme, Flowbite, Pagination } from "flowbite-react"
 
 interface Option {
     value: string
@@ -22,6 +24,8 @@ const CollectionsPage = () => {
     const [, setShowFileDropzone] = useState<boolean>(false)
     const [checkedCollections, setCheckedCollections] = useState<{ [key: string]: boolean }>({})
     const [showWarningPopup, setShowWarningPopup] = useState(false)
+    const [currentPage, setCurrentPage] = useState(1)
+    const pageSize = 10
 
     const queryClient = useQueryClient()
 
@@ -35,14 +39,16 @@ const CollectionsPage = () => {
         // XLSX.writeFile(wb, "DataExport.xlsx")
     }
 
-    const { data: fetchedData } = useQuery<Collection[], Error>(
-        ["collection"],
-        getCollections,
+    const { data: fetchedData } = useQuery(
+        ["collection", currentPage, pageSize],
+        () => getCollections(currentPage, pageSize),
+        {
+            keepPreviousData: true,
+        },
     )
-
     const checkAll = () => {
-        const newCheckedCollections = fetchedData?.reduce(
-            (acc, collection) => ({
+        const newCheckedCollections = fetchedData?.collections?.reduce(
+            (acc: any, collection: any) => ({
                 ...acc,
                 [collection.id!]: true,
             }),
@@ -82,7 +88,7 @@ const CollectionsPage = () => {
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const sortedCollections = fetchedData ? [...fetchedData].sort((a, b) => {
+        const sortedCollections = fetchedData.collections ? [...fetchedData.collections].sort((a, b) => {
             if (sortOrder === "A-Z") {
                 return a.name.localeCompare(b.name)
             } else {
@@ -131,6 +137,8 @@ const CollectionsPage = () => {
             { value: "A-Z", label: "Kolekcja rosnąco" },
             { value: "Z-A", label: "Kolekcja malejąco" },
         ]
+
+
 
         return <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
             {showPopup && <CreateCollection onClose={() => setShowNewCollectionPopup(!showPopup)} />}
@@ -215,7 +223,16 @@ const CollectionsPage = () => {
                     />
                     </span>
                 </div>
+
                 {allCollections}
+
+                <div className="flex justify-center">
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={Math.ceil(fetchedData.total / pageSize)}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
+                </div>
             </div>
         </section>
     }
