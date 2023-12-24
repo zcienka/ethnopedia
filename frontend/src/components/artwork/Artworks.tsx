@@ -83,8 +83,8 @@ const Artworks = () => {
     }
 
     const sortedArtworks = useMemo(() => {
-        return sortArtworks([...(artworkData.artworks || [])], sortOrder)
-    }, [artworkData.artworks, sortOrder])
+        return sortArtworks([...(artworkData?.artworks || [])], sortOrder)
+    }, [artworkData, sortOrder])
 
     const handleCheck = (id: string) => {
         setSelectedArtworks((prev) => ({ ...prev, [id]: !prev[id] }))
@@ -110,7 +110,7 @@ const Artworks = () => {
 
     const navigate = useNavigate()
 
-    if (artworkData === undefined) {
+    if (artworkData === undefined || sortedArtworks === undefined) {
         return <LoadingPage />
     } else {
         const allArtworks = sortedArtworks.map((artwork: any) => (
@@ -266,14 +266,13 @@ const Artworks = () => {
                 <div className="mx-auto w-full flex-1">
                 </div>
             </div>
-            {artworkData.total !== 0 ??
-                <div className="flex justify-center mb-2">
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={Math.ceil(artworkData.total / pageSize)}
-                        onPageChange={(page) => setCurrentPage(page)}
-                    />
-                </div>}
+            <div className="flex justify-center mb-2">
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(artworkData.total / pageSize)}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
+            </div>
         </>
     }
 }
