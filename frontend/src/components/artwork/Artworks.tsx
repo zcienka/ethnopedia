@@ -16,6 +16,7 @@ import { getSingleCollection } from "../../api/collections"
 import FilterDropdown from "../filter/FilterDropdown"
 import Navigation from "../Navigation"
 import EditCollection from "../../pages/collections/EditCollection"
+import Pagination from "../Pagination"
 
 const Artworks = () => {
     const [selectedArtworks, setSelectedArtworks] = useState<{ [key: string]: boolean }>({})
@@ -24,6 +25,9 @@ const Artworks = () => {
     const [showWarningPopup, setShowWarningPopup] = useState(false)
     const [sortOrder, setSortOrder] = useState<string>("default")
     const [showEditCollection, setShowEditCollection] = useState<boolean>(false)
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const pageSize = 10
 
     const { collection } = useParams()
     const queryClient = useQueryClient()
@@ -37,9 +41,10 @@ const Artworks = () => {
     ]
 
     const { data: artworkData } = useQuery({
-        queryKey: ["artwork"],
-        queryFn: () => getArtworksByCategory(collection as string),
+        queryKey: ["artwork", currentPage, pageSize],
+        queryFn: () => getArtworksByCategory(collection as string, currentPage, pageSize),
         enabled: !!collection,
+        keepPreviousData: true,
     })
 
     const { data: collectionData } = useQuery({
@@ -48,7 +53,7 @@ const Artworks = () => {
     })
 
     const selectAll = () => {
-        const newSelection = artworkData.reduce((acc: any, artwork: any) => {
+        const newSelection = artworkData?.artworks.reduce((acc: any, artwork: any) => {
             acc[artwork._id] = true
             return acc
         }, {})
@@ -78,8 +83,8 @@ const Artworks = () => {
     }
 
     const sortedArtworks = useMemo(() => {
-        return sortArtworks([...(artworkData || [])], sortOrder)
-    }, [artworkData, sortOrder])
+        return sortArtworks([...(artworkData.artworks || [])], sortOrder)
+    }, [artworkData.artworks, sortOrder])
 
     const handleCheck = (id: string) => {
         setSelectedArtworks((prev) => ({ ...prev, [id]: !prev[id] }))
@@ -102,8 +107,6 @@ const Artworks = () => {
                 })
         }
     }
-
-    console.log({ collectionData })
 
     const navigate = useNavigate()
 
@@ -263,6 +266,14 @@ const Artworks = () => {
                 <div className="mx-auto w-full flex-1">
                 </div>
             </div>
+            {artworkData.total !== 0 ??
+                <div className="flex justify-center mb-2">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={Math.ceil(artworkData.total / pageSize)}
+                        onPageChange={(page) => setCurrentPage(page)}
+                    />
+                </div>}
         </>
     }
 }
