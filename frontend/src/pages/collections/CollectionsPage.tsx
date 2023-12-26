@@ -100,7 +100,7 @@ const CollectionsPage = () => {
             <div
                 className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border border-gray-300 dark:border-gray-600 cursor-pointer"
                 key={collection.id}
-                onClick={() => navigate(`/collections/${collection.name}/artworks`)}
+                onClick={() => navigate(`/collections/${collection.id}/artworks`)}
             >
 
                 <div className="flex flex-row justify-between">
@@ -137,8 +137,6 @@ const CollectionsPage = () => {
             { value: "A-Z", label: "Kolekcja rosnąco" },
             { value: "Z-A", label: "Kolekcja malejąco" },
         ]
-
-
 
         return <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
             {showPopup && <CreateCollection onClose={() => setShowNewCollectionPopup(!showPopup)} />}

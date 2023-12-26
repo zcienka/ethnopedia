@@ -5,7 +5,10 @@ const artworkSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collection",
     },
-
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }
 },{
     strict: false,
     timestamps: true,

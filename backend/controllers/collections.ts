@@ -62,9 +62,9 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
         const page = parseInt(req.query.page as string) || 1
         const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        const totalArtworks = await Artwork.countDocuments({ Kategoria: req.params.collection })
+        const totalArtworks = await Artwork.countDocuments({ collectionId: req.params.id })
 
-        const records = await Artwork.find({ Kategoria: req.params.collection })
+        const records = await Artwork.find({ collectionId: req.params.id })
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .exec()
@@ -148,7 +148,7 @@ const patchCollection = asyncWrapper(async (req: Request, res: Response, next: N
     }
 
     try {
-        const result = await Collection.updateOne({ _id: new ObjectId(CollectionId) }, { $set: updateData }, { upsert: true })
+        const result = await Collection.updateOne({ _id: new ObjectId(CollectionId) }, { $set: updateData }, { upsert: false })
 
         if (result.matchedCount === 0) {
             return res.status(404).json({ message: `Collection with id ${CollectionId} not found` })

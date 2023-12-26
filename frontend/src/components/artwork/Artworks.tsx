@@ -109,6 +109,7 @@ const Artworks = () => {
     }
 
     const navigate = useNavigate()
+    console.log({collection })
 
     if (artworkData === undefined || sortedArtworks === undefined) {
         return <LoadingPage />
