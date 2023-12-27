@@ -34,6 +34,7 @@ const EditCollection = ({ onClose, collectionData }: Props) => {
                             jwtToken: jwtToken,
                         }).then(() => {
                             queryClient.invalidateQueries(["collection"])
+                            queryClient.invalidateQueries([`${collectionData._id}`])
                             onClose()
                         }).catch((error: any) => {
                             console.error(error)

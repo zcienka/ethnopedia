@@ -88,7 +88,7 @@ const getCollection = async (req: Request, res: Response, next: any) => {
         //     return res.status(400).json(`Invalid collection id: ${collectionId}`)
         // }
 
-        const collection = await Collection.find({ name: collectionId }).exec()
+        const collection = await Collection.find({ _id: collectionId }).exec()
 
         if (!collection) {
             return res.status(404).json("Collection not found")
@@ -128,7 +128,7 @@ const batchDeleteCollections = async (req: Request, res: Response, next: NextFun
         const existingCollections = await Collection.find({ _id: { $in: collectionsToDeleteList } })
 
         if (existingCollections.length === 0) {
-            return res.status(404).send({ message: "Collections not found" })
+            return res.status(404).send({ message: `Collection with id ${collectionsToDelete} not found` })
         }
 
         const result = await Collection.deleteMany({ _id: { $in: collectionsToDeleteList } })

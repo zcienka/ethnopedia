@@ -31,7 +31,6 @@ const CollectionsPage = () => {
 
     const { mutate: batchDeleteMutation } = useBatchDeleteCollectionMutation()
 
-
     const exportToExcel = () => {
         // const ws = XLSX.utils.json_to_sheet(fetchedData)
         // const wb = XLSX.utils.book_new()
@@ -82,6 +81,7 @@ const CollectionsPage = () => {
 
     const [showPopup, setShowNewCollectionPopup] = useState(false)
     const [sortOrder, setSortOrder] = useState("A-Z")
+
 
     const navigate = useNavigate()
 

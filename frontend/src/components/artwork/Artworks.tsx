@@ -12,7 +12,7 @@ import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.
 import CreateArtwork from "./CreateArtwork"
 import WarningPopup from "../../pages/collections/WarningPopup"
 import CustomDropdown from "../CustomDropdown"
-import { getSingleCollection } from "../../api/collections"
+import { getSingleCollection, useBatchDeleteCollectionMutation } from "../../api/collections"
 import FilterDropdown from "../filter/FilterDropdown"
 import Navigation from "../Navigation"
 import EditCollection from "../../pages/collections/EditCollection"
@@ -22,7 +22,8 @@ const Artworks = () => {
     const [selectedArtworks, setSelectedArtworks] = useState<{ [key: string]: boolean }>({})
     const [showFileDropzone, setShowFileDropzone] = useState<boolean>(false)
     const [showCreateArtwork, setShowCreateArtwork] = useState<boolean>(false)
-    const [showWarningPopup, setShowWarningPopup] = useState(false)
+    const [showDeleteRecordsWarning, setShowDeleteRecordsWarning] = useState(false)
+    const [showDeleteCollectionWarning, setShowDeleteCollectionWarning] = useState(false)
     const [sortOrder, setSortOrder] = useState<string>("default")
     const [showEditCollection, setShowEditCollection] = useState<boolean>(false)
 
@@ -47,7 +48,10 @@ const Artworks = () => {
         keepPreviousData: true,
     })
 
+    console.log({ collection })
+
     const { data: collectionData } = useQuery({
+        queryKey: [`${collection}`],
         enabled: !!collection,
         queryFn: () => getSingleCollection(collection as string),
     })
@@ -102,14 +106,30 @@ const Artworks = () => {
                 {
                     onSuccess: () => {
                         queryClient.invalidateQueries(["artwork"])
-                        setShowWarningPopup(!showWarningPopup)
+                        setShowDeleteRecordsWarning(!showDeleteRecordsWarning)
                     },
                 })
         }
     }
 
+    const deleteCollectionMutation = useBatchDeleteCollectionMutation()
+    const deleteCollection = () => {
+        if (collection) {
+            deleteCollectionMutation.mutate([collection], {
+                onSuccess: () => {
+                    queryClient.invalidateQueries(["artwork"])
+                    queryClient.invalidateQueries(["collection"])
+                    setShowDeleteCollectionWarning(false)
+                    navigate("/")
+                },
+                onError: (error: any) => {
+                    console.error("Error deleting collection: ", error)
+                },
+            })
+        }
+    }
+
     const navigate = useNavigate()
-    console.log({collection })
 
     if (artworkData === undefined || sortedArtworks === undefined) {
         return <LoadingPage />
@@ -144,10 +164,15 @@ const Artworks = () => {
 
             {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
             {showCreateArtwork && <CreateArtwork onClose={() => setShowCreateArtwork(false)} />}
-            {showWarningPopup && <WarningPopup onClose={() => setShowWarningPopup(!showWarningPopup)}
-                                               deleteSelected={deleteSelected}
-                                               warningMessage={"Czy na pewno chcesz usunąć zaznaczone rekordy?"} />}
+            {showDeleteRecordsWarning &&
+                <WarningPopup onClose={() => setShowDeleteRecordsWarning(false)}
+                              deleteSelected={deleteSelected}
+                              warningMessage={"Czy na pewno chcesz usunąć zaznaczone rekordy?"} />}
 
+            {showDeleteCollectionWarning &&
+                <WarningPopup onClose={() => setShowDeleteCollectionWarning(false)}
+                              deleteSelected={deleteCollection}
+                              warningMessage={"Czy na pewno chcesz usunąć zaznaczoną kolekcję?"} />}
             <div className="flex flex-col w-full items-center bg-gray-50 dark:bg-gray-900 p-2 sm:p-4">
                 <div className="flex flex-col max-w-screen-xl w-full lg:px-6">
                     <Navigation />
@@ -163,8 +188,19 @@ const Artworks = () => {
                         </div>
 
                         <div className="flex items-center">
-                            <button className="h-fit font-semibold" onClick={() => setShowEditCollection(true)}>
+                            <button className="text-lg mr-2 h-fit font-semibold"
+                                    onClick={() => setShowEditCollection(true)}>
                                 Edytuj
+                            </button>
+                        </div>
+
+                        <div className="flex items-center">
+                            <button
+                                className="text-lg font-semibold h-fit border-red-700 text-red-700 bg-red-50 hover:bg-white">
+                                <span className="flex-row flex items-center"
+                                      onClick={() => setShowDeleteCollectionWarning(true)}>
+                                    <p className="ml-2">Usuń</p>
+                                </span>
                             </button>
                         </div>
 
@@ -238,7 +274,7 @@ const Artworks = () => {
                                     type="button"
                                     onClick={() => {
                                         if (Object.keys(selectedArtworks).length !== 0)
-                                            setShowWarningPopup(!showWarningPopup)
+                                            setShowDeleteRecordsWarning(!showDeleteRecordsWarning)
                                     }}
                             >
                                 Usuń zaznaczone
