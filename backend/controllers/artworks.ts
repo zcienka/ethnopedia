@@ -82,17 +82,11 @@ const patchArtwork = asyncWrapper(async (req: Request, res: Response, next: Next
 const searchArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let query = JSON.parse(JSON.stringify(req.query))
-        console.log(req.query.collection + " " + req.query.searchText)
-        console.log(query)
         const collection = req.query.collection
         const searchText = req.query.searchText
-        Object.keys(query).forEach(key => {
-            if (typeof query[key] === "string") {
-                query[key] = new RegExp(query[key], "i")
-            }
-        })
-
-        const records = await Artwork.find(query).exec()
+        let query_json: any = {Kategoria: collection, $text: { $search: searchText }}
+        const records = await mongoClient.db().collection('artworks').find(query_json).toArray()
+        console.log(records)
         return res.status(200).json(records)
     } catch (error) {
         next(error)
