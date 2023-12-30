@@ -80,7 +80,10 @@ const patchArtwork = asyncWrapper(async (req: Request, res: Response, next: Next
 const searchArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let query = JSON.parse(JSON.stringify(req.query))
-
+        console.log(req.query.collection + " " + req.query.searchText)
+        console.log(query)
+        const collection = req.query.collection
+        const searchText = req.query.searchText
         Object.keys(query).forEach(key => {
             if (typeof query[key] === "string") {
                 query[key] = new RegExp(query[key], "i")

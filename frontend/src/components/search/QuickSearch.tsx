@@ -1,14 +1,16 @@
 import React from "react"
 import { useFormik } from "formik"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
+import { getQuickSearchResult } from "../../api/artworks"
 
 const QuickSearch = () => {
     const formik = useFormik({
         initialValues: {
+            collectionName: window.location.href.split('/')[window.location.href.split('/').findIndex((element) => element === 'collections')+1],
             searchText: "",
         },
         onSubmit: values => {
-            console.log(values.searchText)
+            getQuickSearchResult(values.collectionName, values.searchText)
         },
     })
 
