@@ -14,7 +14,7 @@ const subsections = require("./routes/subsection")
 const categories = require("./routes/category")
 const general = require("./routes/general")
 
-import connectDB from "./db/connect"
+const {connectDB, connectMongoDBNativeDriver} = require("./db/connect")
 
 app.use(cors())
 app.use(express.json())
@@ -32,6 +32,7 @@ const port = process.env.PORT || 5000
 const start = async () => {
     try {
         await connectDB(process.env.MONGO_URI)
+        await connectMongoDBNativeDriver()
         app.listen(port, () =>
             console.log(`Server is listening on port ${port}...`),
         )

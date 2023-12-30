@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
-import { ObjectId } from "mongodb"
+import {getMongoDBNativeDriverClient} from "../db/connect"
 
 const asyncWrapper = require("../middleware/async")
-
 const Artwork = require("../models/artwork")
+const ObjectId = require('mongodb').ObjectId;
+const mongoClient = getMongoDBNativeDriverClient()
+
 
 const getAllArtworks = async (req: Request, res: Response, next: NextFunction) => {
     const page = parseInt(req.query.page as string) || 1
