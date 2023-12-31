@@ -130,14 +130,22 @@ export const advsearchArtworks = async (req: Request, res: Response, next: NextF
     try {
         let query = JSON.parse(JSON.stringify(req.query))
         let mongoQuery: any = {}
-        console.log(query)
-        mongoQuery.$and = []
         for (const property in query) {
             // console.log(property.split(".").join('.subcategories.'))
-            const category = property.split(".").join('.subcategories.')
-            const categoryDotValue: string = `${category}.value`
-            mongoQuery.$and.push({ $or: [{ category: query[category] }, { categoryDotValue: query[category] }]})
-            console.log(query[category])
+            const category_split = property.split(".")
+            if(category_split.length == 1) {
+                mongoQuery[category_split[0]] = query[property]
+            } else {
+                const category = category_split.join('.subcategories.') + ".value"
+                mongoQuery[category] = query[property]
+                // console.log(category)
+            }
+            
+            
+            // const categoryDotValue: string = `${category}.value`
+            // mongoQuery.$and.push({ $or: [{ category: query[category] }, { categoryDotValue: query[category] }]})
+            // console.log(query[category])
+
             // mongoQuery[category] = { $or: [{ property: query[category] }, { propertyDotValue: query[category] }]}
             // if(query[property]["value"] === undefined) {
             //     mongoQuery[category] = query[property]
@@ -146,11 +154,12 @@ export const advsearchArtworks = async (req: Request, res: Response, next: NextF
             // }
 
         }
+
         console.log(mongoQuery)
         const records = await mongoClient.db().collection('artworks').find(mongoQuery).toArray()
         console.log(records)
-        return res.status(200).json(records)
-        return res.status(200).json({})
+        // return res.status(200).json(records)
+        // return res.status(200).json({})
     } catch (error) {
         next(error)
     }
