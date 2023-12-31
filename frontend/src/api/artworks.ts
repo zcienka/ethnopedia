@@ -33,6 +33,11 @@ export const getQuickSearchResult = async (collectionName: string, searchText: s
         .then(res => res.data)
 }
 
+export const getAdvSearchResult = async (queryParameters: string) => {
+    return await axios.get(`${API_URL}v1/artworks/advsearch${queryParameters}`)
+        .then(res => res.data)
+}
+
 export const createArtwork = async () => {
     return await axios
         .post(`${API_URL}v1/artworks`, {})

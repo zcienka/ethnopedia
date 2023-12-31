@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useFormik } from "formik"
 import { useQuery } from "react-query"
 import { getCategories2 } from "../../api/categories"
+import { getAdvSearchResult } from "../../api/artworks"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
@@ -57,7 +58,8 @@ const AdvancedSearch = () => {
     }
 
     const handleSearch = () => {
-        navigate(`/artworks/search?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
+        navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
+        getAdvSearchResult(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
         setShowValidationMessage(() => false)
     }
 

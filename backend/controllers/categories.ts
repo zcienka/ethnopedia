@@ -11,12 +11,11 @@ const Category = require("../models/category")
 const getNestedKeys = (record: any, parents: any) => {
     let keys: any = []
     for (const property in record) {
-        if(record[property]["subcategories"] === undefined) {
-            keys.push(`${parents}.${property}`)
-        } else {
+        keys.push(`${parents}.${property}`)
+        if(record[property]["subcategories"] !== undefined) {
             let subkeys = getNestedKeys(record[property]["subcategories"], `${parents}.${property}`)
             keys = keys.concat(subkeys)
-        }            
+        }           
     }
     return keys
 }
@@ -26,9 +25,8 @@ export const getAllKeys = async (req: Request, res: Response, next: NextFunction
     let keys: any = []
     records.forEach(record => {
         for (const property in record) {
-            if(record[property]["subcategories"] === undefined) {
-                keys.push(property)
-            } else {
+            keys.push(property)
+            if(record[property]["subcategories"] !== undefined) {
                 let subkeys = getNestedKeys(record[property]["subcategories"], property)
                 keys = keys.concat(subkeys)
             }            
