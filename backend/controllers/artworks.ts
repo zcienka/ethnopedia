@@ -78,14 +78,47 @@ const patchArtwork = asyncWrapper(async (req: Request, res: Response, next: Next
     }
 })
 
+const getNestedKeys = (record: any, parents: any) => {
+    let keys: any = []
+    for (const property in record) {
+        if(record[property]["subcategories"] === undefined) {
+            keys.push(`${parents}.${property}`)
+        } else {
+            let subkeys = getNestedKeys(record[property]["subcategories"], `${parents}.${property}`)
+            keys = keys.concat(subkeys)
+        }            
+    }
+    return keys
+}
+
+const getAllKeys = async (collection: any) => {
+    const records = await mongoClient.db().collection('artworks').find({Kategoria: collection}).toArray()
+    let keys: any = []
+    records.forEach(record => {
+        for (const property in record) {
+            if(record[property]["subcategories"] === undefined) {
+                keys.push(property)
+            } else {
+                let subkeys = getNestedKeys(record[property]["subcategories"], property)
+                keys = keys.concat(subkeys)
+            }            
+        }
+    });
+    let keys_unique = keys.filter((value: any, index: number, array: any) => {
+        return array.indexOf(value) === index;
+      })
+    return keys_unique
+}
 
 const searchArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
         let query = JSON.parse(JSON.stringify(req.query))
         const collection = req.query.collection
         const searchText = req.query.searchText
-        let query_json: any = {Kategoria: collection, $text: { $search: searchText }}
+        let query_json: object = {Kategoria: collection, $text: { $search: searchText }}
         const records = await mongoClient.db().collection('artworks').find(query_json).toArray()
+        const keys = await getAllKeys(collection)
+        console.log(keys)
         console.log(records)
         return res.status(200).json(records)
     } catch (error) {
