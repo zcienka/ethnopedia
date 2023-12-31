@@ -25,7 +25,9 @@ export const getAllKeys = async (req: Request, res: Response, next: NextFunction
     let keys: any = []
     records.forEach(record => {
         for (const property in record) {
-            keys.push(property)
+            if(property != "_id") {
+                keys.push(property)
+            }
             if(record[property]["subcategories"] !== undefined) {
                 let subkeys = getNestedKeys(record[property]["subcategories"], property)
                 keys = keys.concat(subkeys)
@@ -35,7 +37,6 @@ export const getAllKeys = async (req: Request, res: Response, next: NextFunction
     let keys_unique = keys.filter((value: any, index: number, array: any) => {
         return array.indexOf(value) === index;
       })
-    // return keys_unique
     res.status(200).json(keys_unique)
 }
 

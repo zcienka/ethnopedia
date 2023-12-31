@@ -59,7 +59,8 @@ const AdvancedSearch = () => {
 
     const handleSearch = () => {
         navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
-        getAdvSearchResult(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
+        const kategoria = window.location.href.split('/')[window.location.href.split('/').findIndex((element) => element === 'collections')+1]
+        getAdvSearchResult(`?Kategoria=${kategoria}&${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
         setShowValidationMessage(() => false)
     }
 
