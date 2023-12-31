@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useFormik } from "formik"
 import { useQuery } from "react-query"
-import { getCategories } from "../../api/categories"
+import { getCategories2 } from "../../api/categories"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
@@ -34,7 +34,7 @@ const AdvancedSearch = () => {
 
     const { data: categoriesData } = useQuery(
         ["allCategories"],
-        getCategories,
+        () => getCategories2(window.location.href.split('/')[window.location.href.split('/').findIndex((element) => element === 'collections')+1]),
     )
 
     const navigate = useNavigate()
@@ -75,8 +75,8 @@ const AdvancedSearch = () => {
                         className="border p-2"
                     >
                         <option hidden selected>Wybierz kategorię</option>
-                        {categoriesData[0].categories.map((subcategory: Category) => (
-                            <option value={subcategory.category} key={uuidv4()}>{subcategory.category}</option>
+                        {categoriesData.map((category: any) => (
+                            <option value={category} key={uuidv4()}>{category}</option>
                         ))}
                     </select>
                     <input

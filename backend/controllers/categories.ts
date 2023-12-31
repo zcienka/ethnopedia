@@ -1,10 +1,45 @@
 import { NextFunction, Request, Response } from "express"
 import { ObjectId } from "mongodb"
 import mongoose from "mongoose"
+import {getMongoDBNativeDriverClient} from "../db/connect"
+const mongoClient = getMongoDBNativeDriverClient()
 
 const asyncWrapper = require("../middleware/async")
 
 const Category = require("../models/category")
+
+const getNestedKeys = (record: any, parents: any) => {
+    let keys: any = []
+    for (const property in record) {
+        if(record[property]["subcategories"] === undefined) {
+            keys.push(`${parents}.${property}`)
+        } else {
+            let subkeys = getNestedKeys(record[property]["subcategories"], `${parents}.${property}`)
+            keys = keys.concat(subkeys)
+        }            
+    }
+    return keys
+}
+
+export const getAllKeys = async (req: Request, res: Response, next: NextFunction) => {
+    const records = await mongoClient.db().collection('artworks').find({Kategoria: req.query.collection}).toArray()
+    let keys: any = []
+    records.forEach(record => {
+        for (const property in record) {
+            if(record[property]["subcategories"] === undefined) {
+                keys.push(property)
+            } else {
+                let subkeys = getNestedKeys(record[property]["subcategories"], property)
+                keys = keys.concat(subkeys)
+            }            
+        }
+    });
+    let keys_unique = keys.filter((value: any, index: number, array: any) => {
+        return array.indexOf(value) === index;
+      })
+    // return keys_unique
+    res.status(200).json(keys_unique)
+}
 
 const getAllCategories = async (req: Request, res: Response, next: NextFunction) => {
     const page = typeof req.query.page === "string" ? parseInt(req.query.page) : 1
@@ -17,10 +52,11 @@ const getAllCategories = async (req: Request, res: Response, next: NextFunction)
 
     // const categories = await Category.find({}).skip(skip).limit(limit)
     const categories = await Category.find({}).exec()
-
+    console.log(categories)
     res.status(200).json(categories)
 }
 
 module.exports = {
-    getAllCategories
+    getAllCategories,
+    getAllKeys
 }
