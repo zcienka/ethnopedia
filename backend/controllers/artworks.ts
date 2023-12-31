@@ -126,28 +126,6 @@ const searchArtworks = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
-export const advsearchArtworks = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        let query = JSON.parse(JSON.stringify(req.query))
-        let mongoQuery: any = {}
-        for (const property in query) {
-            const category_split = property.split(".")
-            const category = category_split.join('.subcategories.') + ".value"
-            console.log(query[property])
-            mongoQuery[category] = query[property]
-        }
-
-        // console.log(mongoQuery)
-        console.log(mongoQuery)
-        const records = await mongoClient.db().collection('artworks').find(mongoQuery).toArray()
-        // console.log(records)
-        // return res.status(200).json(records)
-        // return res.status(200).json({})
-    } catch (error) {
-        next(error)
-    }
-}
-
 const filterArtworks = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
         const records = await Artwork.find(req.query).exec()
@@ -221,7 +199,6 @@ module.exports = {
     getArtwork,
     createArtwork,
     searchArtworks,
-    advsearchArtworks,
     batchDeleteArtworks,
     filterArtworks,
     patchArtwork,

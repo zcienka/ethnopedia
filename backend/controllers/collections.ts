@@ -62,9 +62,21 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
         const page = parseInt(req.query.page as string) || 1
         const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        const totalArtworks = await Artwork.countDocuments({ Kategoria: req.params.collection })
+        //advanced search handling
+        let query = JSON.parse(JSON.stringify(req.query))
+        let mongoQuery: any = {}
+        for (const property in query) {
+            if(property != "page" && property != "pageSize") {
+                const category_split = property.split(".")
+                const category = category_split.join('.subcategories.') + ".value"
+                mongoQuery[category] = query[property]
+            }
+            
+        }
+        mongoQuery = { Kategoria : req.params.collection, ...mongoQuery }
 
-        const records = await Artwork.find({ Kategoria: req.params.collection })
+        const totalArtworks = await Artwork.countDocuments(mongoQuery)
+        const records = await Artwork.find(mongoQuery)
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .exec()

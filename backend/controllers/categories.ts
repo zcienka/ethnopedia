@@ -51,7 +51,6 @@ const getAllCategories = async (req: Request, res: Response, next: NextFunction)
 
     // const categories = await Category.find({}).skip(skip).limit(limit)
     const categories = await Category.find({}).exec()
-    console.log(categories)
     res.status(200).json(categories)
 }
 

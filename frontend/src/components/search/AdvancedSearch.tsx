@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useFormik } from "formik"
 import { useQuery } from "react-query"
 import { getCategories2 } from "../../api/categories"
-import { getAdvSearchResult } from "../../api/artworks"
+// import { getAdvSearchResult } from "../../api/artworks"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
@@ -59,8 +59,6 @@ const AdvancedSearch = () => {
 
     const handleSearch = () => {
         navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
-        const kategoria = window.location.href.split('/')[window.location.href.split('/').findIndex((element) => element === 'collections')+1]
-        getAdvSearchResult(`?Kategoria=${kategoria}&${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
         setShowValidationMessage(() => false)
     }
 
@@ -97,7 +95,7 @@ const AdvancedSearch = () => {
                         </span>
                         Dodaj regułę
                     </button>
-                    <button className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
+                    <button type="submit" className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
                             text-white p-2"
                             onClick={handleSearch}
                     >
