@@ -21,7 +21,7 @@ const getNestedKeys = (record: any, parents: any) => {
 }
 
 export const getAllKeys = async (req: Request, res: Response, next: NextFunction) => {
-    const records = await mongoClient.db().collection('artworks').find({Kategoria: req.query.collection}).toArray()
+    const records = await mongoClient.db().collection('artworks').find({Kolekcja: {value: req.query.collection}}).toArray()
     let keys: any = []
     records.forEach(record => {
         for (const property in record) {

@@ -76,7 +76,7 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
                 }          
             }
         }  
-        mongoQuery = { Kategoria : req.params.collection, ...mongoQuery }
+        mongoQuery = { Kolekcja : {value: req.params.collection}, ...mongoQuery }
 
         const totalArtworks = await Artwork.countDocuments(mongoQuery)
         const records = await Artwork.find(mongoQuery)
