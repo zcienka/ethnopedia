@@ -120,9 +120,9 @@ const ArtworkPage = () => {
 
                     <div className="flex flex-row">
                         <div className="mt-2 flex-1">
-                            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł.value}</h1>
-                            <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści.value}</p>
-                            <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok.value}</p>
+                            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł ? Tytuł.value : "Tytuł nieznany"}</h1>
+                            <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści ? Artyści.value : "Artyści nieznani"}</p>
+                            <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok ? Rok.value : "Rok nieznany"}</p>
                             <ul className="list-disc list-inside pl-4">
                             {showEditArtwork ? artworksEdit : Object.entries(detailsToShow).map(([columName, value]: any) => (
                                 columName !== "_id" && <span key={uuidv4()} className="font-medium">
