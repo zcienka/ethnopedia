@@ -1,7 +1,6 @@
 import React from "react"
 import { useFormik } from "formik"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
-import { getQuickSearchResult } from "../../api/artworks"
 import { useNavigate } from "react-router-dom"
 
 const QuickSearch = () => {
@@ -17,7 +16,6 @@ const QuickSearch = () => {
             searchText: "",
         },
         onSubmit: (values, { resetForm }) => {
-            getQuickSearchResult(values.collectionName, values.searchText)
             handleSearch(values.searchText)
             resetForm()
         },

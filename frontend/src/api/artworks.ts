@@ -28,10 +28,6 @@ export const getArtworksByCategory = async (collection: string, page: number, pa
         .then(res => res.data)
 }
 
-export const getQuickSearchResult = async (collectionName: string, searchText: string) => {
-    return await axios.get(`${API_URL}v1/artworks/search?collection=${collectionName}&searchText=${searchText}`)
-        .then(res => res.data)
-}
 
 export const createArtwork = async () => {
     return await axios

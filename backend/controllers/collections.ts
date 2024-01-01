@@ -62,17 +62,20 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
         const page = parseInt(req.query.page as string) || 1
         const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        //advanced search handling
         let query = JSON.parse(JSON.stringify(req.query))
         let mongoQuery: any = {}
-        for (const property in query) {
-            if(property != "page" && property != "pageSize") {
-                const category_split = property.split(".")
-                const category = category_split.join('.subcategories.') + ".value"
-                mongoQuery[category] = query[property]
+        //quicksearch
+        if (query.searchText) {
+            mongoQuery.$text = { $search: query.searchText }
+        //advanced search
+        } else {
+            for (const property in query) {
+                if(property != "page" && property != "pageSize") {
+                    const category = property.split(".").join('.subcategories.') + ".value"
+                    mongoQuery[category] = query[property]
+                }          
             }
-            
-        }
+        }  
         mongoQuery = { Kategoria : req.params.collection, ...mongoQuery }
 
         const totalArtworks = await Artwork.countDocuments(mongoQuery)
