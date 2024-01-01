@@ -9,7 +9,6 @@ import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.
 import LoadingPage from "../../pages/LoadingPage"
 import { useNavigate } from "react-router-dom"
 import { v4 as uuidv4 } from "uuid"
-import { bool, boolean } from "yup"
 
 const initialRule = { id: Date.now(), field: "", operator: "", value: "" }
 
@@ -32,7 +31,6 @@ const initialRule = { id: Date.now(), field: "", operator: "", value: "" }
 // type CollectionArray = CollectionItem[]
 const AdvancedSearch = () => {
     const [rules, setRules] = useState<any[]>([])
-    const [showValidationMessage, setShowValidationMessage] = useState<boolean>(false)
 
     const { data: categoriesData } = useQuery(
         ["allCategories"],
@@ -43,7 +41,7 @@ const AdvancedSearch = () => {
 
     const categoryInRules = (rules: any) => {
         for(const rule in rules) {
-            if(rules[rule].field == formik.values.field) {
+            if(rules[rule].field === formik.values.field) {
                 return true
             }
         }
@@ -115,9 +113,6 @@ const AdvancedSearch = () => {
                         </span>
                         Wyszukaj
                     </button>
-                    {showValidationMessage && <span className="text-red-500 ml-2">
-                        All fields are required to add a rule.
-                    </span>}
                 </div>
             </form>
 
