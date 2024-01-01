@@ -2,7 +2,7 @@ import CustomTextField from "../../components/CustomTextField"
 import LoadingPage from "../LoadingPage"
 import Navbar from "../../components/navbar/Navbar"
 import Navigation from "../../components/Navigation"
-import React, { useEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import WarningPopup from "../collections/WarningPopup"
 import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg"
 import { ReactComponent as TrashBinIcon } from "../../assets/icons/trashBin.svg"
@@ -77,7 +77,21 @@ const ArtworkPage = () => {
             setShowMore(true)
         }
     }
-
+      
+    function Subcategories(categories: any) {
+        let entries: any = []
+        for (const property in categories) {
+            entries.push(<li><span className="mr-2">{property}:</span> {categories[property]["value"]}</li>)
+            if(categories[property]["subcategories"]) {
+                entries = [...entries, Subcategories(categories[property]["subcategories"])]
+            }
+        }
+        return <>{
+            <ul className="list-disc list-inside pl-4">
+                {entries}
+            </ul>
+        }</>
+    }
 
     if (fetchedData === undefined) {
         return <LoadingPage />
@@ -94,7 +108,6 @@ const ArtworkPage = () => {
                 />
             </div>
         })
-
         return <>
             <Navbar />
             {showDeleteArtworkWarning &&
@@ -107,15 +120,18 @@ const ArtworkPage = () => {
 
                     <div className="flex flex-row">
                         <div className="mt-2 flex-1">
-                            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł}</h1>
-                            <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści}</p>
-                            <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok}</p>
+                            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł.value}</h1>
+                            <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści.value}</p>
+                            <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok.value}</p>
+                            <ul className="list-disc list-inside pl-4">
                             {showEditArtwork ? artworksEdit : Object.entries(detailsToShow).map(([columName, value]: any) => (
-                                columName !== "_id" && <div key={uuidv4()} className="py-2 font-medium">
-                                    <span className="mr-2">{columName}:</span>
-                                    {value}
-                                </div>
+                                columName !== "_id" && <span key={uuidv4()} className="font-medium">
+                                    <li><span className="mr-2">{columName}:</span>
+                                    {value.value}</li>
+                                    <Subcategories {...value.subcategories}/>
+                                </span>
                             ))}
+                            </ul>
                         </div>
                         <div className="flex-1 mt-4 flex justify-end text-gray-700">
                             {showEditArtwork ?
