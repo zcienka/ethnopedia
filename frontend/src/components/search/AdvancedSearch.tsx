@@ -17,10 +17,10 @@ type Subcategory = {
     values?: string[]
 }
 
-type Category = {
-    category: string
-    subcategories?: Subcategory[]
-}
+// type Category = {
+//     category: string
+//     subcategories?: Subcategory[]
+// }
 
 // type CollectionItem = {
 //     _id: string
