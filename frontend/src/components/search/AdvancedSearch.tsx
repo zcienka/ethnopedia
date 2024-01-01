@@ -9,6 +9,7 @@ import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.
 import LoadingPage from "../../pages/LoadingPage"
 import { useNavigate } from "react-router-dom"
 import { v4 as uuidv4 } from "uuid"
+import { bool, boolean } from "yup"
 
 const initialRule = { id: Date.now(), field: "", operator: "", value: "" }
 
@@ -40,26 +41,35 @@ const AdvancedSearch = () => {
 
     const navigate = useNavigate()
 
+    const categoryInRules = (rules: any) => {
+        for(const rule in rules) {
+            if(rules[rule].field == formik.values.field) {
+                return true
+            }
+        }
+        return false
+    }
+
     const formik = useFormik({
         initialValues: initialRule,
         onSubmit: (values, { resetForm }) => {
-            if (values.field  && values.value) {
-                setRules([...rules, { ...values, id: Date.now() }])         
-                resetForm()
-                setShowValidationMessage(() => false)
-            } else {
-                setShowValidationMessage(() => true)
+            handleAddRule()
+            let newest = ""
+            if(values.field && values.value && !categoryInRules(rules)) {
+                newest = `&${formik.values.field}=${formik.values.value}`
             }
+            navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}${newest}`)     
         },
     })
 
-    const deleteRule = (id: string) => {
-        setRules(rules.filter((rule) => rule.id !== id))
+    const handleAddRule = () => {
+        if(formik.values.field && formik.values.value && !categoryInRules(rules)) {
+            setRules([...rules, { ...formik.values, id: Date.now() }])
+        }
     }
 
-    const handleSearch = () => {
-        navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
-        setShowValidationMessage(() => false)
+    const deleteRule = (id: string) => {
+        setRules(rules.filter((rule) => rule.id !== id))
     }
 
     if (categoriesData === undefined) {
@@ -88,8 +98,9 @@ const AdvancedSearch = () => {
                         className="border p-2 rounded-lg"
                     />
 
-                    <button type="submit" className="border-gray-800 flex items-center bg-gray-800 hover:bg-gray-700 text-white p-2
-                            font-semibold">
+                    <button type="button" className="border-gray-800 flex items-center bg-gray-800 hover:bg-gray-700 text-white p-2
+                            font-semibold" onClick={handleAddRule}
+                        >
                         <span className="mr-1">
                             <PlusIcon />
                         </span>
@@ -97,7 +108,6 @@ const AdvancedSearch = () => {
                     </button>
                     <button type="submit" className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
                             text-white p-2"
-                            onClick={handleSearch}
                     >
                         <span className="mr-1">
                             <SearchLoopIcon />
