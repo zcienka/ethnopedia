@@ -12,10 +12,10 @@ import { v4 as uuidv4 } from "uuid"
 
 const initialRule = { id: Date.now(), field: "", operator: "", value: "" }
 
-type Subcategory = {
-    name: string
-    values?: string[]
-}
+// type Subcategory = {
+//     name: string
+//     values?: string[]
+// }
 
 // type Category = {
 //     category: string
