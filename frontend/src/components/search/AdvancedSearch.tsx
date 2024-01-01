@@ -54,11 +54,12 @@ const AdvancedSearch = () => {
         initialValues: initialRule,
         onSubmit: (values, { resetForm }) => {
             handleAddRule()
-            let newest = ""
+            let newest_rule = ""
             if(values.field && values.value && !categoryInRules(rules)) {
-                newest = `&${formik.values.field}=${formik.values.value}`
+                newest_rule = `&${formik.values.field}=${formik.values.value}`
             }
-            navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}${newest}`)     
+            
+            navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}${newest_rule}`)     
         },
     })
 

@@ -18,11 +18,11 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
 
     const pipeline = [
         {
-            $match: { "Kategoria": { $exists: true } },
+            $match: { "Kolekcja": { $exists: true } },
         },
         {
             $group: {
-                _id: "$Kategoria",
+                _id: "$Kolekcja.value",
                 count: { $sum: 1 },
             },
         },
