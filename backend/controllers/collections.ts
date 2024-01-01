@@ -68,7 +68,7 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
         if (query.searchText) {
             mongoQuery.$text = { $search: query.searchText }
         //advanced search
-        } else {
+        } else if(query.searchText !== ""){
             for (const property in query) {
                 if(property != "page" && property != "pageSize") {
                     const category = property.split(".").join('.subcategories.') + ".value"

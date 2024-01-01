@@ -36,7 +36,7 @@ export const getAllKeys = async (req: Request, res: Response, next: NextFunction
     });
     let keys_unique = keys.filter((value: any, index: number, array: any) => {
         return array.indexOf(value) === index;
-      })
+    })
     res.status(200).json(keys_unique)
 }
 
