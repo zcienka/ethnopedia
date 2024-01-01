@@ -131,9 +131,9 @@ const Artworks = () => {
                         </span>
 
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Tytuł}</h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artyści}</p>
-                        <p className=" text-gray-500 dark:text-gray-300">{artwork.Rok}</p>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Tytuł.value}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artyści.value}</p>
+                        <p className=" text-gray-500 dark:text-gray-300">{artwork.Rok.value}</p>
                     </div>
                 </div>
             </div>

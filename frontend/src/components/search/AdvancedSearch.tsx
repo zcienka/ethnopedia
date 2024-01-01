@@ -44,7 +44,7 @@ const AdvancedSearch = () => {
         initialValues: initialRule,
         onSubmit: (values, { resetForm }) => {
             if (values.field  && values.value) {
-                setRules([...rules, { ...values, id: Date.now() }])
+                setRules([...rules, { ...values, id: Date.now() }])         
                 resetForm()
                 setShowValidationMessage(() => false)
             } else {
