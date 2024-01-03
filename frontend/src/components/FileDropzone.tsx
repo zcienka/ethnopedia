@@ -21,7 +21,7 @@ const FileDropzone = ({ onClose }: Props) => {
     const formik = useFormik({
         initialValues: {},
         onSubmit: (values, { resetForm }) => {
-            uploadArtworks()     
+            uploadArtworks(fileContents)     
         },
     })
 

@@ -28,8 +28,8 @@ export const getArtworksByCategory = async (collection: string, page: number, pa
         .then(res => res.data)
 }
 
-export const uploadArtworks = async () => {
-    return await axios.post(`${API_URL}v1/upload`)
+export const uploadArtworks = async (fileContents: any) => {
+    return await axios.post(`${API_URL}v1/upload`, {fileContents})
     .then(res => res.data)
 }
 

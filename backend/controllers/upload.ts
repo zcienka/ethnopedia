@@ -9,7 +9,10 @@ const mongoClient = getMongoDBNativeDriverClient()
 
 const uploadArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        
+        const fileContents = req.body.fileContents
+        const mongoQuery = fileContents.map((query: any) => JSON.parse(query))
+        const result = await mongoClient.db().collection('artworks').insertMany(mongoQuery)
+        return res.status(201).json(result)
     } catch (error) {
         next(error)
     }
