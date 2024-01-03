@@ -1,5 +1,4 @@
-import express from "express"
-
+import express, { Request, Response, NextFunction } from "express"
 require("dotenv").config()
 
 const app = express()
@@ -13,6 +12,7 @@ const sections = require("./routes/section")
 const subsections = require("./routes/subsection")
 const categories = require("./routes/category")
 const general = require("./routes/general")
+const upload = require("./routes/upload")
 
 const {connectDB, connectMongoDBNativeDriver} = require("./db/connect")
 
@@ -26,6 +26,7 @@ app.use("/api/v1/sections", sections)
 app.use("/api/v1/subsections", subsections)
 app.use("/api/v1/categories", categories)
 app.use("/api/v1", general)
+app.use("/api/v1/upload", upload)
 
 const port = process.env.PORT || 5000
 

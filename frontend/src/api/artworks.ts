@@ -28,6 +28,10 @@ export const getArtworksByCategory = async (collection: string, page: number, pa
         .then(res => res.data)
 }
 
+export const uploadArtworks = async () => {
+    return await axios.post(`${API_URL}v1/upload`)
+    .then(res => res.data)
+}
 
 export const createArtwork = async () => {
     return await axios

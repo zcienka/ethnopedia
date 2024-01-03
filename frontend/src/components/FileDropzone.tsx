@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { ReactComponent as DragAndDrop } from "../assets/icons/dragAndDrop.svg"
 import { ReactComponent as Close } from "../assets/icons/close.svg"
+import { useFormik } from "formik"
+import { uploadArtworks } from "../api/artworks"
 
 type Props = {
     onClose: () => void
@@ -15,6 +17,13 @@ const FileDropzone = ({ onClose }: Props) => {
     const listItems = fileNames.map((fileName) =>
         <li>{fileName}</li>
     );
+
+    const formik = useFormik({
+        initialValues: {},
+        onSubmit: (values, { resetForm }) => {
+            uploadArtworks()     
+        },
+    })
 
     const handleFileUpload = (event: any) => {
         const files = event.target.files
@@ -84,7 +93,9 @@ const FileDropzone = ({ onClose }: Props) => {
                             />
                         </label>
                     </div>
-                    <button type="submit">Prześlij</button>
+                    <form onSubmit={formik.handleSubmit} className="flex space-x-2">
+                        <button type="submit">Prześlij</button>
+                    </form>        
                 </div>
             </div>
         </div>
