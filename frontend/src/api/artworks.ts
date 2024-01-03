@@ -33,6 +33,11 @@ export const uploadArtworks = async (fileContents: any) => {
     .then(res => res.data)
 }
 
+export const getArtworksForExport = async (artworksQuery: string) => {
+    return  await axios.get(`${API_URL}v1/upload?${artworksQuery}`)
+    .then(res => res.data)
+}
+
 export const createArtwork = async () => {
     return await axios
         .post(`${API_URL}v1/artworks`, {})

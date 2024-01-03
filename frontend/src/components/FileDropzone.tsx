@@ -13,6 +13,7 @@ const FileDropzone = ({ onClose }: Props) => {
     const [, setUploadedFile] = useState(null)
     const [fileNames, setFileNames] = useState<Array<string>>([])
     const [fileContents, setFileContents] = useState<Array<string>>([])
+    const [showResultMessage, setShowResultMessage] = useState<boolean>(false)
 
     const listItems = fileNames.map((fileName) =>
         <li>{fileName}</li>
@@ -20,12 +21,18 @@ const FileDropzone = ({ onClose }: Props) => {
 
     const formik = useFormik({
         initialValues: {},
-        onSubmit: (values, { resetForm }) => {
-            uploadArtworks(fileContents)     
+        onSubmit: async (values, { resetForm }) => {
+            const res = await uploadArtworks(fileContents)
+            if(res.acknowledged) {
+                setFileNames([])
+                setFileContents([])
+                setShowResultMessage(true)
+            }     
         },
     })
 
     const handleFileUpload = (event: any) => {
+        setShowResultMessage(false)
         const files = event.target.files
         let contents: any = []
         Array.from(files).forEach((value: any, fileIndex: number) => {
@@ -66,6 +73,7 @@ const FileDropzone = ({ onClose }: Props) => {
                         </button>
                     </div>
                     <div className="flex items-start justify-between p-4 rounded-t">
+                        {showResultMessage && <p>Rekordy dodane pomyślnie</p>}
                         <ul>
                             {listItems}
                         </ul>
@@ -82,7 +90,7 @@ const FileDropzone = ({ onClose }: Props) => {
                                 <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                                     <span className="font-semibold">Kliknij, aby przesłać</span> lub przeciągnij i upuść
                                 </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">Pliki XLSX, XLS lub CSV</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Pliki JSON</p>
                             </div>
                             <input
                                 id="dropzone-file"

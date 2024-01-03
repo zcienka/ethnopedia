@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "react-query"
-import { getArtworksByCategory, useBatchDeleteArtworkMutation } from "../../api/artworks"
+import { getArtworksForExport, getArtworksByCategory, useBatchDeleteArtworkMutation } from "../../api/artworks"
 import LoadingPage from "../../pages/LoadingPage"
 import React, { useMemo, useState } from "react"
 import Navbar from "../navbar/Navbar"
@@ -25,6 +25,7 @@ const Artworks = () => {
     const [showWarningPopup, setShowWarningPopup] = useState(false)
     const [sortOrder, setSortOrder] = useState<string>("default")
     const [showEditCollection, setShowEditCollection] = useState<boolean>(false)
+    const [exportData, setExportData] = useState<any>()
     const location = useLocation()
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -59,13 +60,6 @@ const Artworks = () => {
             return acc
         }, {})
         setSelectedArtworks(newSelection)
-    }
-
-    const exportToExcel = () => {
-        // const ws = XLSX.utils.json_to_sheet(artworkData)
-        // const wb = XLSX.utils.book_new()
-        // XLSX.utils.book_append_sheet(wb, ws, "DataSheet")
-        // XLSX.writeFile(wb, "DataExport.xlsx")
     }
 
     const sortArtworks = (artworks: any[], order: string) => {
@@ -108,6 +102,27 @@ const Artworks = () => {
                 })
         }
     }
+
+    const exportArtworks = async () => {
+        const selectedIds = Object.keys(selectedArtworks).filter(id => selectedArtworks[id])
+        const queryString = selectedIds.map((idString) => {
+            return `ids=${idString}`
+        }).join("&")
+        const res = await getArtworksForExport(queryString)
+        setExportData(res)
+    }
+
+    const saveFile = async (blob: Blob) => {
+        const a = document.createElement('a');
+        a.download = 'exportedData.json';
+        a.href = URL.createObjectURL(blob);
+        a.addEventListener('click', (e) => {
+          setTimeout(() => URL.revokeObjectURL(a.href), 30 * 1000);
+        });
+        a.click();
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {type : 'application/json'});
 
     const navigate = useNavigate()
 
@@ -193,12 +208,15 @@ const Artworks = () => {
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                     type="button"
-                                    onClick={() => exportToExcel()}
+                                    onClick={() => {
+                                        exportArtworks()
+                                        saveFile(blob)
+                                    }}
                             >
                             <span className="text-white dark:text-gray-400">
                                 <FileExportIcon />
                             </span>
-                                Eksportuj plik
+                                Eksportuj zaznaczone utwory
                             </button>
                             <button className="flex items-center justify-center dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
@@ -209,7 +227,7 @@ const Artworks = () => {
                                 <span className="text-white dark:text-gray-400">
                                     <FileImportIcon />
                                 </span>
-                                Importuj plik
+                                Importuj utwory
                             </button>
 
                             <button className="flex items-center justify-center dark:text-white
