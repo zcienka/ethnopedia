@@ -9,14 +9,29 @@ type Props = {
 const FileDropzone = ({ onClose }: Props) => {
     const [, setWindowOpen] = useState(false)
     const [, setUploadedFile] = useState(null)
+    const [fileNames, setFileNames] = useState<Array<string>>([])
+    const [fileContents, setFileContents] = useState<Array<string>>([])
+
+    const listItems = fileNames.map((fileName) =>
+        <li>{fileName}</li>
+    );
 
     const handleFileUpload = (event: any) => {
-        const file = event.target.files[0]
-
-        if (file) {
-            setUploadedFile(file)
-            setWindowOpen(true)
-        }
+        const files = event.target.files
+        let contents: any = []
+        Array.from(files).forEach((value: any, fileIndex: number) => {
+            const reader = new FileReader()
+            reader.onload = async (event: any) => { 
+                const text = (event.target.result)
+                contents.push(text)
+                if(fileIndex == files.length - 1) {
+                    setFileContents([...fileContents, ...contents])
+                }   
+            };
+            reader.readAsText(event.target.files[fileIndex])
+        })
+        const newFileNames = [...event.target.files].map((file: any) => file.name)
+        setFileNames([...fileNames, ...newFileNames])
     }
 
     return <div
@@ -41,6 +56,11 @@ const FileDropzone = ({ onClose }: Props) => {
                             <Close />
                         </button>
                     </div>
+                    <div className="flex items-start justify-between p-4 rounded-t">
+                        <ul>
+                            {listItems}
+                        </ul>
+                    </div>
                     <div className="w-full h-full flex items-center justify-center">
                         <label
                             htmlFor="dropzone-file"
@@ -60,9 +80,11 @@ const FileDropzone = ({ onClose }: Props) => {
                                 type="file"
                                 className="hidden"
                                 onChange={handleFileUpload}
+                                multiple
                             />
                         </label>
                     </div>
+                    <button type="submit">Prześlij</button>
                 </div>
             </div>
         </div>

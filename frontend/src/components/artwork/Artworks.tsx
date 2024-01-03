@@ -142,7 +142,7 @@ const Artworks = () => {
         return <>
             <Navbar />
 
-            {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
+            {/* {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />} */}
             {showCreateArtwork && <CreateArtwork onClose={() => setShowCreateArtwork(false)} />}
             {showWarningPopup && <WarningPopup onClose={() => setShowWarningPopup(!showWarningPopup)}
                                                deleteSelected={deleteSelected}
