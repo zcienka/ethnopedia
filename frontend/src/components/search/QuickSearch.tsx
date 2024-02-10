@@ -1,14 +1,23 @@
 import React from "react"
 import { useFormik } from "formik"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
+import { useNavigate } from "react-router-dom"
 
 const QuickSearch = () => {
+    const navigate = useNavigate()
+
+    const handleSearch = (searchText: string) => {
+        navigate(`?searchText=${searchText}`)
+    }
+
     const formik = useFormik({
         initialValues: {
+            collectionName: window.location.href.split('/')[window.location.href.split('/').findIndex((element) => element === 'collections')+1],
             searchText: "",
         },
-        onSubmit: values => {
-            console.log(values.searchText)
+        onSubmit: (values, { resetForm }) => {
+            handleSearch(values.searchText)
+            resetForm()
         },
     })
 

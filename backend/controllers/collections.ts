@@ -18,11 +18,11 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
 
     const pipeline = [
         {
-            $match: { "Kategoria": { $exists: true } },
+            $match: { "Kolekcja": { $exists: true } },
         },
         {
             $group: {
-                _id: "$Kategoria",
+                _id: "$Kolekcja.value",
                 count: { $sum: 1 },
             },
         },
@@ -62,9 +62,24 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
         const page = parseInt(req.query.page as string) || 1
         const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        const totalArtworks = await Artwork.countDocuments({ collectionId: req.params.id })
+        let query = JSON.parse(JSON.stringify(req.query))
+        let mongoQuery: any = {}
+        //quicksearch
+        if (query.searchText) {
+            mongoQuery.$text = { $search: query.searchText }
+        //advanced search
+        } else if(query.searchText !== ""){
+            for (const property in query) {
+                if(property != "page" && property != "pageSize") {
+                    const category = property.split(".").join('.subcategories.') + ".value"
+                    mongoQuery[category] = query[property]
+                }          
+            }
+        }  
+        mongoQuery = { Kolekcja : {value: req.params.id}, ...mongoQuery }
 
-        const records = await Artwork.find({ collectionId: req.params.id })
+        const totalArtworks = await Artwork.countDocuments({ collectionId: req.params.id })
+        const records = await Artwork.find(mongoQuery)
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .exec()

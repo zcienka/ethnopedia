@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { useFormik } from "formik"
 import { useQuery } from "react-query"
-import { getCategories } from "../../api/categories"
+import { getCategories2 } from "../../api/categories"
+// import { getAdvSearchResult } from "../../api/artworks"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
@@ -11,15 +12,15 @@ import { v4 as uuidv4 } from "uuid"
 
 const initialRule = { id: Date.now(), field: "", operator: "", value: "" }
 
-type Subcategory = {
-    name: string
-    values?: string[]
-}
+// type Subcategory = {
+//     name: string
+//     values?: string[]
+// }
 
-type Category = {
-    category: string
-    subcategories?: Subcategory[]
-}
+// type Category = {
+//     category: string
+//     subcategories?: Subcategory[]
+// }
 
 // type CollectionItem = {
 //     _id: string
@@ -30,35 +31,44 @@ type Category = {
 // type CollectionArray = CollectionItem[]
 const AdvancedSearch = () => {
     const [rules, setRules] = useState<any[]>([])
-    const [showValidationMessage, setShowValidationMessage] = useState<boolean>(false)
 
     const { data: categoriesData } = useQuery(
         ["allCategories"],
-        getCategories,
+        () => getCategories2(window.location.href.split('/')[window.location.href.split('/').findIndex((element) => element === 'collections')+1]),
     )
 
     const navigate = useNavigate()
 
+    const categoryInRules = (rules: any) => {
+        for(const rule in rules) {
+            if(rules[rule].field === formik.values.field) {
+                return true
+            }
+        }
+        return false
+    }
+
     const formik = useFormik({
         initialValues: initialRule,
         onSubmit: (values, { resetForm }) => {
-            if (values.field  && values.value) {
-                setRules([...rules, { ...values, id: Date.now() }])
-                resetForm()
-                setShowValidationMessage(() => false)
-            } else {
-                setShowValidationMessage(() => true)
+            handleAddRule()
+            let newest_rule = ""
+            if(values.field && values.value && !categoryInRules(rules)) {
+                newest_rule = `&${formik.values.field}=${formik.values.value}`
             }
+            
+            navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}${newest_rule}`)     
         },
     })
 
-    const deleteRule = (id: string) => {
-        setRules(rules.filter((rule) => rule.id !== id))
+    const handleAddRule = () => {
+        if(formik.values.field && formik.values.value && !categoryInRules(rules)) {
+            setRules([...rules, { ...formik.values, id: Date.now() }])
+        }
     }
 
-    const handleSearch = () => {
-        navigate(`/artworks/search?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
-        setShowValidationMessage(() => false)
+    const deleteRule = (id: string) => {
+        setRules(rules.filter((rule) => rule.id !== id))
     }
 
     if (categoriesData === undefined) {
@@ -75,8 +85,8 @@ const AdvancedSearch = () => {
                         className="border p-2"
                     >
                         <option hidden selected>Wybierz kategorię</option>
-                        {categoriesData[0].categories.map((subcategory: Category) => (
-                            <option value={subcategory.category} key={uuidv4()}>{subcategory.category}</option>
+                        {categoriesData.map((category: any) => (
+                            <option value={category} key={uuidv4()}>{category}</option>
                         ))}
                     </select>
                     <input
@@ -87,25 +97,22 @@ const AdvancedSearch = () => {
                         className="border p-2 rounded-lg"
                     />
 
-                    <button type="submit" className="border-gray-800 flex items-center bg-gray-800 hover:bg-gray-700 text-white p-2
-                            font-semibold">
+                    <button type="button" className="border-gray-800 flex items-center bg-gray-800 hover:bg-gray-700 text-white p-2
+                            font-semibold" onClick={handleAddRule}
+                        >
                         <span className="mr-1">
                             <PlusIcon />
                         </span>
                         Dodaj regułę
                     </button>
-                    <button className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
+                    <button type="submit" className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
                             text-white p-2"
-                            onClick={handleSearch}
                     >
                         <span className="mr-1">
                             <SearchLoopIcon />
                         </span>
                         Wyszukaj
                     </button>
-                    {showValidationMessage && <span className="text-red-500 ml-2">
-                        All fields are required to add a rule.
-                    </span>}
                 </div>
             </form>
 

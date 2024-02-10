@@ -18,8 +18,8 @@ export const getAdvancedSearchResult = async (queryParameters: string) => {
 }
 
 
-export const getArtworksByCategory = async (collection: string, page: number, pageSize: number) => {
-    return await axios.get(`${API_URL}v1/collection/${collection}/artworks`, {
+export const getArtworksByCategory = async (collection: string, page: number, pageSize: number, searchparams: string) => {
+    return await axios.get(`${API_URL}v1/collection/${collection}/artworks${searchparams}`, {
         params: {
             page: page,
             pageSize: pageSize,
@@ -28,10 +28,6 @@ export const getArtworksByCategory = async (collection: string, page: number, pa
         .then(res => res.data)
 }
 
-export const getQuickSearchResult = async (queryParameters: string) => {
-    return await axios.get(`${API_URL}v1/artworks/search?${queryParameters}`)
-        .then(res => res.data)
-}
 
 export const createArtwork = async () => {
     return await axios

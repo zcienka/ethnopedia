@@ -92,7 +92,7 @@ const FilterDropdown: React.FC = () => {
         const generatedQueryString = generateQueryString()
         setQueryString(generatedQueryString)
     }
-    console.log({ queryString })
+    // console.log({ queryString })
     const renderSubcategory = (category: string, subcategory: Subcategory) => {
         return (
             <div key={subcategory.name} className="pl-4 py-2">

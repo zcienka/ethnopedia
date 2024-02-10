@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
-import { ObjectId } from "mongodb"
+import {getMongoDBNativeDriverClient} from "../db/connect"
 
 const asyncWrapper = require("../middleware/async")
-
 const Artwork = require("../models/artwork")
+const ObjectId = require('mongodb').ObjectId;
+const mongoClient = getMongoDBNativeDriverClient()
+
 
 const getAllArtworks = async (req: Request, res: Response, next: NextFunction) => {
     const page = parseInt(req.query.page as string) || 1
@@ -76,19 +78,17 @@ const patchArtwork = asyncWrapper(async (req: Request, res: Response, next: Next
     }
 })
 
-
 const searchArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let query = JSON.parse(JSON.stringify(req.query))
-
-        Object.keys(query).forEach(key => {
-            if (typeof query[key] === "string") {
-                query[key] = new RegExp(query[key], "i")
-            }
-        })
-
-        const records = await Artwork.find(query).exec()
-        return res.status(200).json(records)
+        // let query = JSON.parse(JSON.stringify(req.query))
+        // const collection = req.query.collection
+        // const searchText = req.query.searchText
+        // let query_json: object = {Kolekcja: {value: collection}, $text: { $search: searchText }}
+        // const records = await mongoClient.db().collection('artworks').find(query_json).toArray()
+        // // const keys = await getAllKeys(collection)
+        // // console.log(keys)
+        // console.log(records)
+        // return res.status(200).json(records)
     } catch (error) {
         next(error)
     }
