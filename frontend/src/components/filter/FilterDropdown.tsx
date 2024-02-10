@@ -26,7 +26,7 @@ interface FilterData {
 interface CheckedSubcategory {
     [category: string]: {
         [subcategory: string]: {
-            [value: string]: boolean;
+            [value: string]: boolean
         }
     }
 }
@@ -73,7 +73,7 @@ const FilterDropdown: React.FC = () => {
             })
         })
 
-        return `/filter?${queryParams.join("&")}`
+        return `/artworks/filter?${queryParams.join("&")}`
     }
 
     const handleCheckboxChange = (category: string, subcategoryName: string, value: string, isChecked: boolean) => {
@@ -88,11 +88,12 @@ const FilterDropdown: React.FC = () => {
             },
         }))
     }
+
     const handleApplyFilters = () => {
         const generatedQueryString = generateQueryString()
         setQueryString(generatedQueryString)
     }
-    console.log({ queryString })
+
     const renderSubcategory = (category: string, subcategory: Subcategory) => {
         return (
             <div key={subcategory.name} className="pl-4 py-2">
@@ -116,7 +117,7 @@ const FilterDropdown: React.FC = () => {
         if (category.category !== "Region") {
             const isCategoryOpen = openCategories.has(category.category)
             return (
-                <div key={category.category} className="hover:bg-gray-100 py-2 rounded-md px-4">
+                <div key={category.category} className="hover:bg-gray-100 dark:hover:bg-gray-700 py-2 rounded-md px-4">
                     <h2 onClick={() => toggleCategory(category.category)}
                         className="text-md cursor-pointer rounded-md flex flex-row">
                         {category.category}
@@ -137,13 +138,14 @@ const FilterDropdown: React.FC = () => {
         return <LoadingPage />
     }
 
-    return <div className="px-2 pb-4 border border-gray-300 bg-white shadow rounded-lg overflow-hidden h-fit">
+    return <div className="px-2 pb-4 border dark:border-gray-600 dark:bg-gray-800 shadow rounded-lg overflow-hidden h-fit">
         <h2 className="pt-4 pb-1 px-4 text-xl font-semibold text-gray-900 dark:text-white">
                 <span className="flex items-center">
                     <FilterIcon />
                     Filtry
                 </span>
         </h2>
+
         {data?.map(item => item.categories.map(renderCategory))}
 
         <button

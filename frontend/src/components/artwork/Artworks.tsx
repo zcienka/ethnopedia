@@ -48,8 +48,6 @@ const Artworks = () => {
         keepPreviousData: true,
     })
 
-    console.log({ collection })
-
     const { data: collectionData } = useQuery({
         queryKey: [`${collection}`],
         enabled: !!collection,

@@ -17,7 +17,6 @@ export const getAdvancedSearchResult = async (queryParameters: string) => {
         .then(res => res.data)
 }
 
-
 export const getArtworksByCategory = async (collection: string, page: number, pageSize: number) => {
     return await axios.get(`${API_URL}v1/collection/${collection}/artworks`, {
         params: {

@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb"
 const asyncWrapper = require("../middleware/async")
 
 const Artwork = require("../models/artwork")
+const Category = require("../models/category")
 
 const getAllArtworks = async (req: Request, res: Response, next: NextFunction) => {
     const page = parseInt(req.query.page as string) || 1
@@ -94,15 +95,38 @@ const searchArtworks = async (req: Request, res: Response, next: NextFunction) =
     }
 }
 
+
 const filterArtworks = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        const records = await Artwork.find(req.query).exec()
+        const parseNestedQuery = (query: any) => {
+            const parsedQuery: any = {}
+            Object.keys(query).forEach((key) => {
+                const match = key.match(/(\w+)\[(\w+)\]/)
+                if (match) {
+                    const [, outerKey, innerKey] = match
+                    if (!parsedQuery[outerKey]) {
+                        parsedQuery[outerKey] = {}
+                    }
+                    parsedQuery[outerKey][innerKey] = query[key]
+                } else {
+                    parsedQuery[key] = query[key]
+                }
+            })
+            return parsedQuery
+        }
 
+        const parsedQuery = parseNestedQuery(req.query)
+
+        console.log("MongoDB Query:", parsedQuery)
+
+        const records = await Artwork.find(parsedQuery).exec()
         return res.json(records)
     } catch (error: any) {
+        console.error("Error in filterArtworks:", error)
         next(error)
     }
 }
+
 
 const createArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const title = req.body.title
