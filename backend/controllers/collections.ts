@@ -76,9 +76,9 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
                 }          
             }
         }  
-        mongoQuery = { Kolekcja : {value: req.params.collection}, ...mongoQuery }
+        mongoQuery = { Kolekcja : {value: req.params.id}, ...mongoQuery }
 
-        const totalArtworks = await Artwork.countDocuments(mongoQuery)
+        const totalArtworks = await Artwork.countDocuments({ collectionId: req.params.id })
         const records = await Artwork.find(mongoQuery)
             .skip((page - 1) * pageSize)
             .limit(pageSize)
@@ -103,7 +103,7 @@ const getCollection = async (req: Request, res: Response, next: any) => {
         //     return res.status(400).json(`Invalid collection id: ${collectionId}`)
         // }
 
-        const collection = await Collection.find({ name: collectionId }).exec()
+        const collection = await Collection.find({ _id: collectionId }).exec()
 
         if (!collection) {
             return res.status(404).json("Collection not found")
@@ -143,7 +143,7 @@ const batchDeleteCollections = async (req: Request, res: Response, next: NextFun
         const existingCollections = await Collection.find({ _id: { $in: collectionsToDeleteList } })
 
         if (existingCollections.length === 0) {
-            return res.status(404).send({ message: "Collections not found" })
+            return res.status(404).send({ message: `Collection with id ${collectionsToDelete} not found` })
         }
 
         const result = await Collection.deleteMany({ _id: { $in: collectionsToDeleteList } })
@@ -163,7 +163,7 @@ const patchCollection = asyncWrapper(async (req: Request, res: Response, next: N
     }
 
     try {
-        const result = await Collection.updateOne({ _id: new ObjectId(CollectionId) }, { $set: updateData }, { upsert: true })
+        const result = await Collection.updateOne({ _id: new ObjectId(CollectionId) }, { $set: updateData }, { upsert: false })
 
         if (result.matchedCount === 0) {
             return res.status(404).json({ message: `Collection with id ${CollectionId} not found` })

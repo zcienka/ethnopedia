@@ -11,7 +11,7 @@ const {
     patchCollection
 } = require("../controllers/collections")
 
-router.route("/:collection/artworks").get(artworksInCollection)
+router.route("/:id/artworks").get(artworksInCollection)
 router.route("/").get(getAllCollections)
 router.route("/").post(createCollection)
 router.route("/:id").get(getCollection)

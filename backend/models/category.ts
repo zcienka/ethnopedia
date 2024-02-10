@@ -1,12 +1,14 @@
 import mongoose from "mongoose"
 
 const CategorySchema = new mongoose.Schema({
-    name: {
-        type: String,
+        collectionId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Collection",
+        },
     },
-    description: {
-        type: String,
-    },
-})
+    {
+        strict: false,
+        timestamps: true,
+    })
 
 module.exports = mongoose.model("Category", CategorySchema)
