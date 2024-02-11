@@ -1,28 +1,29 @@
 import mongoose from "mongoose"
 
-
-const artworksData = [{
-    "Region": "Śląsk",
-    "Sygnatura nagrania": "SKML-010",
-    "Incipit": "Incipit-50",
-    "Numer wątku muzycznego": 71,
-    "Numer w publikacji": 227,
-    "Miejsce zamieszkania": "Tarnowskie Góry",
-    "Sposób wykonania": "Gitara elektryczna",
-    "Funkcja utworu": "Nowoczesna",
-    "Link do nagrania": "https://example.com/recording/010",
-    "Źródło": "Nagranie studyjne",
-    "Klasyfikacja melodyczna": "Skala heksatoniczna",
-    "Kategoria": "Śląska Kolekcja Muzyki Ludowej",
-    "Wykorzystanie w publikacji": "W książce muzycznej",
-    "Struktura tekstu": "Refrenowa",
-    "Uwagi": "Współczesne brzmienie",
-    "Obecność w źródłach": "Nagranie festiwalowe",
-    "Tytuł": "Nowoczesne Brzmienia Tarnowskich Gór",
-    "Artyści": ["Piotr Szymański"],
-    "Rok": 2020,
-    "Język incipitu": "niemiecki",
-},
+const artworksData = [
+    {
+        "Region": "Śląsk",
+        "Sygnatura nagrania": "SKML-010",
+        "Incipit": "Incipit-50",
+        "Numer wątku muzycznego": 71,
+        "Numer w publikacji": 227,
+        "Miejsce zamieszkania": "Tarnowskie Góry",
+        "Sposób wykonania": "Gitara elektryczna",
+        "Funkcja utworu": "Nowoczesna",
+        "Link do nagrania": "https://example.com/recording/010",
+        "Źródło": "Nagranie studyjne",
+        "Klasyfikacja melodyczna": "Skala heksatoniczna",
+        "Kategoria": "Śląska Kolekcja Muzyki Ludowej",
+        "Wykorzystanie w publikacji": "W książce muzycznej",
+        "Struktura tekstu": "Refrenowa",
+        "Uwagi": "Współczesne brzmienie",
+        "Obecność w źródłach": "Nagranie festiwalowe",
+        "Tytuł": "Nowoczesne Brzmienia Tarnowskich Gór",
+        "Artyści": [
+            "Piotr Szymański",
+        ],
+        "Rok": 2020,
+    },
     {
         "Region": "Śląsk",
         "Sygnatura nagrania": "SKML-909",
@@ -41,9 +42,10 @@ const artworksData = [{
         "Uwagi": "Nowoczesne interpretacje",
         "Obecność w źródłach": "Nagranie koncertowe",
         "Tytuł": "Saksofonowe Dźwięki Zabrza",
-        "Artyści": ["Aleksandra Wiśniewska"],
+        "Artyści": [
+            "Aleksandra Wiśniewska",
+        ],
         "Rok": 2018,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Śląsk",
@@ -63,9 +65,10 @@ const artworksData = [{
         "Uwagi": "Folklor świąteczny",
         "Obecność w źródłach": "Nagranie archiwalne",
         "Tytuł": "Świąteczne Nuty z Opola",
-        "Artyści": ["Tomasz Baranowski"],
+        "Artyści": [
+            "Tomasz Baranowski",
+        ],
         "Rok": 2015,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Śląsk",
@@ -85,9 +88,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie dawnych melodii",
         "Obecność w źródłach": "Rejestracja terenowa",
         "Tytuł": "Fletowe Melodie Bielska-Białej",
-        "Artyści": ["Maria Kowalska"],
+        "Artyści": [
+            "Maria Kowalska",
+        ],
         "Rok": 2013,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Śląsk",
@@ -107,9 +111,10 @@ const artworksData = [{
         "Uwagi": "Popularność w lokalnej społeczności",
         "Obecność w źródłach": "Nagranie festiwalowe",
         "Tytuł": "Harmonijkowe Dźwięki Rybnika",
-        "Artyści": ["Piotr Nowak"],
+        "Artyści": [
+            "Piotr Nowak",
+        ],
         "Rok": 2010,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Śląsk",
@@ -129,9 +134,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie lokalnego folkloru",
         "Obecność w źródłach": "Kolekcja prywatna",
         "Tytuł": "Basowe Brzmienia Zabrza",
-        "Artyści": ["Tomasz Baranowski"],
+        "Artyści": [
+            "Tomasz Baranowski",
+        ],
         "Rok": 2012,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Śląsk",
@@ -151,9 +157,10 @@ const artworksData = [{
         "Uwagi": "Fuzja nowoczesności z tradycją",
         "Obecność w źródłach": "Nagranie współczesne",
         "Tytuł": "Gitarowe Dźwięki Gliwic",
-        "Artyści": ["Aleksandra Wiśniewska"],
+        "Artyści": [
+            "Aleksandra Wiśniewska",
+        ],
         "Rok": 2008,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Śląsk",
@@ -173,9 +180,10 @@ const artworksData = [{
         "Uwagi": "Elementy kultury śląskiej",
         "Obecność w źródłach": "Nagranie dokumentacyjne",
         "Tytuł": "Akordeonowe Melodie Sosnowca",
-        "Artyści": ["Piotr Szymański"],
+        "Artyści": [
+            "Piotr Szymański",
+        ],
         "Rok": 2004,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Śląsk",
@@ -195,9 +203,10 @@ const artworksData = [{
         "Uwagi": "Autentyczne wykonanie",
         "Obecność w źródłach": "Nagranie terenowe",
         "Tytuł": "Skrzypcowe Echo Częstochowy",
-        "Artyści": ["Maria Kowalska"],
+        "Artyści": [
+            "Maria Kowalska",
+        ],
         "Rok": 2000,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Śląsk",
@@ -217,9 +226,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie lokalnych melodii",
         "Obecność w źródłach": "Nagranie archiwalne",
         "Tytuł": "Rytmy Katowic",
-        "Artyści": ["Jan Nowak"],
+        "Artyści": [
+            "Jan Nowak",
+        ],
         "Rok": 1995,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Kaszuby",
@@ -239,9 +249,10 @@ const artworksData = [{
         "Uwagi": "Innowacyjne interpretacje",
         "Obecność w źródłach": "Nagranie koncertowe",
         "Tytuł": "Nowe Brzmienia z Gdańska",
-        "Artyści": ["Tomasz Baranowski"],
+        "Artyści": [
+            "Tomasz Baranowski",
+        ],
         "Rok": 2020,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Kaszuby",
@@ -261,9 +272,10 @@ const artworksData = [{
         "Uwagi": "Fuzja tradycji z nowoczesnością",
         "Obecność w źródłach": "Nagranie współczesne",
         "Tytuł": "Klarnetowe Pieśni Słupska",
-        "Artyści": ["Aleksandra Wiśniewska"],
+        "Artyści": [
+            "Aleksandra Wiśniewska",
+        ],
         "Rok": 2017,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Kaszuby",
@@ -283,9 +295,10 @@ const artworksData = [{
         "Uwagi": "Nowoczesne aranżacje",
         "Obecność w źródłach": "Nagranie festiwalowe",
         "Tytuł": "Saksofonowe Melodie z Kartuz",
-        "Artyści": ["Piotr Szymański"],
+        "Artyści": [
+            "Piotr Szymański",
+        ],
         "Rok": 2019,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Kaszuby",
@@ -305,9 +318,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie dawnych tradycji",
         "Obecność w źródłach": "Archiwum regionalne",
         "Tytuł": "Basowe Dźwięki Chojnic",
-        "Artyści": ["Anna Wiśniewska"],
+        "Artyści": [
+            "Anna Wiśniewska",
+        ],
         "Rok": 2016,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Kaszuby",
@@ -327,9 +341,10 @@ const artworksData = [{
         "Uwagi": "Elementy humorystyczne w muzyce",
         "Obecność w źródłach": "Nagranie współczesne",
         "Tytuł": "Wesołe Nuty z Pucka",
-        "Artyści": ["Marek Nowak"],
+        "Artyści": [
+            "Marek Nowak",
+        ],
         "Rok": 2014,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Kaszuby",
@@ -349,9 +364,10 @@ const artworksData = [{
         "Uwagi": "Współczesne aranżacje",
         "Obecność w źródłach": "Nagranie festiwalowe",
         "Tytuł": "Gitarowe Pieśni Gdyńskie",
-        "Artyści": ["Tomasz Baranowski"],
+        "Artyści": [
+            "Tomasz Baranowski",
+        ],
         "Rok": 2013,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Kaszuby",
@@ -371,9 +387,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie lokalnych tradycji",
         "Obecność w źródłach": "Nagranie historyczne",
         "Tytuł": "Fletowe Pieśni z Wejherowa",
-        "Artyści": ["Aleksandra Wiśniewska"],
+        "Artyści": [
+            "Aleksandra Wiśniewska",
+        ],
         "Rok": 2007,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Kaszuby",
@@ -393,9 +410,10 @@ const artworksData = [{
         "Uwagi": "Autentyczne wykonanie",
         "Obecność w źródłach": "Rejestracja terenowa",
         "Tytuł": "Akordeonowe Melodie Lęborskie",
-        "Artyści": ["Marek Nowak"],
+        "Artyści": [
+            "Marek Nowak",
+        ],
         "Rok": 2010,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Kaszuby",
@@ -415,9 +433,10 @@ const artworksData = [{
         "Uwagi": "Popularność wśród lokalnej społeczności",
         "Obecność w źródłach": "Nagranie współczesne",
         "Tytuł": "Skrzypcowe Dźwięki z Bytowa",
-        "Artyści": ["Piotr Kowalski"],
+        "Artyści": [
+            "Piotr Kowalski",
+        ],
         "Rok": 2005,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Kaszuby",
@@ -437,9 +456,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie tradycji regionalnych",
         "Obecność w źródłach": "Nagranie archiwalne",
         "Tytuł": "Harfowe Brzmienia Kościerzyny",
-        "Artyści": ["Anna Nowak"],
+        "Artyści": [
+            "Anna Nowak",
+        ],
         "Rok": 2001,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Tatry",
@@ -459,9 +479,10 @@ const artworksData = [{
         "Uwagi": "Element pasterskiej tradycji",
         "Obecność w źródłach": "Archiwum regionalne",
         "Tytuł": "Fletowe Dźwięki z Czarnej Góry",
-        "Artyści": ["Tomasz Baranowski"],
+        "Artyści": [
+            "Tomasz Baranowski",
+        ],
         "Rok": 2012,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Tatry",
@@ -481,9 +502,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie lokalnego folkloru",
         "Obecność w źródłach": "Kolekcja prywatna",
         "Tytuł": "Basowe Dźwięki z Witowa",
-        "Artyści": ["Aleksandra Wiśniewska"],
+        "Artyści": [
+            "Aleksandra Wiśniewska",
+        ],
         "Rok": 2019,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Tatry",
@@ -503,9 +525,10 @@ const artworksData = [{
         "Uwagi": "Autentyczność wykonania",
         "Obecność w źródłach": "Nagranie terenowe",
         "Tytuł": "Dudowe Echa Chochołowa",
-        "Artyści": ["Piotr Szymański"],
+        "Artyści": [
+            "Piotr Szymański",
+        ],
         "Rok": 2014,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Tatry",
@@ -525,9 +548,10 @@ const artworksData = [{
         "Uwagi": "Fuzja nowoczesności z tradycją",
         "Obecność w źródłach": "Nagranie współczesne",
         "Tytuł": "Mandolinowe Melodie z Jurgowa",
-        "Artyści": ["Anna Wiśniewska"],
+        "Artyści": [
+            "Anna Wiśniewska",
+        ],
         "Rok": 2016,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Tatry",
@@ -547,9 +571,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie tradycji pasterskich",
         "Obecność w źródłach": "Nagranie archiwalne",
         "Tytuł": "Dźwięki Trombity z Zębu",
-        "Artyści": ["Michał Nowak"],
+        "Artyści": [
+            "Michał Nowak",
+        ],
         "Rok": 2008,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Tatry",
@@ -569,9 +594,10 @@ const artworksData = [{
         "Uwagi": "Energiczne rytmiki",
         "Obecność w źródłach": "Nagranie współczesne",
         "Tytuł": "Wesołe nuty z Murzasichla",
-        "Artyści": ["Tomasz Baranowski"],
+        "Artyści": [
+            "Tomasz Baranowski",
+        ],
         "Rok": 2015,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Tatry",
@@ -591,9 +617,10 @@ const artworksData = [{
         "Uwagi": "Unikalne wykonanie",
         "Obecność w źródłach": "Nagranie festiwalowe",
         "Tytuł": "Fujarkowe Melodie Poronińskie",
-        "Artyści": ["Aleksandra Wiśniewska"],
+        "Artyści": [
+            "Aleksandra Wiśniewska",
+        ],
         "Rok": 2011,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Tatry",
@@ -613,9 +640,10 @@ const artworksData = [{
         "Uwagi": "Charakterystyczne brzmienie",
         "Obecność w źródłach": "Nagranie dokumentacyjne",
         "Tytuł": "Harmonie Bukowiańskie",
-        "Artyści": ["Piotr Szymański"],
+        "Artyści": [
+            "Piotr Szymański",
+        ],
         "Rok": 2007,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Tatry",
@@ -635,9 +663,10 @@ const artworksData = [{
         "Uwagi": "Tradycyjne wykonanie",
         "Obecność w źródłach": "Archiwum ludowe",
         "Tytuł": "Cymbałowe dźwięki z Kościeliska",
-        "Artyści": ["Maria Nowak"],
+        "Artyści": [
+            "Maria Nowak",
+        ],
         "Rok": 2003,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Tatry",
@@ -657,9 +686,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie autentyczności",
         "Obecność w źródłach": "Nagranie terenowe",
         "Tytuł": "Melodie Zakopiańskie",
-        "Artyści": ["Jan Kowalski"],
+        "Artyści": [
+            "Jan Kowalski",
+        ],
         "Rok": 1999,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Warmia i Mazury",
@@ -679,9 +709,10 @@ const artworksData = [{
         "Uwagi": "Ożywienie kultury ludowej",
         "Obecność w źródłach": "Nagranie festiwalowe",
         "Tytuł": "Harmonie Szczytna",
-        "Artyści": ["Ewa Kowalska"],
+        "Artyści": [
+            "Ewa Kowalska",
+        ],
         "Rok": 2018,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Warmia i Mazury",
@@ -701,9 +732,10 @@ const artworksData = [{
         "Uwagi": "Popularność wśród starszego pokolenia",
         "Obecność w źródłach": "Nagranie archiwalne",
         "Tytuł": "Klarnetowe dźwięki Ostródy",
-        "Artyści": ["Piotr Szymański"],
+        "Artyści": [
+            "Piotr Szymański",
+        ],
         "Rok": 2010,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Warmia i Mazury",
@@ -723,9 +755,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie tradycyjnych melodii",
         "Obecność w źródłach": "Nagranie terenowe",
         "Tytuł": "Pieśni Lidzbarka Warmińskiego",
-        "Artyści": ["Aleksandra Wiśniewska"],
+        "Artyści": [
+            "Aleksandra Wiśniewska",
+        ],
         "Rok": 2014,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Warmia i Mazury",
@@ -745,9 +778,10 @@ const artworksData = [{
         "Uwagi": "Unikatowe dziedzictwo muzyczne",
         "Obecność w źródłach": "Rejestracja muzealna",
         "Tytuł": "Dźwięki Kętrzyna",
-        "Artyści": ["Michał Nowak"],
+        "Artyści": [
+            "Michał Nowak",
+        ],
         "Rok": 2017,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Warmia i Mazury",
@@ -767,9 +801,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie dawnych tradycji",
         "Obecność w źródłach": "Nagranie archiwalne",
         "Tytuł": "Rytmy Braniewa",
-        "Artyści": ["Katarzyna Jankowska"],
+        "Artyści": [
+            "Katarzyna Jankowska",
+        ],
         "Rok": 2009,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Warmia i Mazury",
@@ -789,9 +824,10 @@ const artworksData = [{
         "Uwagi": "Odrodzenie kultury ludowej",
         "Obecność w źródłach": "Nagranie z festiwalu",
         "Tytuł": "Gitary Iławy",
-        "Artyści": ["Tomasz Baranowski"],
+        "Artyści": [
+            "Tomasz Baranowski",
+        ],
         "Rok": 2013,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Warmia i Mazury",
@@ -811,9 +847,10 @@ const artworksData = [{
         "Uwagi": "Zachowanie tradycji muzycznych regionu",
         "Obecność w źródłach": "Nagranie historyczne",
         "Tytuł": "Flauta Mrągowska",
-        "Artyści": ["Piotr Szymański"],
+        "Artyści": [
+            "Piotr Szymański",
+        ],
         "Rok": 2008,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Warmia i Mazury",
@@ -833,9 +870,10 @@ const artworksData = [{
         "Uwagi": "Popularne wśród lokalnej społeczności",
         "Obecność w źródłach": "Rejestracja współczesna",
         "Tytuł": "Dźwięki Giżycka",
-        "Artyści": ["Anna Wiśniewska"],
+        "Artyści": [
+            "Anna Wiśniewska",
+        ],
         "Rok": 2012,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Warmia i Mazury",
@@ -855,9 +893,10 @@ const artworksData = [{
         "Uwagi": "Element regionalnego dziedzictwa",
         "Obecność w źródłach": "Nagranie terenowe",
         "Tytuł": "Pieśni Ełckie",
-        "Artyści": ["Marek Nowak"],
+        "Artyści": [
+            "Marek Nowak",
+        ],
         "Rok": 2006,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Warmia i Mazury",
@@ -877,9 +916,10 @@ const artworksData = [{
         "Uwagi": "Stylizacja ludowa",
         "Obecność w źródłach": "Nagranie archiwalne",
         "Tytuł": "Melodie Olsztyńskie",
-        "Artyści": ["Zofia Kowalska"],
+        "Artyści": [
+            "Zofia Kowalska",
+        ],
         "Rok": 2004,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Wielkopolska",
@@ -893,15 +933,16 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/010",
         "Źródło": "Rejestracja terenowa",
         "Klasyfikacja melodyczna": "Skala frygijska",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "W encyklopedii regionalnej",
         "Struktura tekstu": "Onomatopeiczna",
         "Uwagi": "Tradycyjne rytmy",
         "Obecność w źródłach": "Archiwum ludowe",
         "Tytuł": "Bębny Wągrowca",
-        "Artyści": ["Paweł Nowicki"],
+        "Artyści": [
+            "Paweł Nowicki",
+        ],
         "Rok": 2018,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Wielkopolska",
@@ -915,15 +956,16 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/909",
         "Źródło": "Dziedzictwo lokalne",
         "Klasyfikacja melodyczna": "Skala lidyjska",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "W opracowaniu naukowym",
         "Struktura tekstu": "Humorystyczna",
         "Uwagi": "Element kultury miejskiej",
         "Obecność w źródłach": "Nagranie dokumentalne",
         "Tytuł": "Swingi Rawicza",
-        "Artyści": ["Ewa Szymańska"],
+        "Artyści": [
+            "Ewa Szymańska",
+        ],
         "Rok": 2003,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Wielkopolska",
@@ -937,15 +979,16 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/808",
         "Źródło": "Zbiór uniwersytecki",
         "Klasyfikacja melodyczna": "Skala dorycka",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "W podręczniku muzyki",
         "Struktura tekstu": "Kupletowa",
         "Uwagi": "Popularność wśród młodzieży",
         "Obecność w źródłach": "Nagranie edukacyjne",
         "Tytuł": "Rytmy Gostynia",
-        "Artyści": ["Marek Kowalczyk"],
+        "Artyści": [
+            "Marek Kowalczyk",
+        ],
         "Rok": 2015,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Wielkopolska",
@@ -959,15 +1002,16 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/707",
         "Źródło": "Zbiór etnograficzny",
         "Klasyfikacja melodyczna": "Skala mixolydzka",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "W zbiorze pieśni",
         "Struktura tekstu": "Balladowa",
         "Uwagi": "Charakterystyczne dla regionu",
         "Obecność w źródłach": "Kolekcja muzealna",
         "Tytuł": "Melodie z Piły",
-        "Artyści": ["Agnieszka Nowak"],
+        "Artyści": [
+            "Agnieszka Nowak",
+        ],
         "Rok": 2007,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Wielkopolska",
@@ -981,15 +1025,16 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/606",
         "Źródło": "Tradycja oralna",
         "Klasyfikacja melodyczna": "Skala bluesowa",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "W monografii regionalnej",
         "Struktura tekstu": "Epicka",
         "Uwagi": "Unikalny styl wykonania",
         "Obecność w źródłach": "Rejestracja terenowa",
         "Tytuł": "Bluesy Ostrowa",
-        "Artyści": ["Krzysztof Jankowski"],
+        "Artyści": [
+            "Krzysztof Jankowski",
+        ],
         "Rok": 2011,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Wielkopolska",
@@ -1003,15 +1048,39 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/505",
         "Źródło": "Zbiór ludowy",
         "Klasyfikacja melodyczna": "Skala diatoniczna",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "W antologii",
         "Struktura tekstu": "Liryczna",
         "Uwagi": "Element folkloru",
         "Obecność w źródłach": "Kolekcja prywatna",
         "Tytuł": "Ballady Konina",
-        "Artyści": ["Tomasz Baranowski"],
+        "Artyści": [
+            "Tomasz Baranowski",
+        ],
         "Rok": 2001,
-        "Język incipitu": "angielski",
+    },
+    {
+        "Region": "Wielkopolska",
+        "Sygnatura nagrania": "WLM-404",
+        "Incipit": "Incipit-4",
+        "Numer wątku muzycznego": 10,
+        "Numer w publikacji": 36,
+        "Miejsce zamieszkania": "Leszno",
+        "Sposób wykonania": "Harmonia",
+        "Funkcja utworu": "Świąteczna",
+        "Link do nagrania": "https://example.com/recording/404",
+        "Źródło": "Dziedzictwo regionalne",
+        "Klasyfikacja melodyczna": "Modalna",
+        "Kategoria": "Wielkopolska",
+        "Wykorzystanie w publikacji": "W książce tematycznej",
+        "Struktura tekstu": "Powtarzalna",
+        "Uwagi": "Znane lokalnie",
+        "Obecność w źródłach": "Nagranie współczesne",
+        "Tytuł": "Harmonie Leszna",
+        "Artyści": [
+            "Aleksandra Wiśniewska",
+        ],
+        "Rok": 2016,
     },
     {
         "Region": "Wielkopolska",
@@ -1025,15 +1094,16 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/303",
         "Źródło": "Zbiór kościelny",
         "Klasyfikacja melodyczna": "Skala heksatoniczna",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "Dokumentacja etnograficzna",
         "Struktura tekstu": "Beztekstowe",
         "Uwagi": "Zachowana tradycja",
         "Obecność w źródłach": "Nagranie historyczne",
         "Tytuł": "Dźwięki Gniezna",
-        "Artyści": ["Piotr Szymański"],
+        "Artyści": [
+            "Piotr Szymański",
+        ],
         "Rok": 2010,
-        "Język incipitu": "angielski",
     },
     {
         "Region": "Wielkopolska",
@@ -1047,15 +1117,16 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/202",
         "Źródło": "Zbiór prywatny",
         "Klasyfikacja melodyczna": "Skala molowa",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "Rzadko dokumentowany",
         "Struktura tekstu": "Narracyjna",
         "Uwagi": "Unikatowe wykonanie",
         "Obecność w źródłach": "Nagranie terenowe",
         "Tytuł": "Melodie Kalisza",
-        "Artyści": ["Maria Nowak"],
+        "Artyści": [
+            "Maria Nowak",
+        ],
         "Rok": 2005,
-        "Język incipitu": "niemiecki",
     },
     {
         "Region": "Wielkopolska",
@@ -1069,17 +1140,16 @@ const artworksData = [{
         "Link do nagrania": "https://example.com/recording/101",
         "Źródło": "Zbiór ludowy",
         "Klasyfikacja melodyczna": "Skala dur",
-        "Kategoria": "Wielkopolskie Melodie Ludowe",
+        "Kategoria": "Wielkopolska",
         "Wykorzystanie w publikacji": "Często dokumentowany",
         "Struktura tekstu": "Refrenowa",
         "Uwagi": "Popularny w regionie",
         "Obecność w źródłach": "Nagranie archiwalne",
         "Tytuł": "Rytmy Wielkopolski",
-        "Artyści": ["Jan Kowalski"],
+        "Artyści": [
+            "Jan Kowalski",
+        ],
         "Rok": 1998,
-        "Język incipitu": "angielski",
-
-        // WIĘC TU GENERALNIE TRZEBA ZMIENIĆ TAK  ZEBY JĘZYJK INCIPITU BYŁ ZNESTOWANY TAK SAMO JAK INNE RZECZY TUTAJ PEWNIE XD
     },
 ]
 
@@ -1097,7 +1167,7 @@ const collectionData = [
         "description": "Kompilacja muzyki ludowej ze Śląska, ilustrująca bogatą historię przemysłową i kulturalną regionu.",
     },
     {
-        "name": "Wielkopolskie Melodie Ludowe",
+        "name": "Wielkopolska",
         "description": "Zbiór muzyki ludowej z regionu Wielkopolski, ukazujący bogactwo tradycji muzycznych tego obszaru, w tym tradycyjne instrumenty i unikalne style.",
     },
     {
@@ -1108,176 +1178,171 @@ const collectionData = [
 
 const categoryData = [
     {
-
-        "categories": [
+        "category": "Region",
+        "name": "Wielkopolska",
+        "subcategories": [
             {
-                "category": "Region",
-                "name": "WIELKOPOLSKA",
-                "subcategories": [
-                    {
-                        "name": "Podregion",
-                        "values": [
-                            "Wielkopolska Północno-Zachodnia",
-                            "Wielkopolska Północno-Wschodnia",
-                            "Wielkopolska Południowo-Zachodnia",
-                            "Wielkopolska Południowo-Wschodnia",
-                        ],
-                    },
-                    {
-                        "name": "Region etnograficzny",
-                        "values": [
-                            "Szamotulskie",
-                            "Ziemia Lubuska",
-                            "Kaliskie",
-                            "etc.",
-                        ],
-                    },
-                    {
-                        "name": "Powiat",
-                        "values": [
-                            "Gniezno",
-                            "Poznań",
-                            "Września",
-                            "Środa",
-                            "etc.",
-                        ],
-                    },
-                    {
-                        "name": "Miejscowość",
-                        "values": [
-                            "Leszno",
-                            "Kalisz",
-                            "Konin",
-                            "Piła",
-                            "Ostrów Wielkopolski",
-                        ],
-                    },
+                "name": "Podregion",
+                "values": [
+                    "Wielkopolska Północno-Zachodnia",
+                    "Wielkopolska Północno-Wschodnia",
+                    "Wielkopolska Południowo-Zachodnia",
+                    "Wielkopolska Południowo-Wschodnia",
                 ],
             },
             {
-                "category": "Sygnatura nagrania",
-                "subcategories": [
-                    {
-                        "name": "Pozycja",
-                    },
+                "name": "Region etnograficzny",
+                "values": [
+                    "Szamotulskie",
+                    "Ziemia Lubuska",
+                    "Kaliskie",
+                    "etc.",
                 ],
             },
             {
-                "category": "Incipit",
-                "subcategories": [
-                    {
-                        "name": "Język incipitu",
-                        "values": [
-                            "literacki",
-                            "angielski",
-                            "niemiecki",
-                        ],
-                    },
+                "name": "Powiat",
+                "values": [
+                    "Gniezno",
+                    "Poznań",
+                    "Września",
+                    "Środa",
+                    "etc.",
                 ],
             },
             {
-                "category": "Nazwisko wykonawcy",
-                "subcategories": [
-                    {
-                        "name": "Wykonawca",
-                    },
+                "name": "Miejscowość",
+                "values": [
+                    "Leszno",
+                    "Kalisz",
+                    "Konin",
+                    "Piła",
+                    "Ostrów Wielkopolski",
                 ],
             },
+        ],
+    },
+    {
+        "category": "Sygnatura nagrania",
+        "subcategories": [
             {
-                "category": "Numer wątku muzycznego",
+                "name": "Pozycja",
             },
+        ],
+    },
+    {
+        "category": "Incipit",
+        "subcategories": [
             {
-                "category": "Numer w publikacji",
-            },
-            {
-                "category": "Sposób wykonania",
-                "subcategories": [
-                    {
-                        "name": "Barwa głosu",
-                    },
-                    {
-                        "name": "Tempo wykonania",
-                    },
-                    {
-                        "name": "Ornamentyka",
-                    },
+                "name": "Język incipitu",
+                "values": [
+                    "literacki",
+                    "angielski",
+                    "niemiecki",
                 ],
             },
+        ],
+    },
+    {
+        "category": "Nazwisko wykonawcy",
+        "subcategories": [
             {
-                "category": "Funkcja utworu ogólnie",
-                "subcategories": [
-                    {
-                        "name": "Szczegółowa funkcja",
-                    },
-                    {
-                        "name": "Funkcja określona przez wykonawcę",
-                    },
-                ],
+                "name": "Wykonawca",
+            },
+        ],
+    },
+    {
+        "category": "Numer wątku muzycznego",
+    },
+    {
+        "category": "Numer w publikacji",
+    },
+    {
+        "category": "Sposób wykonania",
+        "subcategories": [
+            {
+                "name": "Barwa głosu",
             },
             {
-                "category": "Numer wątku melodycznego",
+                "name": "Tempo wykonania",
             },
             {
-                "category": "Wykorzystanie w publikacji",
+                "name": "Ornamentyka",
+            },
+        ],
+    },
+    {
+        "category": "Funkcja utworu ogólnie",
+        "subcategories": [
+            {
+                "name": "Szczegółowa funkcja",
             },
             {
-                "category": "Klasyfikacja melodyczna",
-                "subcategories": [
-                    {
-                        "name": "Rytmika",
-                    },
-                    {
-                        "name": "Metrum",
-                    },
-                    {
-                        "name": "Forma melodyczna",
-                    },
-                    {
-                        "name": "Skala",
-                    },
-                    {
-                        "name": "Ambitus",
-                    },
-                    {
-                        "name": "Układ kadencji",
-                    },
-                ],
+                "name": "Funkcja określona przez wykonawcę",
+            },
+        ],
+    },
+    {
+        "category": "Numer wątku melodycznego",
+    },
+    {
+        "category": "Wykorzystanie w publikacji",
+    },
+    {
+        "category": "Klasyfikacja melodyczna",
+        "subcategories": [
+            {
+                "name": "Rytmika",
             },
             {
-                "category": "Struktura tekstu",
-                "subcategories": [
-                    {
-                        "name": "Ilość wersów",
-                    },
-                    {
-                        "name": "Układ sylab w wersie",
-                    },
-                ],
+                "name": "Metrum",
             },
             {
-                "category": "Uwagi",
-                "subcategories": [
-                    {
-                        "name": "Stan techniczny nagrania",
-                    },
-                    {
-                        "name": "Walory melodii",
-                    },
-                ],
+                "name": "Forma melodyczna",
             },
             {
-                "category": "Obecność w źródłach",
-                "subcategories": [
-                    {
-                        "name": "Antologie",
-                    },
-                    {
-                        "name": "Rękopisy",
-                    },
-                    {
-                        "name": "Śpiewniki",
-                    },
-                ],
+                "name": "Skala",
+            },
+            {
+                "name": "Ambitus",
+            },
+            {
+                "name": "Układ kadencji",
+            },
+        ],
+    },
+    {
+        "category": "Struktura tekstu",
+        "subcategories": [
+            {
+                "name": "Ilość wersów",
+            },
+            {
+                "name": "Układ sylab w wersie",
+            },
+        ],
+    },
+    {
+        "category": "Uwagi",
+        "subcategories": [
+            {
+                "name": "Stan techniczny nagrania",
+            },
+            {
+                "name": "Walory melodii",
+            },
+        ],
+    },
+    {
+        "category": "Obecność w źródłach",
+        "subcategories": [
+            {
+                "name": "Antologie",
+            },
+            {
+                "name": "Rękopisy",
+            },
+            {
+                "name": "Śpiewniki",
             },
         ],
     },
@@ -1336,10 +1401,12 @@ const initializeDatabase = async () => {
 
         await Artwork.insertMany(updatedArtworks)
 
-        const categoriesMap = categoryData.map(category => ({
-            ...category,
-            collectionId: collectionMap["Wielkopolskie Melodie Ludowe"]._id,
-        }))
+        const categoriesMap = categoryData.map(category => {
+            return {
+                ...category,
+                collectionId: collectionMap["Wielkopolska"]._id,
+            }
+        })
 
         const insertedCategories = await Category.insertMany(categoriesMap)
 

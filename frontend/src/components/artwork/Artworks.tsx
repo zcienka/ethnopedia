@@ -17,6 +17,7 @@ import FilterDropdown from "../filter/FilterDropdown"
 import Navigation from "../Navigation"
 import EditCollection from "../../pages/collections/EditCollection"
 import Pagination from "../Pagination"
+import category from "../Category"
 
 const Artworks = () => {
     const [selectedArtworks, setSelectedArtworks] = useState<{ [key: string]: boolean }>({})
@@ -40,6 +41,8 @@ const Artworks = () => {
         { value: "year-asc", label: "Rok rosnąco" },
         { value: "year-desc", label: "Rok malejąco" },
     ]
+
+
 
     const { data: artworkData } = useQuery({
         queryKey: ["artwork", currentPage, pageSize],
@@ -129,7 +132,7 @@ const Artworks = () => {
 
     const navigate = useNavigate()
 
-    if (artworkData === undefined || sortedArtworks === undefined) {
+    if (artworkData === undefined || sortedArtworks === undefined || category === undefined) {
         return <LoadingPage />
     } else {
         const allArtworks = sortedArtworks.map((artwork: any) => (
@@ -210,7 +213,7 @@ const Artworks = () => {
                         )}
                     </div>
 
-                    <SearchComponent />
+                    {collection && <SearchComponent id={collection}/>}
 
                     <div className="flex w-full md:w-auto">
                         <div className="flex flex-1 space-x-2">

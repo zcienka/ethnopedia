@@ -6,6 +6,7 @@ import { ReactComponent as AngleRightIcon } from "../../assets/icons/angleRight.
 import { ReactComponent as AngleDownIcon } from "../../assets/icons/angleDown.svg"
 import { ReactComponent as FilterIcon } from "../../assets/icons/filter.svg"
 import { getAdvancedSearchResult } from "../../api/artworks"
+import { useParams } from "react-router-dom"
 
 interface Subcategory {
     name: string
@@ -14,6 +15,8 @@ interface Subcategory {
 
 interface Category {
     category: string
+    collectionId: string
+    name: string
     subcategories?: Subcategory[]
 }
 
@@ -26,7 +29,7 @@ interface FilterData {
 interface CheckedSubcategory {
     [category: string]: {
         [subcategory: string]: {
-            [value: string]: boolean
+            [value: string]: boolean;
         }
     }
 }
@@ -36,10 +39,15 @@ const FilterDropdown: React.FC = () => {
     const [openCategories, setOpenCategories] = useState<Set<string>>(new Set())
     const [queryString, setQueryString] = useState<string | undefined>(undefined)
     const [checkedSubcategories, setCheckedSubcategories] = useState<CheckedSubcategory>({})
+    const { id } = useParams() as { id: string }
+    console.log({ id })
 
-    const { data, isLoading } = useQuery<FilterData[], Error>(
-        "allCategories",
-        getCategories,
+    const { data, isLoading } = useQuery<Category[], Error>(
+        ["allCategories"],
+        () => getCategories(id),
+        {
+            enabled: !!id,
+        },
     )
 
     useQuery({
@@ -73,7 +81,7 @@ const FilterDropdown: React.FC = () => {
             })
         })
 
-        return `/artworks/filter?${queryParams.join("&")}`
+        return `/filter?${queryParams.join("&")}`
     }
 
     const handleCheckboxChange = (category: string, subcategoryName: string, value: string, isChecked: boolean) => {
@@ -88,12 +96,11 @@ const FilterDropdown: React.FC = () => {
             },
         }))
     }
-
     const handleApplyFilters = () => {
         const generatedQueryString = generateQueryString()
         setQueryString(generatedQueryString)
     }
-
+    // console.log({ queryString })
     const renderSubcategory = (category: string, subcategory: Subcategory) => {
         return (
             <div key={subcategory.name} className="pl-4 py-2">
@@ -112,12 +119,12 @@ const FilterDropdown: React.FC = () => {
             </div>
         )
     }
-
+    console.log({ data })
     const renderCategory = (category: Category) => {
         if (category.category !== "Region") {
             const isCategoryOpen = openCategories.has(category.category)
             return (
-                <div key={category.category} className="hover:bg-gray-100 dark:hover:bg-gray-700 py-2 rounded-md px-4">
+                <div key={category.category} className="hover:bg-gray-100 py-2 rounded-md px-4">
                     <h2 onClick={() => toggleCategory(category.category)}
                         className="text-md cursor-pointer rounded-md flex flex-row">
                         {category.category}
@@ -126,7 +133,7 @@ const FilterDropdown: React.FC = () => {
                         {isCategoryOpen ? <AngleDownIcon /> : <AngleRightIcon />}
                     </span>
                     </h2>
-                    {isCategoryOpen && category.subcategories?.map(subcategory =>
+                    {isCategoryOpen && category.subcategories?.map((subcategory: any) =>
                         renderSubcategory(category.category, subcategory))
                     }
                 </div>
@@ -138,15 +145,14 @@ const FilterDropdown: React.FC = () => {
         return <LoadingPage />
     }
 
-    return <div className="px-2 pb-4 border dark:border-gray-600 dark:bg-gray-800 shadow rounded-lg overflow-hidden h-fit">
+    return <div className="px-2 pb-4 border border-gray-300 bg-white shadow rounded-lg overflow-hidden h-fit">
         <h2 className="pt-4 pb-1 px-4 text-xl font-semibold text-gray-900 dark:text-white">
                 <span className="flex items-center">
                     <FilterIcon />
                     Filtry
                 </span>
         </h2>
-
-        {data?.map(item => item.categories.map(renderCategory))}
+        {data?.map(item => renderCategory(item))}
 
         <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-4 py-2 px-4"

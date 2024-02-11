@@ -155,7 +155,7 @@ const patchCollection = asyncWrapper(async (req: Request, res: Response, next: N
         }
 
         if (result.modifiedCount === 0) {
-            return res.status(200).json({ message: "No changes made to the Collection" })
+            return res.status(200).json({ message: "No changes made to the collection" })
         }
 
         const updatedCollection = await Collection.findById(CollectionId)

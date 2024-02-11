@@ -6,7 +6,7 @@ import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
 import LoadingPage from "../../pages/LoadingPage"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { v4 as uuidv4 } from "uuid"
 
 const initialRule = { id: Date.now(), field: "", operator: "", value: "" }
@@ -28,21 +28,29 @@ type Category = {
 // }
 //
 // type CollectionArray = CollectionItem[]
-const AdvancedSearch = () => {
+interface SearchComponentProps {
+    id: string;
+}
+
+const AdvancedSearch: React.FC<SearchComponentProps> = ({ id }) => {
     const [rules, setRules] = useState<any[]>([])
     const [showValidationMessage, setShowValidationMessage] = useState<boolean>(false)
 
-    const { data: categoriesData } = useQuery(
+    const { data: categoriesData } = useQuery<Category[], Error>(
         ["allCategories"],
-        getCategories,
+        () => getCategories(id),
+        {
+            enabled: !!id,
+        },
     )
+
 
     const navigate = useNavigate()
 
     const formik = useFormik({
         initialValues: initialRule,
         onSubmit: (values, { resetForm }) => {
-            if (values.field  && values.value) {
+            if (values.field && values.value) {
                 setRules([...rules, { ...values, id: Date.now() }])
                 resetForm()
                 setShowValidationMessage(() => false)
@@ -75,7 +83,7 @@ const AdvancedSearch = () => {
                         className="border p-2"
                     >
                         <option hidden selected>Wybierz kategorię</option>
-                        {categoriesData[0].categories.map((subcategory: Category) => (
+                        {categoriesData.map((subcategory: Category) => (
                             <option value={subcategory.category} key={uuidv4()}>{subcategory.category}</option>
                         ))}
                     </select>

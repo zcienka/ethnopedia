@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
-import { ObjectId } from "mongodb"
 
 const asyncWrapper = require("../middleware/async")
-
 const Artwork = require("../models/artwork")
+const Collection = require("../models/collection")
 const Category = require("../models/category")
+
+const ObjectId = require("mongodb").ObjectId
 
 const getAllArtworks = async (req: Request, res: Response, next: NextFunction) => {
     const page = parseInt(req.query.page as string) || 1
@@ -37,11 +38,11 @@ const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
         }
 
         const artwork = await Artwork.findById(artworkId).exec()
-        const columnNames = Object.keys(artwork.toObject())
 
         if (!artwork) {
             return res.status(404).json("Artwork not found")
         } else {
+            const columnNames = Category.find({ collectionId: artwork.collectionId }).exec()
             return res.status(200).json({ artwork, columnNames })
         }
 
@@ -77,56 +78,31 @@ const patchArtwork = asyncWrapper(async (req: Request, res: Response, next: Next
     }
 })
 
-
 const searchArtworks = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let query = JSON.parse(JSON.stringify(req.query))
-
-        Object.keys(query).forEach(key => {
-            if (typeof query[key] === "string") {
-                query[key] = new RegExp(query[key], "i")
-            }
-        })
-
-        const records = await Artwork.find(query).exec()
-        return res.status(200).json(records)
+        // let query = JSON.parse(JSON.stringify(req.query))
+        // const collection = req.query.collection
+        // const searchText = req.query.searchText
+        // let query_json: object = {Kolekcja: {value: collection}, $text: { $search: searchText }}
+        // const records = await mongoClient.db().collection('artworks').find(query_json).toArray()
+        // // const keys = await getAllKeys(collection)
+        // // console.log(keys)
+        // console.log(records)
+        // return res.status(200).json(records)
     } catch (error) {
         next(error)
     }
 }
 
-
 const filterArtworks = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        const parseNestedQuery = (query: any) => {
-            const parsedQuery: any = {}
-            Object.keys(query).forEach((key) => {
-                const match = key.match(/(\w+)\[(\w+)\]/)
-                if (match) {
-                    const [, outerKey, innerKey] = match
-                    if (!parsedQuery[outerKey]) {
-                        parsedQuery[outerKey] = {}
-                    }
-                    parsedQuery[outerKey][innerKey] = query[key]
-                } else {
-                    parsedQuery[key] = query[key]
-                }
-            })
-            return parsedQuery
-        }
+        const records = await Artwork.find(req.query).exec()
 
-        const parsedQuery = parseNestedQuery(req.query)
-
-        console.log("MongoDB Query:", parsedQuery)
-
-        const records = await Artwork.find(parsedQuery).exec()
         return res.json(records)
     } catch (error: any) {
-        console.error("Error in filterArtworks:", error)
         next(error)
     }
 }
-
 
 const createArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
     const title = req.body.title
