@@ -1172,7 +1172,7 @@ const collectionData = [
     },
     {
         "name": "Tradycyjne Pieśni Warmii i Mazur",
-        "description": "Kolekcja ludowych pieśni z regionów Warmii i Mazur, odzwierciedlająca unikalne połączenie kulturowe tych obszarów.",
+        "description": "Kolekcja ludowych pieśni z regionów Warmii i Mazur, odzwierciedlająca unikalne połączenie kultu rowe tych obszarów.",
     },
 ]
 
@@ -1180,7 +1180,7 @@ const categoryData = [
     {
         "category": "Region",
         "name": "Wielkopolska",
-        "subcategories": [
+        "locationDetails": [
             {
                 "name": "Podregion",
                 "values": [
@@ -1196,8 +1196,7 @@ const categoryData = [
                 "values": [
                     "Szamotulskie",
                     "Ziemia Lubuska",
-                    "Kaliskie",
-                    "etc.",
+                    "Kaliskie"
                 ],
                 "isSelectable": true,
             },
@@ -1207,8 +1206,7 @@ const categoryData = [
                     "Gniezno",
                     "Poznań",
                     "Września",
-                    "Środa",
-                    "etc.",
+                    "Środa"
                 ],
                 "isSelectable": true,
             },
