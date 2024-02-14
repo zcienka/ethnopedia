@@ -77,7 +77,21 @@ const ArtworkPage = () => {
             setShowMore(true)
         }
     }
-
+      
+    function Subcategories(categories: any) {
+        let entries: any = []
+        for (const property in categories) {
+            entries.push(<li><span className="mr-2">{property}:</span> {categories[property]["value"]}</li>)
+            if(categories[property]["subcategories"]) {
+                entries = [...entries, Subcategories(categories[property]["subcategories"])]
+            }
+        }
+        return <>{
+            <ul className="list-disc list-inside pl-4">
+                {entries}
+            </ul>
+        }</>
+    }
 
     if (fetchedData === undefined) {
         return <LoadingPage />
@@ -94,7 +108,6 @@ const ArtworkPage = () => {
                 />
             </div>
         })
-
         return <>
             <Navbar />
             {showDeleteArtworkWarning &&
@@ -107,15 +120,18 @@ const ArtworkPage = () => {
 
                     <div className="flex flex-row">
                         <div className="mt-2 flex-1">
-                            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł}</h1>
-                            <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści}</p>
-                            <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok}</p>
+                            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł ? Tytuł.value : "Tytuł nieznany"}</h1>
+                            <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści ? Artyści.value : "Artyści nieznani"}</p>
+                            <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok ? Rok.value : "Rok nieznany"}</p>
+                            <ul className="list-disc list-inside pl-4">
                             {showEditArtwork ? artworksEdit : Object.entries(detailsToShow).map(([columName, value]: any) => (
-                                columName !== "_id" && <div key={uuidv4()} className="py-2 font-medium">
-                                    <span className="mr-2">{columName}:</span>
-                                    {value}
-                                </div>
+                                columName !== "_id" && <span key={uuidv4()} className="font-medium">
+                                    <li><span className="mr-2">{columName}:</span>
+                                    {value.value}</li>
+                                    <Subcategories {...value.subcategories}/>
+                                </span>
                             ))}
+                            </ul>
                         </div>
                         <div className="flex-1 mt-4 flex justify-end text-gray-700">
                             {showEditArtwork ?

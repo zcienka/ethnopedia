@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express"
 import { ObjectId } from "mongodb"
 import mongoose from "mongoose"
+import {getMongoDBNativeDriverClient} from "../db/connect"
+const mongoClient = getMongoDBNativeDriverClient()
 
 const asyncWrapper = require("../middleware/async")
 
