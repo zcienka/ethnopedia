@@ -96,9 +96,39 @@ const searchArtworks = async (req: Request, res: Response, next: NextFunction) =
 
 const filterArtworks = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        const records = await Artwork.find(req.query).exec()
+        const page = parseInt(req.query.page as string) || 1
+        const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        return res.json(records)
+        const queryParams: any = {}
+        for (const [key, value] of Object.entries(req.query)) {
+            if (key === "page" || key === "pageSize") continue
+
+            const decodedKey = decodeURIComponent(key)
+            const decodedValue = decodeURIComponent(value as string)
+
+            if (queryParams.hasOwnProperty(decodedKey)) {
+                if (!Array.isArray(queryParams[decodedKey])) {
+                    queryParams[decodedKey] = [queryParams[decodedKey]]
+                }
+                queryParams[decodedKey].push(decodedValue)
+            } else {
+                queryParams[decodedKey] = decodedValue
+            }
+        }
+
+        const totalArtworks = await Artwork.countDocuments(queryParams)
+
+        const records = await Artwork.find(queryParams)
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .exec()
+
+        return res.json({
+            artworks: records,
+            total: totalArtworks,
+            currentPage: page,
+            pageSize: pageSize,
+        })
     } catch (error: any) {
         next(error)
     }

@@ -42,13 +42,10 @@ const Artworks = () => {
         { value: "year-desc", label: "Rok malejąco" },
     ]
 
-
-
     const { data: artworkData } = useQuery({
-        queryKey: ["artwork", currentPage, pageSize],
+        queryKey: ["artwork"],
         queryFn: () => getArtworksByCategory(collection as string, currentPage, pageSize),
         enabled: !!collection,
-        keepPreviousData: true,
     })
 
     const { data: collectionData } = useQuery({
@@ -213,7 +210,7 @@ const Artworks = () => {
                         )}
                     </div>
 
-                    {collection && <SearchComponent id={collection}/>}
+                    {collection && <SearchComponent id={collection} />}
 
                     <div className="flex w-full md:w-auto">
                         <div className="flex flex-1 space-x-2">

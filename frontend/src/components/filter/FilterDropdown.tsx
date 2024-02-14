@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useQuery } from "react-query"
+import { useQuery, useQueryClient } from "react-query"
 import { getCategories } from "../../api/categories"
 import LoadingPage from "../../pages/LoadingPage"
 import { ReactComponent as AngleRightIcon } from "../../assets/icons/angleRight.svg"
@@ -9,28 +9,32 @@ import { getAdvancedSearchResult } from "../../api/artworks"
 import { useParams } from "react-router-dom"
 
 interface Subcategory {
-    name: string;
-    values: string[];
-    isSelectable: boolean;
+    name: string
+    values?: string[]
+    subcategories?: Subcategory[]
+    isSelectable: boolean
 }
 
 interface Category {
+    _id: string
     category: string
     collectionId: string
     name: string
-    subcategories?: Subcategory[]
+    locationDetails?: Subcategory[]
+    // subcategories?: Subcategory[]
+    // otherCategories?: Value[]
 }
 
-interface FilterData {
-    _id: string
-    collection: string
-    categories: Category[]
+interface Value {
+    name: string
+    subcategories: string[]
+    isSelectable: boolean
 }
 
 interface CheckedSubcategory {
     [category: string]: {
         [subcategory: string]: {
-            [value: string]: boolean;
+            [value: string]: boolean
         }
     }
 }
@@ -41,7 +45,6 @@ const FilterDropdown: React.FC = () => {
     const [queryString, setQueryString] = useState<string | undefined>(undefined)
     const [checkedSubcategories, setCheckedSubcategories] = useState<CheckedSubcategory>({})
     const { id } = useParams<{ id: string }>()
-    console.log({ id })
 
     const { data, isLoading } = useQuery<Category[], Error>(
         ["allCategories"],
@@ -51,10 +54,16 @@ const FilterDropdown: React.FC = () => {
         },
     )
 
+    const queryClient = useQueryClient()
+
     useQuery({
-        queryKey: ["artwork"],
+        // queryKey: ["artwork"],
         queryFn: () => getAdvancedSearchResult(queryString as string),
         enabled: !!queryString,
+        onSuccess: (data) => {
+            console.log({data})
+            queryClient.setQueryData(["artwork"], data)
+        },
     })
 
     const toggleCategory = (categoryName: string) => {
@@ -76,15 +85,14 @@ const FilterDropdown: React.FC = () => {
             Object.entries(subcats).forEach(([subcatName, values]) => {
                 Object.entries(values).forEach(([value, isChecked]) => {
                     if (isChecked) {
-                        queryParams.push(`${encodeURIComponent(category)}[${encodeURIComponent(subcatName)}]=${encodeURIComponent(value)}`)
+                        queryParams.push(`Region=${category}&${subcatName}=${value}`)
                     }
                 })
             })
         })
 
-        return `/filter?${queryParams.join("&")}`
+        return `/artworks/filter?${queryParams.join("&")}`
     }
-
     const handleCheckboxChange = (category: string, subcategoryName: string, value: string, isChecked: boolean) => {
         setCheckedSubcategories(prev => ({
             ...prev,
@@ -98,16 +106,17 @@ const FilterDropdown: React.FC = () => {
         }))
     }
 
+
     const handleApplyFilters = () => {
         const generatedQueryString = generateQueryString()
         setQueryString(generatedQueryString)
     }
 
-    const renderSubcategories = (categoryName: string, subcategories: Subcategory[]) => {
+    const renderLocationDetails = (categoryName: string, subcategories: Subcategory[]) => {
         return subcategories.map(subcategory => subcategory.isSelectable ? (
-            <div key={subcategory.name} className="pl-4 py-2">
+            <div key={subcategory.name} className="mt-2">
                 <h3 className="text-md font-semibold">{subcategory.name}</h3>
-                {subcategory.values.map(value => (
+                {subcategory.values !== undefined ? subcategory.values.map(value => (
                     <label key={value} className="block cursor-pointer">
                         <input
                             type="checkbox"
@@ -117,57 +126,61 @@ const FilterDropdown: React.FC = () => {
                         />
                         <span className="text-sm">{value}</span>
                     </label>
-                ))}
+                )) : renderSubcategories(subcategory.subcategories || [], categoryName)}
             </div>
         ) : null)
     }
 
     const renderCategory = (category: Category) => {
-        const isCategoryOpen = openCategories.has(category.name)
+        const isCategoryOpen = true
         return (
-            <div key={category.name} className="hover:bg-gray-100 py-2 rounded-md px-4">
+            <div key={category.name} className="p-2 rounded-md hover:bg-gray-100">
                 <h2 onClick={() => toggleCategory(category.name)}
-                    className="text-md cursor-pointer flex justify-between">
+                    className="text-md cursor-pointer font-bold flex justify-between">
                     {category.name}
                     <span>{isCategoryOpen ? <AngleDownIcon /> : <AngleRightIcon />}</span>
                 </h2>
-                {isCategoryOpen && category.locationDetails && renderSubcategories(category.name, category.locationDetails)}
+                {category.locationDetails && renderLocationDetails(category.name, category.locationDetails)}
             </div>
         )
     }
-    const renderValues = (values: string[], categoryName: string, subcategoryName: string) => {s
+    const renderValues = (values: string[], categoryName: string, subcategoryName: string) => {
         return values.map(value => (
-            <div key={`${subcategoryName}-${value}`} className="pl-6">
+            <div key={`${subcategoryName}-${value}`}>
                 <label className="inline-flex items-center">
-                    <input type="checkbox" className="form-checkbox" />
-                    <span className="ml-2">{value}</span>
+                    <input
+                        type="checkbox"
+                        className="mr-2 leading-tight"
+                        checked={checkedSubcategories[categoryName]?.[subcategoryName]?.[value] || false}
+                        onChange={(e) => handleCheckboxChange(categoryName, subcategoryName, value, e.target.checked)}
+                    /> <span className="font-normal">{value}</span>
                 </label>
             </div>
         ))
     }
 
-    const renderSubcategories1 = (subcategories: Value[], categoryName: string) => {
-        return subcategories.map(subcategory => (
-            <div key={subcategory.name}>
-                <div className="font-bold">{subcategory.name}</div>
-                {renderValues(subcategory.values, categoryName, subcategory.name)}
+    const renderSubcategories = (subcategories: Subcategory[], categoryName: string) => {
+        return subcategories.map(subcategory => subcategory.values != undefined && subcategory.values.length > 0 && (
+            <div key={subcategory.name} className="mt-2 text-gray-900">
+                <div className="font-semibold">{subcategory.name}</div>
+                {renderValues(subcategory.values || [], categoryName, subcategory.name)}
             </div>
         ))
     }
 
-    const renderCategories = (categories: Category[]) => {
+    const renderCategories = (categories: Subcategory[]) => {
         return categories.map(category => {
             const isCategoryOpen = openCategories.has(category.name)
             return (
-                <div key={category.name} className="border-b">
+                <div key={category.name} className="p-2 text-md hover:bg-gray-100 rounded-md">
                     <div
                         onClick={() => toggleCategory(category.name)}
-                        className="flex justify-between items-center cursor-pointer p-2"
+                        className="flex justify-between items-center cursor-pointer font-bold"
                     >
                         {category.name}
                         {isCategoryOpen ? <AngleDownIcon /> : <AngleRightIcon />}
                     </div>
-                    {isCategoryOpen && renderSubcategories1(category.subcategories, category.name)}
+                    {isCategoryOpen && renderSubcategories(category.subcategories || [], category.name)}
                 </div>
             )
         })
@@ -179,22 +192,17 @@ const FilterDropdown: React.FC = () => {
     }
 
     return (
-        <div className="px-2 pb-4 border border-gray-300 bg-white shadow rounded-lg overflow-hidden h-fit">
-            <h2 className="pt-4 pb-1 px-4 text-xl font-semibold text-gray-900 dark:text-white">
+        <div className="px-8 py-6 border border-gray-300 bg-white shadow rounded-lg overflow-hidden h-fit">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 <span className="flex items-center">
                     <FilterIcon />
                     Filtry
                 </span>
             </h2>
             {data?.map(renderCategory)}
-            {data?.map(item => (
-                <div key={item._id} className="mt-4">
-                    <h3 className="font-bold">{item.name}</h3>
-                    {renderCategories(item.categories)}
-                </div>
-            ))}
+
             <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold"
                 onClick={handleApplyFilters}>
                 Zastosuj
             </button>

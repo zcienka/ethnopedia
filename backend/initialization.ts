@@ -1107,6 +1107,30 @@ const artworksData = [
     },
     {
         "Region": "Wielkopolska",
+        "Region etnograficzny": "Szamotulskie",
+        "Sygnatura nagrania": "WLM-303",
+        "Incipit": "Incipit-3",
+        "Numer wątku muzycznego": 15,
+        "Numer w publikacji": 22,
+        "Miejscowość": "Gniezno",
+        "Sposób wykonania": "Flet",
+        "Funkcja utworu": "Religijna",
+        "Link do nagrania": "https://example.com/recording/303",
+        "Źródło": "Zbiór kościelny",
+        "Klasyfikacja melodyczna": "Skala heksatoniczna",
+        "Kategoria": "Wielkopolska",
+        "Wykorzystanie w publikacji": "Dokumentacja etnograficzna",
+        "Struktura tekstu": "Beztekstowe",
+        "Uwagi": "Zachowana tradycja",
+        "Obecność w źródłach": "Nagranie historyczne",
+        "Tytuł": "Dźwięki Gniezna",
+        "Artyści": [
+            "Piotr Szymański",
+        ],
+        "Rok": 2010,
+    },
+    {
+        "Region": "Wielkopolska",
         "Sygnatura nagrania": "WLM-202",
         "Incipit": "Incipit-2",
         "Numer wątku muzycznego": 8,
@@ -1221,8 +1245,6 @@ const categoryData = [
                 ],
                 "isSelectable": true,
             },
-        ],
-        "categories": [
             {
                 "name": "Sygnatura nagrania",
                 "subcategories": [
@@ -1248,7 +1270,7 @@ const categoryData = [
                 "subcategories": [
                     {
                         "name": "Wykonawca",
-                        "values": [],
+                        "values": ["sadjkasdkjsda", "sadjkasdkjsda", "sadjkasdkjsda"],
                     },
                 ],
                 "isSelectable": false,
@@ -1392,7 +1414,7 @@ const initializeDatabase = async () => {
             }
         })
 
-        const insertedCategories = await Category.insertMany(categoriesMap)
+        await Category.insertMany(categoriesMap)
 
 
         console.log("Artworks collection initialized")
