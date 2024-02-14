@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 import { useFormik } from "formik"
 import { useQuery } from "react-query"
-import { getCategories2 } from "../../api/categories"
-// import { getAdvSearchResult } from "../../api/artworks"
+import { getCategories } from "../../api/categories"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg"
 import { ReactComponent as SearchLoopIcon } from "../../assets/icons/searchLoop.svg"
@@ -12,15 +11,15 @@ import { v4 as uuidv4 } from "uuid"
 
 const initialRule = { id: Date.now(), field: "", operator: "", value: "" }
 
-// type Subcategory = {
-//     name: string
-//     values?: string[]
-// }
+type Subcategory = {
+    name: string
+    values?: string[]
+}
 
-// type Category = {
-//     category: string
-//     subcategories?: Subcategory[]
-// }
+type Category = {
+    category: string
+    subcategories?: Subcategory[]
+}
 
 // type CollectionItem = {
 //     _id: string
@@ -35,6 +34,7 @@ interface SearchComponentProps {
 
 const AdvancedSearch: React.FC<SearchComponentProps> = ({ id }) => {
     const [rules, setRules] = useState<any[]>([])
+    const [showValidationMessage, setShowValidationMessage] = useState<boolean>(false)
 
     const { data: categoriesData } = useQuery<Category[], Error>(
         ["allCategories"],
@@ -47,15 +47,6 @@ const AdvancedSearch: React.FC<SearchComponentProps> = ({ id }) => {
 
     const navigate = useNavigate()
 
-    const categoryInRules = (rules: any) => {
-        for(const rule in rules) {
-            if(rules[rule].field === formik.values.field) {
-                return true
-            }
-        }
-        return false
-    }
-
     const formik = useFormik({
         initialValues: initialRule,
         onSubmit: (values, { resetForm }) => {
@@ -66,19 +57,16 @@ const AdvancedSearch: React.FC<SearchComponentProps> = ({ id }) => {
             } else {
                 setShowValidationMessage(() => true)
             }
-            
-            navigate(`?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}${newest_rule}`)     
         },
     })
 
-    const handleAddRule = () => {
-        if(formik.values.field && formik.values.value && !categoryInRules(rules)) {
-            setRules([...rules, { ...formik.values, id: Date.now() }])
-        }
-    }
-
     const deleteRule = (id: string) => {
         setRules(rules.filter((rule) => rule.id !== id))
+    }
+
+    const handleSearch = () => {
+        navigate(`/artworks/search?${rules.map(rule => `${rule.field}=${rule.value}`).join("&")}`)
+        setShowValidationMessage(() => false)
     }
 
     if (categoriesData === undefined) {
@@ -107,22 +95,25 @@ const AdvancedSearch: React.FC<SearchComponentProps> = ({ id }) => {
                         className="border p-2 rounded-lg"
                     />
 
-                    <button type="button" className="border-gray-800 flex items-center bg-gray-800 hover:bg-gray-700 text-white p-2
-                            font-semibold" onClick={handleAddRule}
-                        >
+                    <button type="submit" className="border-gray-800 flex items-center bg-gray-800 hover:bg-gray-700 text-white p-2
+                            font-semibold">
                         <span className="mr-1">
                             <PlusIcon />
                         </span>
                         Dodaj regułę
                     </button>
-                    <button type="submit" className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
+                    <button className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
                             text-white p-2"
+                            onClick={handleSearch}
                     >
                         <span className="mr-1">
                             <SearchLoopIcon />
                         </span>
                         Wyszukaj
                     </button>
+                    {showValidationMessage && <span className="text-red-500 ml-2">
+                        All fields are required to add a rule.
+                    </span>}
                 </div>
             </form>
 

@@ -33,7 +33,7 @@ const port = process.env.PORT || 5000
 
 const start = async () => {
     try {
-        await connectMongoDBNativeDriver()
+        await connectDB(process.env.MONGO_URI)
         await initializeDatabase()
 
         app.listen(port, () =>

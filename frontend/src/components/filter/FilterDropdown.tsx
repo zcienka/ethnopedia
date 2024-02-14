@@ -25,12 +25,6 @@ interface Category {
     // otherCategories?: Value[]
 }
 
-interface Value {
-    name: string
-    subcategories: string[]
-    isSelectable: boolean
-}
-
 interface CheckedSubcategory {
     [category: string]: {
         [subcategory: string]: {
@@ -160,32 +154,13 @@ const FilterDropdown: React.FC = () => {
     }
 
     const renderSubcategories = (subcategories: Subcategory[], categoryName: string) => {
-        return subcategories.map(subcategory => subcategory.values != undefined && subcategory.values.length > 0 && (
+        return subcategories.map(subcategory => subcategory.values !== undefined && subcategory.values.length > 0 && (
             <div key={subcategory.name} className="mt-2 text-gray-900">
                 <div className="font-semibold">{subcategory.name}</div>
                 {renderValues(subcategory.values || [], categoryName, subcategory.name)}
             </div>
         ))
     }
-
-    const renderCategories = (categories: Subcategory[]) => {
-        return categories.map(category => {
-            const isCategoryOpen = openCategories.has(category.name)
-            return (
-                <div key={category.name} className="p-2 text-md hover:bg-gray-100 rounded-md">
-                    <div
-                        onClick={() => toggleCategory(category.name)}
-                        className="flex justify-between items-center cursor-pointer font-bold"
-                    >
-                        {category.name}
-                        {isCategoryOpen ? <AngleDownIcon /> : <AngleRightIcon />}
-                    </div>
-                    {isCategoryOpen && renderSubcategories(category.subcategories || [], category.name)}
-                </div>
-            )
-        })
-    }
-
 
     if (isLoading) {
         return <LoadingPage />
