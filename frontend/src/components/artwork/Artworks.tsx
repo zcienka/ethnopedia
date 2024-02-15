@@ -3,7 +3,7 @@ import { getArtworksByCategory, useBatchDeleteArtworkMutation } from "../../api/
 import LoadingPage from "../../pages/LoadingPage"
 import React, { useMemo, useState } from "react"
 import Navbar from "../navbar/Navbar"
-import { useLocation, useNavigate, useParams} from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import SearchComponent from "../search/SearchComponent"
 import FileDropzone from "../FileDropzone"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
@@ -17,6 +17,7 @@ import FilterDropdown from "../filter/FilterDropdown"
 import Navigation from "../Navigation"
 import EditCollection from "../../pages/collections/EditCollection"
 import Pagination from "../Pagination"
+import category from "../Category"
 
 const Artworks = () => {
     const [selectedArtworks, setSelectedArtworks] = useState<{ [key: string]: boolean }>({})
@@ -26,7 +27,6 @@ const Artworks = () => {
     const [showDeleteCollectionWarning, setShowDeleteCollectionWarning] = useState(false)
     const [sortOrder, setSortOrder] = useState<string>("default")
     const [showEditCollection, setShowEditCollection] = useState<boolean>(false)
-    const location = useLocation()
 
     const [currentPage, setCurrentPage] = useState(1)
     const pageSize = 10
@@ -43,13 +43,10 @@ const Artworks = () => {
     ]
 
     const { data: artworkData } = useQuery({
-        queryKey: ["artwork", currentPage, pageSize, location.search],
-        queryFn: () => getArtworksByCategory(collection as string, currentPage, pageSize, location.search),
+        queryKey: ["artwork"],
+        queryFn: () => getArtworksByCategory(collection as string, currentPage, pageSize),
         enabled: !!collection,
-        keepPreviousData: true,
     })
-
-    console.log({ collection })
 
     const { data: collectionData } = useQuery({
         queryKey: [`${collection}`],
@@ -132,7 +129,7 @@ const Artworks = () => {
 
     const navigate = useNavigate()
 
-    if (artworkData === undefined || sortedArtworks === undefined) {
+    if (artworkData === undefined || sortedArtworks === undefined || category === undefined) {
         return <LoadingPage />
     } else {
         const allArtworks = sortedArtworks.map((artwork: any) => (
@@ -152,9 +149,9 @@ const Artworks = () => {
                         </span>
 
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.hasOwnProperty("Tytuł") ? artwork.Tytuł.value : "Tytuł nieznany"}</h3>
-                        <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.hasOwnProperty("Artyści") ? artwork.Artyści.value : "Artyści nieznani"}</p>
-                        <p className=" text-gray-500 dark:text-gray-300">{ artwork.hasOwnProperty("Rok") ? artwork.Rok.value : "Rok nieznany"}</p>
+                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{artwork.Tytuł}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 mb-1">{artwork.Artyści}</p>
+                        <p className=" text-gray-500 dark:text-gray-300">{artwork.Rok}</p>
                     </div>
                 </div>
             </div>
@@ -213,7 +210,7 @@ const Artworks = () => {
                         )}
                     </div>
 
-                    <SearchComponent />
+                    {collection && <SearchComponent id={collection} />}
 
                     <div className="flex w-full md:w-auto">
                         <div className="flex flex-1 space-x-2">
@@ -296,7 +293,7 @@ const Artworks = () => {
             <div className="flex flex-row">
                 <div
                     className="flex mx-auto flex-1 justify-end w-full">
-                    {/* <FilterDropdown /> */}
+                    <FilterDropdown />
                 </div>
                 <div className="w-full flex-2 lg:px-6 max-w-screen-xl">
                     {allArtworks}

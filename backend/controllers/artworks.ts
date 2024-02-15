@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express"
 import mongoose from "mongoose"
-import {getMongoDBNativeDriverClient} from "../db/connect"
 
 const asyncWrapper = require("../middleware/async")
 const Artwork = require("../models/artwork")
-const ObjectId = require('mongodb').ObjectId;
-const mongoClient = getMongoDBNativeDriverClient()
+const Collection = require("../models/collection")
+const Category = require("../models/category")
 
+const ObjectId = require("mongodb").ObjectId
 
 const getAllArtworks = async (req: Request, res: Response, next: NextFunction) => {
     const page = parseInt(req.query.page as string) || 1
@@ -38,11 +38,11 @@ const getArtwork = async (req: Request, res: Response, next: NextFunction) => {
         }
 
         const artwork = await Artwork.findById(artworkId).exec()
-        const columnNames = Object.keys(artwork.toObject())
 
         if (!artwork) {
             return res.status(404).json("Artwork not found")
         } else {
+            const columnNames = Category.find({ collectionId: artwork.collectionId }).exec()
             return res.status(200).json({ artwork, columnNames })
         }
 
@@ -96,9 +96,39 @@ const searchArtworks = async (req: Request, res: Response, next: NextFunction) =
 
 const filterArtworks = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
-        const records = await Artwork.find(req.query).exec()
+        const page = parseInt(req.query.page as string) || 1
+        const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        return res.json(records)
+        const queryParams: any = {}
+        for (const [key, value] of Object.entries(req.query)) {
+            if (key === "page" || key === "pageSize") continue
+
+            const decodedKey = decodeURIComponent(key)
+            const decodedValue = decodeURIComponent(value as string)
+
+            if (queryParams.hasOwnProperty(decodedKey)) {
+                if (!Array.isArray(queryParams[decodedKey])) {
+                    queryParams[decodedKey] = [queryParams[decodedKey]]
+                }
+                queryParams[decodedKey].push(decodedValue)
+            } else {
+                queryParams[decodedKey] = decodedValue
+            }
+        }
+
+        const totalArtworks = await Artwork.countDocuments(queryParams)
+
+        const records = await Artwork.find(queryParams)
+            .skip((page - 1) * pageSize)
+            .limit(pageSize)
+            .exec()
+
+        return res.json({
+            artworks: records,
+            total: totalArtworks,
+            currentPage: page,
+            pageSize: pageSize,
+        })
     } catch (error: any) {
         next(error)
     }

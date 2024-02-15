@@ -2,7 +2,11 @@ import React, { useState } from "react"
 import QuickSearch from "./QuickSearch"
 import AdvancedSearch from "./AdvancedSearch"
 
-const SearchComponent = () => {
+interface SearchComponentProps {
+    id: string;
+}
+
+const SearchComponent: React.FC<SearchComponentProps> = ({ id }) => {
     const [activeTab, setActiveTab] = useState<string>("advancedSearch")
 
     const handleTabClick = (tabName: string) => {
@@ -35,7 +39,7 @@ const SearchComponent = () => {
         </ul>
 
         {activeTab === "quickSearch" && <QuickSearch />}
-        {activeTab === "advancedSearch" && <AdvancedSearch />}
+        {activeTab === "advancedSearch" && <AdvancedSearch id={id} />}
     </div>
 }
 

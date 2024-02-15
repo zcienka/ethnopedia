@@ -15,10 +15,16 @@ const CreateArtwork = ({ onClose }: Props) => {
     const { mutate: createCollection } = useCreateCollectionMutation()
     const queryClient = useQueryClient()
 
+    const id = "60f3e3e3e6e6f3e3e3e6e6e6"
+
     const { data: categoriesData } = useQuery(
         ["allCategories"],
-        getCategories,
+        () => getCategories(id),
+        {
+            enabled: !!id
+        }
     )
+
 
     if (categoriesData === undefined) {
         return <LoadingPage />

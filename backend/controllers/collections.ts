@@ -18,11 +18,11 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
 
     const pipeline = [
         {
-            $match: { "Kolekcja": { $exists: true } },
+            $match: { "Kategoria": { $exists: true } },
         },
         {
             $group: {
-                _id: "$Kolekcja.value",
+                _id: "$Kategoria",
                 count: { $sum: 1 },
             },
         },
@@ -62,24 +62,9 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
         const page = parseInt(req.query.page as string) || 1
         const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        let query = JSON.parse(JSON.stringify(req.query))
-        let mongoQuery: any = {}
-        //quicksearch
-        if (query.searchText) {
-            mongoQuery.$text = { $search: query.searchText }
-        //advanced search
-        } else if(query.searchText !== ""){
-            for (const property in query) {
-                if(property != "page" && property != "pageSize") {
-                    const category = property.split(".").join('.subcategories.') + ".value"
-                    mongoQuery[category] = query[property]
-                }          
-            }
-        }  
-        mongoQuery = { Kolekcja : {value: req.params.id}, ...mongoQuery }
-
         const totalArtworks = await Artwork.countDocuments({ collectionId: req.params.id })
-        const records = await Artwork.find(mongoQuery)
+
+        const records = await Artwork.find({ collectionId: req.params.id })
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .exec()
@@ -170,7 +155,7 @@ const patchCollection = asyncWrapper(async (req: Request, res: Response, next: N
         }
 
         if (result.modifiedCount === 0) {
-            return res.status(200).json({ message: "No changes made to the Collection" })
+            return res.status(200).json({ message: "No changes made to the collection" })
         }
 
         const updatedCollection = await Collection.findById(CollectionId)
