@@ -3,7 +3,7 @@ import QuickSearch from "./QuickSearch"
 import AdvancedSearch from "./AdvancedSearch"
 
 interface SearchComponentProps {
-    id: string;
+    id: string
 }
 
 const SearchComponent: React.FC<SearchComponentProps> = ({ id }) => {
