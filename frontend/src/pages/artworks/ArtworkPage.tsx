@@ -4,13 +4,11 @@ import Navbar from "../../components/navbar/Navbar"
 import Navigation from "../../components/Navigation"
 import React, { useEffect, useState } from "react"
 import WarningPopup from "../collections/WarningPopup"
-import { ReactComponent as EditIcon } from "../../assets/icons/edit.svg"
-import { ReactComponent as TrashBinIcon } from "../../assets/icons/trashBin.svg"
 import { deleteArtwork, getArtwork, updateArtwork } from "../../api/artworks"
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { useNavigate, useParams } from "react-router-dom"
 import { useUser } from "../../providers/UserProvider"
-import { v4 as uuidv4 } from "uuid"
+import ArtworkDetails from "./ArtworkDetails"
 
 const ArtworkPage = () => {
     const { artworkId } = useParams<string>()
@@ -20,7 +18,9 @@ const ArtworkPage = () => {
     const navigate = useNavigate()
     const queryClient = useQueryClient()
     const [textFields, setTextFields] = useState<any>([])
-    const [showEditArtwork, setShowEditArtwork] = useState<boolean>(false)
+    const [showStructure, setShowStructure] = useState<boolean>(false)
+
+    const [activeTab, setActiveTab] = useState("ArtworkDetails")
 
     const { data: fetchedData } = useQuery({
         queryKey: ["artwork", artworkId],
@@ -62,7 +62,7 @@ const ArtworkPage = () => {
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("artwork")
-                setShowEditArtwork(false)
+                setShowStructure(false)
             },
             onError: (error) => {
             },
@@ -70,27 +70,16 @@ const ArtworkPage = () => {
     )
 
     const handleEditClick = () => {
-        if (showEditArtwork) {
-            updateArtworkMutation.mutate({ id: artworkId as string, artwork: textFields, jwtToken})
+        if (showStructure) {
+            updateArtworkMutation.mutate({ id: artworkId as string, artwork: textFields, jwtToken })
         } else {
-            setShowEditArtwork(true)
+            setShowStructure(true)
             setShowMore(true)
         }
     }
-      
-    function Subcategories(categories: any) {
-        let entries: any = []
-        for (const property in categories) {
-            entries.push(<li><span className="mr-2">{property}:</span> {categories[property]["value"]}</li>)
-            if(categories[property]["subcategories"]) {
-                entries = [...entries, Subcategories(categories[property]["subcategories"])]
-            }
-        }
-        return <>{
-            <ul className="list-disc list-inside pl-4">
-                {entries}
-            </ul>
-        }</>
+
+    const handleTabClick = (tabName: string) => {
+        setActiveTab(tabName)
     }
 
     if (fetchedData === undefined) {
@@ -108,71 +97,63 @@ const ArtworkPage = () => {
                 />
             </div>
         })
-        return <>
-            <Navbar />
-            {showDeleteArtworkWarning &&
-                <WarningPopup onClose={() => setShowDeleteArtworkWarning(!showDeleteArtworkWarning)}
-                              deleteSelected={handleArtworkDeletion}
-                              warningMessage={"Czy na pewno chcesz usunąć rekord?"} />}
-            <section className="p-2 sm:p-4">
-                <div className="mx-auto max-w-screen-xl lg:px-6">
-                    <Navigation />
 
-                    <div className="flex flex-row">
-                        <div className="mt-2 flex-1">
-                            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">{Tytuł ? Tytuł.value : "Tytuł nieznany"}</h1>
-                            <p className="text-xl text-gray-600 dark:text-gray-400 mt-1">Artyści: {Artyści ? Artyści.value : "Artyści nieznani"}</p>
-                            <p className="text-lg text-gray-500 dark:text-gray-300 mt-1">Rok: {Rok ? Rok.value : "Rok nieznany"}</p>
-                            <ul className="list-disc list-inside pl-4">
-                            {showEditArtwork ? artworksEdit : Object.entries(detailsToShow).map(([columName, value]: any) => (
-                                columName !== "_id" && <span key={uuidv4()} className="font-medium">
-                                    <li><span className="mr-2">{columName}:</span>
-                                    {value.value}</li>
-                                    <Subcategories {...value.subcategories}/>
-                                </span>
-                            ))}
-                            </ul>
-                        </div>
-                        <div className="flex-1 mt-4 flex justify-end text-gray-700">
-                            {showEditArtwork ?
-                                <button
-                                    className="flex mr-4 h-fit px-8 text-lg block bg-blue-500 hover:bg-blue-400
-                                    font-semibold text-white border-none"
-                                    onClick={handleEditClick}>
-                                    Zapisz
-                                </button> :
-                                <button className="text-lg font-semibold h-fit mr-4"
-                                        onClick={handleEditClick}>
-                                <span className="flex-row flex items-center">
-                                <EditIcon />
-                                    <p className="ml-2">Edytuj</p>
-                                </span>
-                                </button>
-                            }
-                            <button
-                                className="text-lg font-semibold h-fit border-red-700 text-red-700 bg-red-50 hover:bg-white">
-                                <span className="flex-row flex items-center"
-                                    onClick={() => setShowDeleteArtworkWarning(true)}>
-                                <TrashBinIcon />
-                                    <p className="ml-2">Usuń</p>
-                                </span>
+        return (
+            <>
+                <Navbar />
+                {showDeleteArtworkWarning &&
+                    <WarningPopup onClose={() => setShowDeleteArtworkWarning(!showDeleteArtworkWarning)}
+                                  deleteSelected={handleArtworkDeletion}
+                                  warningMessage={"Czy na pewno chcesz usunąć rekord?"} />}
+                <section className="p-2 sm:p-4">
+                    <div className="mx-auto max-w-screen-xl lg:px-6">
+                        <Navigation />
+
+                        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-600 dark:text-gray-300 mt-4">
+                            <li className="me-2">
+                                <div
+                                    onClick={() => handleTabClick("ArtworkDetails")}
+                                    className={`inline-block p-2 rounded-t-lg cursor-pointer ${activeTab === "ArtworkDetails" ?
+                                        "text-gray-800 font-semibold bg-gray-100 dark:bg-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600" :
+                                        "hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"}`}>
+                                    Szczegóły rekordu
+                                </div>
+                            </li>
+                            <li className="me-2">
+                                <div
+                                    onClick={() => handleTabClick("Structure")}
+                                    className={`inline-block p-2 rounded-t-lg cursor-pointer ${activeTab === "Structure" ?
+                                        "text-gray-800 font-semibold bg-gray-100 dark:bg-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600" :
+                                        "hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300"}`}>
+                                    Struktura rekordu
+                                </div>
+                            </li>
+                        </ul>
+
+                        {activeTab === "ArtworkDetails" && (
+                            <ArtworkDetails
+                                Tytuł={Tytuł}
+                                Artyści={Artyści}
+                                Rok={Rok}
+                                detailsToShow={detailsToShow}
+                                showStructure={showStructure}
+                                handleEditClick={handleEditClick}
+                                setShowDeleteArtworkWarning={setShowDeleteArtworkWarning}
+                            />
+                        )}
+                        {activeTab === "Structure" && showStructure && artworksEdit}
+
+                        {!showStructure &&
+                            <button type="button" onClick={() => setShowMore(!showMore)}
+                                    className="mt-4 px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold border-none">
+                                {showMore ? "Pokaż mniej" : "Pokaż więcej"}
                             </button>
-                        </div>
+                        }
                     </div>
+                </section>
+            </>
+        )
 
-
-                    {!showEditArtwork &&
-                        <button
-                            type="button"
-                            onClick={() => setShowMore(!showMore)}
-                            className="mt-4 px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold border-none"
-                        >
-                            {showMore ? "Pokaż mniej" : "Pokaż więcej"}
-                        </button>
-                    }
-                </div>
-            </section>
-        </>
     }
 }
 export default ArtworkPage
