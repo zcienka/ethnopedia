@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { ChangeEvent, FC, useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg"
 
@@ -6,6 +6,7 @@ type Subcategory = {
     name: string
     values?: string[]
     subcategories?: Subcategory[]
+    isSelectable?: boolean
 }
 
 type Category = {
@@ -14,342 +15,418 @@ type Category = {
     values?: string[]
 }
 
-type JSONTree = {
-    _id: string
-    collection: string
-    categories: Category[]
+
+interface SelectedDetail {
+    detailIndex: number | null;
+    subcategories: string[];
+    category: string; // Ensure this is not optional if you always initialize it
 }
 
-interface CategorySelectorProps {
-    item: JSONTree
-    selectedCategory: string
-    handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>, itemIndex: number, catIndex: number) => void
-    index: number
-    catIndex: number
-}
-
-// interface ValueProps {
-//     category: string;
-//     subcategories?: Subcategory[] | undefined;
-// }
-
-const jsonData: JSONTree[] = [
+const jsonData: CollectionItem[] = [
     {
-        "_id": "6562758966826fe944b0fc2f",
-        "collection": "Wielkopolska",
-        "categories": [
+        "_id": "65ce9ec43171573092ad7e2e",
+        "collectionId": "65ce9ec33171573092ad7df7",
+        "category": "Region",
+        "name": "Wielkopolska",
+        "locationDetails": [
             {
-                "category": "Sygnatura nagrania",
+                "name": "Podregion",
+                "values": [
+                    "Wielkopolska Północno-Zachodnia",
+                    "Wielkopolska Północno-Wschodnia",
+                    "Wielkopolska Południowo-Zachodnia",
+                    "Wielkopolska Południowo-Wschodnia",
+                ],
+                "isSelectable": true,
+            },
+            {
+                "name": "Region etnograficzny",
+                "values": [
+                    "Szamotulskie",
+                    "Ziemia Lubuska",
+                    "Kaliskie",
+                ],
+                "isSelectable": true,
+            },
+            {
+                "name": "Powiat",
+                "values": [
+                    "Gniezno",
+                    "Poznań",
+                    "Września",
+                    "Środa",
+                ],
+                "isSelectable": true,
+            },
+            {
+                "name": "Miejscowość",
+                "values": [
+                    "Leszno",
+                    "Kalisz",
+                    "Konin",
+                    "Piła",
+                    "Ostrów Wielkopolski",
+                ],
+                "isSelectable": true,
+            },
+            {
+                "name": "Sygnatura nagrania",
                 "subcategories": [
                     {
                         "name": "Pozycja",
-                        "values": ["Rec001", "Rec002", "Rec003"],
+                        "values": [],
                     },
                 ],
+                "isSelectable": false,
             },
             {
-                "category": "Incipit",
+                "name": "Incipit",
                 "subcategories": [
                     {
                         "name": "Język incipitu",
                         "values": [
                             "angielski",
                             "niemiecki",
-                            "polski",
                         ],
                     },
                 ],
+                "isSelectable": true,
             },
             {
-                "category": "Nazwisko wykonawcy",
+                "name": "Nazwisko wykonawcy",
                 "subcategories": [
                     {
                         "name": "Wykonawca",
-                        "values": ["Kowalski", "Nowak", "Wiśniewska"],
+                        "values": [
+                            "sadjkasdkjsda",
+                            "sadjkasdkjsda",
+                            "sadjkasdkjsda",
+                        ],
                     },
                 ],
+                "isSelectable": false,
             },
             {
-                "category": "Numer wątku muzycznego",
-                "values": ["Muz001", "Muz002", "Muz003"],
+                "name": "Numer wątku muzycznego",
+                "subcategories": [],
+                "isSelectable": false,
             },
             {
-                "category": "Numer w publikacji",
-                "values": ["Pub001", "Pub002", "Pub003"],
+                "name": "Numer w publikacji",
+                "subcategories": [],
+                "isSelectable": false,
             },
             {
-                "category": "Sposób wykonania",
+                "name": "Sposób wykonania",
                 "subcategories": [
                     {
                         "name": "Barwa głosu",
-                        "values": ["baryton", "sopran", "tenor"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Tempo wykonania",
-                        "values": ["szybko", "umiarkowanie", "wolno"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Ornamentyka",
-                        "values": ["tryle", "mordenty", "vibrato"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                 ],
+                "isSelectable": true,
             },
             {
-                "category": "Funkcja utworu ogólnie",
+                "name": "Funkcja utworu ogólnie",
                 "subcategories": [
                     {
                         "name": "Szczegółowa funkcja",
-                        "values": ["taniec", "kołysanka", "pieśń ludowa"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Funkcja określona przez wykonawcę",
-                        "values": ["obrzędowa", "rozrywkowa", "ceremonialna"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                 ],
+                "isSelectable": true,
             },
             {
-                "category": "Numer wątku melodycznego",
-                "values": ["Mel001", "Mel002", "Mel003"],
+                "name": "Numer wątku melodycznego",
+                "subcategories": [],
+                "isSelectable": false,
             },
             {
-                "category": "Wykorzystanie w publikacji",
-                "values": ["Publikacja A", "Publikacja B", "Publikacja C"],
+                "name": "Wykorzystanie w publikacji",
+                "subcategories": [],
+                "isSelectable": false,
             },
             {
-                "category": "Klasyfikacja melodyczna",
+                "name": "Klasyfikacja melodyczna",
                 "subcategories": [
                     {
                         "name": "Rytmika",
-                        "values": ["4/4", "3/4", "6/8"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Metrum",
-                        "values": ["wolne", "umiarkowane", "szybkie"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Forma melodyczna",
-                        "values": ["ABA", "ABC", "AABB"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Skala",
-                        "values": ["majorowa", "minorowa", "chromatyczna"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Ambitus",
-                        "values": ["1 oktawa", "1.5 oktawy", "2 oktawy"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Układ kadencji",
-                        "values": ["prosta", "rozbudowana", "modulująca"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                 ],
+                "isSelectable": true,
             },
             {
-                "category": "Struktura tekstu",
+                "name": "Struktura tekstu",
                 "subcategories": [
                     {
                         "name": "Ilość wersów",
-                        "values": ["4", "8", "12"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Układ sylab w wersie",
-                        "values": ["7-6-7-6", "8-8-8-8", "5-5-5-5"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                 ],
+                "isSelectable": true,
             },
             {
-                "category": "Uwagi",
+                "name": "Uwagi",
                 "subcategories": [
                     {
                         "name": "Stan techniczny nagrania",
-                        "values": ["doskonały", "dobry", "zadowalający"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Walory melodii",
-                        "values": ["chwytliwa", "melancholijna", "rytmiczna"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                 ],
+                "isSelectable": true,
             },
             {
-                "category": "Obecność w źródłach",
+                "name": "Obecność w źródłach",
                 "subcategories": [
                     {
                         "name": "Antologie",
-                        "values": ["Antologia A", "Antologia B", "Antologia C"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Rękopisy",
-                        "values": ["Rękopis 1", "Rękopis 2", "Rękopis 3"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                     {
                         "name": "Śpiewniki",
-                        "values": ["Śpiewnik 1", "Śpiewnik 2", "Śpiewnik 3"],
+                        "values": [],
+                        "isSelectable": false,
                     },
                 ],
+                "isSelectable": true,
             },
         ],
     },
 ]
 
-const NewArtworkStructure: React.FC = () => {
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+const NewArtworkStructure = () => {
+    const [selectedDetails, setSelectedDetails] = useState<{ [key: string]: SelectedDetail }>({})
 
-    const handleCategoryChange = (
-        event: React.ChangeEvent<HTMLSelectElement>,
-        itemIndex: number,
-        catIndex: number,
-    ) => {
-        const updatedCategories = [...selectedCategories]
-        updatedCategories[catIndex] = `cat-${itemIndex}-${event.target.value}`
-        setSelectedCategories(updatedCategories)
+    const handleDetailChange = (itemIndex: number, detailIndex: any) => {
+        const details = { ...selectedDetails }
+        if (!details[itemIndex]) details[itemIndex] = { category: "", detailIndex: null, subcategories: [] }
+        details[itemIndex].detailIndex = detailIndex
+        setSelectedDetails(details)
     }
 
-    const removeCategory = (catIndex: number) => {
-        const updatedCategories = selectedCategories.filter((_, index) => index !== catIndex)
-        setSelectedCategories(updatedCategories)
+    const handleSubcategoryChange = (itemIndex: number, subcatName: string, subcatIndex: any) => {
+        const details = { ...selectedDetails }
+        const currentSubcategories = details[itemIndex]?.subcategories || []
+        currentSubcategories[subcatIndex] = subcatName
+        details[itemIndex] = { ...details[itemIndex], subcategories: currentSubcategories }
+        setSelectedDetails(details)
+    }
+
+    const addSubcategory = (itemIndex: any) => {
+        const details = { ...selectedDetails }
+        const currentSubcategories = details[itemIndex]?.subcategories || []
+        currentSubcategories.push("")
+        details[itemIndex] = { ...details[itemIndex], subcategories: currentSubcategories }
+        setSelectedDetails(details)
     }
 
     const addCategory = () => {
-        setSelectedCategories([...selectedCategories, ""])
+        const newCategoryId = `new-${Date.now()}`
+        setSelectedDetails((prevDetails) => ({
+            ...prevDetails,
+            [newCategoryId]: {
+                category: "", // Initially empty, can be renamed by the user
+                detailIndex: null, // Assuming null is an acceptable initial value
+                subcategories: [], // Placeholder for future subcategories
+            },
+        }))
     }
 
-    return <div className="p-4 max-w-screen-md">
-        {jsonData.map((item, index) => (
-            <div key={`${item._id}-${index}`}>
-                <h2 className="font-bold">{item.collection}</h2>
+    const handleCategoryChange = (identifier: any, newCategoryName: any) => {
+        setSelectedDetails(prevDetails => ({
+            ...prevDetails,
+            [identifier]: {
+                ...prevDetails[identifier],
+                category: newCategoryName,
+            },
+        }))
+    }
 
-                <div className="ml-2 border-l-2 border-gray-300">
-                    {selectedCategories.map((selectedCategory, catIndex) => (
+
+    console.log({ selectedDetails })
+    return (
+        <div className="p-4 max-w-screen-md">
+            {Object.entries(selectedDetails).map(([key, detail]) => (
+
+                jsonData.map((item: CollectionItem) => (
+                    <div key={item._id}>
+                        <h2 className="font-bold">{item.name}</h2>
                         <CategoryAndValueSelector
-                            key={catIndex}
                             item={item}
-                            selectedCategory={selectedCategory}
-                            handleCategoryChange={handleCategoryChange}
-                            handleCategoryDeletion={() => removeCategory(catIndex)}
-                            index={index}
-                            catIndex={catIndex}
+                            identifier={item._id}
+                            category={selectedDetails[item._id]?.category ?? ""}
+                            detailIndex={selectedDetails[item._id]?.detailIndex ?? null} // Ensure this is null if not set, as your type expects a number or null
+                            subcategories={selectedDetails[item._id]?.subcategories ?? []}
+                            handleCategoryChange={(category) => handleCategoryChange(item._id, category)}
+                            handleDetailChange={(detailIndex) => handleDetailChange(item._id, detailIndex)}
+                            handleSubcategoryChange={(subcatName, subcatIndex) => handleSubcategoryChange(item._id, subcatName, subcatIndex)}
+                            addSubcategory={() => addSubcategory(item._id)}
                         />
-                    ))}
-                </div>
+                    </div>
+                ))
+            ))}
 
-                <div className="ml-2 flex flex-row relative">
-                    <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
 
-                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
-                    <button onClick={addCategory} className="p-2 border-gray-300 shadow-md" type="button">
-                        <PlusIcon />
-                    </button>
-                </div>
+            <div className="ml-2 flex flex-row relative">
+                <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
+
+                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+                <button
+                    onClick={() => addCategory()}
+                    className="p-2 border-gray-300 shadow-md"
+                    type="button"
+                >
+                    <PlusIcon />
+                </button>
             </div>
-        ))}
-    </div>
+        </div>
+    )
 }
+
+
+interface LocationDetail {
+    name: string
+    values?: string[]
+    subcategories?: Subcategory[]
+    isSelectable: boolean
+}
+
+interface CollectionItem {
+    _id: any
+    collectionId: string
+    category: string
+    name: string
+    locationDetails: LocationDetail[]
+}
+
 
 interface CategorySelectorProps {
-    item: JSONTree
-    selectedCategory: string
-    handleCategoryChange: (event: React.ChangeEvent<HTMLSelectElement>, itemIndex: number, catIndex: number) => void
-    handleCategoryDeletion: () => void
-    index: number
-    catIndex: number
+    item: CollectionItem;
+    identifier: string;
+    detailIndex: any;
+    subcategories: string[];
+    category?: string;
+    handleDetailChange: (identifier: string, detailIndex: number | null) => void;
+    handleSubcategoryChange: (identifier: string, subcatName: string, subcatIndex: any) => void;
+    addSubcategory: (identifier: any) => void;
+    handleCategoryChange: (identifier: string, category: string) => void;
 }
 
-const CategoryAndValueSelector: React.FC<CategorySelectorProps> = ({
-                                                                       item,
-                                                                       selectedCategory,
-                                                                       handleCategoryChange,
-                                                                       handleCategoryDeletion,
-                                                                       index,
-                                                                       catIndex,
-                                                                   }) => {
-    const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([])
-
-    const addSubcategorySelect = () => {
-        setSelectedSubcategories([...selectedSubcategories, ""])
+const CategoryAndValueSelector: FC<CategorySelectorProps> = ({
+                                                                 item,
+                                                                 identifier,
+                                                                 detailIndex,
+                                                                 subcategories,
+                                                                 handleDetailChange,
+                                                                 handleSubcategoryChange,
+                                                                 addSubcategory,
+                                                             }) => {
+    const onDetailChange = (e: ChangeEvent<HTMLSelectElement>) => {
+        const newIndex = e.target.value === "" ? null : parseInt(e.target.value, 10)
+        handleDetailChange(identifier, newIndex)
     }
 
-    const handleSubcategoryChange = (subcatIndex: number, newName: string) => {
-        const updatedSubcategories = [...selectedSubcategories]
-        updatedSubcategories[subcatIndex] = newName
-        setSelectedSubcategories(updatedSubcategories)
-    }
-
-    const removeSubcategorySelect = (subcatIndex: number) => {
-        const updatedSubcategories = selectedSubcategories.filter((_, index) => index !== subcatIndex)
-        setSelectedSubcategories(updatedSubcategories)
+    const onSubcategoryChange = (subcatIndex: number) => (e: ChangeEvent<HTMLSelectElement>) => {
+        handleSubcategoryChange(identifier, e.target.value, subcatIndex)
     }
 
     return (
         <div className="flex flex-col pb-2">
-            <div className="flex flex-row">
-
-                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
-                <div className="p-2 border shadow-md rounded-md mt-2">
+            <div className="flex flex-row items-center">
+                <select
+                    className="p-2 border rounded"
+                    value={detailIndex !== null ? detailIndex : ""}
+                    onChange={onDetailChange}
+                >
+                    <option value="">Select a Location Detail</option>
+                    {item.locationDetails.map((detail: any, idx: any) => (
+                        <option key={`${detail.name}-${idx}`} value={idx}>
+                            {detail.name}
+                        </option>
+                    ))}
+                </select>
+                <button type="button" onClick={() => addSubcategory(detailIndex)} className="ml-2">
+                    Add Subcategory
+                </button>
+            </div>
+            {subcategories.map((subcat, subcatIdx) => (
+                <div key={subcatIdx} className="flex flex-row items-center mt-2">
                     <select
                         className="p-2 border rounded"
-                        onChange={(e) => handleCategoryChange(e, index, catIndex)}
-                        value={selectedCategory.startsWith(`cat-${index}-`) ? selectedCategory.split("-")[2] : ""}
+                        value={subcat}
+                        onChange={onSubcategoryChange(subcatIdx)}
                     >
-                        <option value="">Select a Category</option>
-                        {item.categories.map((category, categoryIndex) => (
-                            <option key={`${category.category}-${categoryIndex}`} value={categoryIndex}>
-                                {category.category}
+                        <option value="">Select a Subcategory</option>
+                        {item.locationDetails[detailIndex]?.subcategories?.map((subcat: any, idx: any) => (
+                            <option key={`subcat-${idx}`} value={subcat.name}>
+                                {subcat.name}
                             </option>
                         ))}
                     </select>
                 </div>
-
-                <div className="flex items-center">
-                    <button onClick={addSubcategorySelect} className="mx-2 p-2 shadow-md" type="button">
-                        <PlusIcon />
-                    </button>
-                    <button onClick={handleCategoryDeletion} className="p-2 shadow-md" type="button">
-                        <MinusIcon />
-                    </button>
-                </div>
-            </div>
-
-
-            {selectedSubcategories.length !== 0 && <div className="flex flex-col">
-                <div className="ml-8 flex flex-row relative">
-                    <div>
-                        {selectedSubcategories.map((subcatName, subcatIndex) => (
-                            <div className="flex flex-row items-center relative">
-
-                                {subcatIndex !== selectedSubcategories.length - 1 ?
-                                    <span className="absolute bg-gray-300 h-full w-0.5"></span>
-                                    : <span className="top-0 absolute bg-gray-300 h-1/2 w-0.5"></span>
-                                }
-                                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center" />
-
-                                <div key={subcatIndex}
-                                     className="flex flex-row items-center p-2 border shadow-md rounded-md mt-2">
-                                    <select
-                                        className="p-2 border rounded"
-                                        value={subcatName}
-                                        onChange={(e) => handleSubcategoryChange(subcatIndex, e.target.value)}
-                                    >
-                                        <option value="">Select a Subcategory</option>
-                                        {item.categories.map((category, categoryIndex) => (
-                                            category.subcategories?.map((subcat, subcatIdx) => (
-                                                <option key={`subcat-${subcatIdx}`} value={subcat.name}>
-                                                    {subcat.name}
-                                                </option>
-                                            ))
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <button onClick={() => removeSubcategorySelect(subcatIndex)}
-                                        className="ml-2 border shadow-md p-2" type="button">
-                                    <MinusIcon />
-                                </button>
-                            </div>
-                        ))}
-
-                    </div>
-                </div>
-            </div>}
+            ))}
         </div>
     )
 }
