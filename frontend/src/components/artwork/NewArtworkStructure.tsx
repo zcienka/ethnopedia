@@ -9,9 +9,9 @@ type Subcategory = {
 }
 
 interface SelectedDetail {
-    category: string;
+    category: any;
     subcategories: string[];
-    detailIndex?: any;
+    details?: string[]
 }
 
 const jsonData: CollectionItem[] = [
@@ -221,7 +221,7 @@ const jsonData: CollectionItem[] = [
                         "isSelectable": false,
                     },
                 ],
-                "isSelectable": true,
+                "isSelectable": false,
             },
             {
                 "name": "Obecność w źródłach",
@@ -249,9 +249,16 @@ const jsonData: CollectionItem[] = [
 ]
 
 const NewArtworkStructure = () => {
-    const [selectedDetails, setSelectedDetails] = useState<{ [key: string]: SelectedDetail }>({})
-
+    const defaultSelectedDetails: { [key: string]: SelectedDetail } = {
+        "defaultKey": {
+            category: "",
+            details: [],
+            subcategories: [],
+        },
+    }
+    const [selectedDetails, setSelectedDetails] = useState<{ [key: string]: SelectedDetail }>(defaultSelectedDetails)
     const addSubcategory = (identifier: string) => {
+        console.log({ identifier })
         setSelectedDetails(prevDetails => ({
             ...prevDetails,
             [identifier]: {
@@ -268,11 +275,13 @@ const NewArtworkStructure = () => {
             ...prevDetails,
             [newCategoryId]: {
                 category: "",
-                detailIndex: null,
+                details: [],
                 subcategories: [],
             },
         }))
     }
+
+    console.log({ selectedDetails })
 
     const handleCategoryChange = (identifier: string, newCategoryName: string) => {
         setSelectedDetails(prevDetails => {
@@ -283,7 +292,6 @@ const NewArtworkStructure = () => {
                     category: newCategoryName,
                 },
             }
-            console.log(updatedDetails)
             return updatedDetails
         })
     }
@@ -293,27 +301,32 @@ const NewArtworkStructure = () => {
             ...prevDetails,
             [itemIndex]: {
                 ...prevDetails[itemIndex],
-                detailIndex: detailIndex,
+                details: detailIndex,
                 subcategories: prevDetails[itemIndex]?.subcategories || [],
             },
         }))
     }
 
-    const handleSubcategoryChange = (itemIndex: string, subcatName: string, subcatIndex: any) => {
-
+    const handleSubcategoryChange = (itemIndex: string, subcatName: string, subcatIndex: number) => {
         console.log({ itemIndex, subcatName, subcatIndex })
-        setSelectedDetails(prevDetails => ({
-            ...prevDetails,
-            [itemIndex]: {
-                ...prevDetails[itemIndex],
-                subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
-                    index === subcatIndex ? subcatName : subcat,
-                ),
-            },
-        }))
+        setSelectedDetails(prevDetails => {
+            const newState = { ...prevDetails }
+
+            if (newState[itemIndex] && Array.isArray(newState[itemIndex].subcategories)) {
+                const existingSubcategory = newState[itemIndex].subcategories[subcatIndex]
+                if (existingSubcategory) {
+                    newState[itemIndex].subcategories[subcatIndex] = subcatName
+                } else {
+                    newState[itemIndex].subcategories.push(subcatName)
+                }
+            } else {
+                newState[itemIndex].subcategories = [subcatName]
+            }
+
+            return newState
+        })
     }
 
-    console.log({ selectedDetails })
     return (
         <div className="p-4 max-w-screen-md">
             {Object.entries(selectedDetails)
@@ -381,7 +394,7 @@ interface CategorySelectorProps {
 }
 
 interface CategoryAndValueSelectorProps {
-    selectedDetails: { [key: string]: SelectedDetail };
+    selectedDetails: any
     handleCategoryChange: (itemIndex: string, newCategoryName: string) => void;
     handleDetailChange: (itemIndex: string, detailIndex: any) => void;
     handleSubcategoryChange: (itemIndex: string, subcatName: string, subcatIndex: any) => void;
@@ -403,7 +416,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                                                                                identifier,
                                                                            }) => {
 
-    console.log({ subcategories })
+    console.log({ jsonData })
 
     return (
         <div>
@@ -416,33 +429,99 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                             value={selectedDetails[identifier]?.category || ""}
                             onChange={(e) => handleCategoryChange(identifier, e.target.value)}
                         >
-                            <option value="">Select a Category</option>
-                            {item.locationDetails.map((detail, index) => (
-                                <option key={index} value={detail.name}>
-                                    {detail.name}
-                                </option>
-                            ))}
+                            {item.locationDetails
+                                .filter(detail => detail.isSelectable)
+                                .map((detail, index) => (
+                                    <option key={index} value={detail.name}>
+                                        {detail.name}
+                                    </option>
+                                ))}
                         </select>
                     </div>
-                    {selectedDetails[identifier]?.detailIndex !== null && (
+                    {item.locationDetails
+                        .find(detail => detail.name === selectedDetails[identifier]?.category && detail.isSelectable)
+                        ?.values && (
                         <div>
                             <label className="block mb-1">Detail:</label>
                             <select
                                 className="mb-2 p-2 border rounded"
-                                value={selectedDetails[identifier]?.detailIndex?.toString() || ""}
-                                onChange={(e) => handleDetailChange(identifier, Number(e.target.value))}
+                                value={selectedDetails[identifier]?.details?.toString() || ""}
+                                onChange={(e) => handleDetailChange(identifier, parseInt(e.target.value))}
                             >
-                                <option value="">Select Detail</option>
-                                {item.locationDetails
-                                    .find((detail) => detail.name === selectedDetails[identifier]?.category)
-                                    ?.values?.map((value, index) => (
-                                        <option key={index} value={index}>
-                                            {value}
+                                {/*{item.locationDetails*/}
+                                {/*    .find(detail => detail.name === selectedDetails[identifier]?.category && detail.isSelectable)*/}
+                                {/*    ?.values*/}
+                                {/*    ?.map((value, index) => (*/}
+                                {/*        <option key={index} value={index}>*/}
+                                {/*            {value}*/}
+                                {/*        </option>*/}
+                                {/*    ))}*/}
+
+                                {
+                                    selectedDetails[identifier]?.details?.map((subcat: any, index: number) => (
+                                        <option key={index} value={subcat}>
+                                            {subcat} 
                                         </option>
-                                    ))}
+                                    ))
+                                }
                             </select>
                         </div>
                     )}
+                    {
+                        selectedDetails[identifier]?.details?.map((subcat: any, index: number) => (
+                            <div>
+                                <label className="block mb-1">Subcategory:</label>
+                                <select
+                                    className="mb-2 p-2 border rounded"
+                                    value={selectedDetails[identifier]?.subcategories[index] || ""}
+                                    onChange={(e) => handleSubcategoryChange(identifier, e.target.value, index)}
+                                >
+
+                                    {
+                                        item.locationDetails
+                                            .find(detail => detail.name === selectedDetails[identifier]?.category && detail.isSelectable)
+                                            ?.subcategories?.map((a, subcatIndex) => (
+                                            <option key={index} value={subcatIndex}>
+                                                {a.name}
+                                            </option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                        ))}
+                    {/*{item.locationDetails*/}
+                    {/*    .find(detail => detail.name === selectedDetails[identifier]?.category && detail.isSelectable)*/}
+                    {/*    ?.subcategories*/}
+                    {/*    ?.map((subcategory, index) => (*/}
+                    {/*        <option key={index} value={index}>*/}
+                    {/*            {subcategory.name}*/}
+                    {/*        </option>*/}
+                    {/*    ))}*/}
+
+
+                    {/*{*/}
+                    {/*    item.locationDetails*/}
+                    {/*        .find(detail => detail.name === selectedDetails[identifier]?.category && detail.isSelectable)*/}
+                    {/*        ?.subcategories !== undefined && (*/}
+                    {/*        <div>*/}
+                    {/*            <select*/}
+                    {/*                className="mb-2 p-2 border rounded"*/}
+                    {/*                value={selectedDetails[identifier]?.detailIndex?.toString() || ""}*/}
+                    {/*                onChange={(e) => handleDetailChange(identifier, e.target.value)}*/}
+                    {/*            >*/}
+                    {/*                {item.locationDetails*/}
+                    {/*                    .find((detail) => detail.name === selectedDetails[identifier]?.category && detail.isSelectable)*/}
+                    {/*                    ?.subcategories*/}
+                    {/*                    ?.map((value, index) => (*/}
+                    {/*                        <option key={index} value={index}>*/}
+                    {/*                            {value.name}*/}
+                    {/*                        </option>*/}
+                    {/*                    ))*/}
+                    {/*                }*/}
+                    {/*            </select>*/}
+                    {/*        </div>*/}
+                    {/*    )*/}
+                    {/*}*/}
                     <div>
                         <button
                             type="button"
@@ -452,24 +531,6 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                             Add Subcategory
                         </button>
                     </div>
-                    {subcategories.length > 0 &&
-
-                        <div>
-                            <label className="block mb-1">Subcategory:</label>
-                            <select
-                                className="mb-2 p-2 border rounded"
-                                value={selectedDetails[identifier]?.subcategories || ""}
-                                onChange={(e) => handleDetailChange(identifier, e.target.value)}
-                            >
-                                <option value="">Select Subcategory</option>
-                                {subcategories.map((subcat, index) => (
-                                    <option key={index} value={subcat}>
-                                        {subcat}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    }
                 </div>
             ))}
         </div>

@@ -1338,7 +1338,7 @@ const categoryData = [
                     { "name": "Stan techniczny nagrania", "values": [], "isSelectable": false },
                     { "name": "Walory melodii", "values": [], "isSelectable": false },
                 ],
-                "isSelectable": true,
+                "isSelectable": false,
             },
             {
                 "name": "Obecność w źródłach",
