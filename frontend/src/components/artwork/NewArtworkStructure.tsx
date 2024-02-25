@@ -1,5 +1,6 @@
-import React, { ChangeEvent, FC, useState } from "react"
+import React, { useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
+import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg"
 
 type Subcategory = {
     name: string
@@ -11,7 +12,7 @@ type Subcategory = {
 interface SelectedDetail {
     category: any;
     subcategories: Subcategory[];
-    details?: string[]
+    values?: string[]
 }
 
 const jsonData: CollectionItem[] = [
@@ -80,6 +81,7 @@ const jsonData: CollectionItem[] = [
                             "angielski",
                             "niemiecki",
                         ],
+                        "isSelectable": true,
                     },
                 ],
                 "isSelectable": true,
@@ -252,7 +254,7 @@ const NewArtworkStructure = () => {
     const defaultSelectedDetails: { [key: string]: SelectedDetail } = {
         [`${Date.now()}`]: {
             category: "",
-            details: [],
+            values: [],
             subcategories: [],
         },
     }
@@ -262,7 +264,7 @@ const NewArtworkStructure = () => {
             ...prevDetails,
             [identifier]: {
                 ...prevDetails[identifier],
-                subcategories: [...prevDetails[identifier]?.subcategories || [], { name: "" }],
+                subcategories: [...prevDetails[identifier]?.subcategories || []],
             },
         }))
     }
@@ -274,23 +276,32 @@ const NewArtworkStructure = () => {
             ...prevDetails,
             [newCategoryId]: {
                 category: "",
-                details: [],
+                values: [],
                 subcategories: [],
             },
         }))
     }
 
-    console.log({ selectedDetails })
-
     const handleCategoryChange = (identifier: string, newCategoryName: string) => {
         setSelectedDetails(prevDetails => {
+            const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName)
+
+            const newSubcategories = categoryData?.subcategories?.map(subcat => ({
+                name: subcat.name,
+                values: subcat.values || [],
+                category: newCategoryName,
+                isSelectable: subcat.isSelectable,
+            })) || []
+
             const updatedDetails = {
                 ...prevDetails,
                 [identifier]: {
-                    ...prevDetails[identifier],
                     category: newCategoryName,
+                    subcategories: newSubcategories || [],
+                    values: categoryData?.values || [],
                 },
             }
+
             return updatedDetails
         })
     }
@@ -300,62 +311,82 @@ const NewArtworkStructure = () => {
             ...prevDetails,
             [itemIndex]: {
                 ...prevDetails[itemIndex],
-                details: detailIndex,
+                values: detailIndex,
                 subcategories: prevDetails[itemIndex]?.subcategories || [],
             },
         }))
     }
 
-    const handleSubcategoryChange = (itemIndex: string, subcatName: string) => {
+    const deleteSubcategory = (identifier: string, subcatIndex: number) => {
         setSelectedDetails(prevDetails => {
-            const newState = { ...prevDetails }
+            const currentSubcategories = prevDetails[identifier].subcategories
+            const updatedSubcategories = currentSubcategories.filter((_, index) => index !== subcatIndex)
 
-            let item = newState[itemIndex] = newState[itemIndex] || {}
-            let subcategories = item.subcategories = item.subcategories || []
-
-            const subcatIndex = subcategories.findIndex(subcat => subcat.name === subcatName)
-
-            if (subcatIndex !== -1) {
-            } else {
-                subcategories.push({ name: subcatName, values: [], subcategories: [], isSelectable: true })
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: updatedSubcategories,
+                },
             }
-
-            return newState
         })
     }
 
+    const handleSubcategoryChange = (itemIndex: string, subcatIndex: number, newName: string) => {
+        setSelectedDetails(prevDetails => ({
+            ...prevDetails,
+            [itemIndex]: {
+                ...prevDetails[itemIndex],
+                subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
+                    index === subcatIndex ? { ...subcat, name: newName } : subcat,
+                ),
+            },
+        }))
+    }
+
+    console.log({ selectedDetails })
+
     return (
-        <div className="p-4 max-w-screen-md">
-            {Object.entries(selectedDetails) !== undefined && Object.entries(selectedDetails)
-                .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
-                .map(([key, selectedDetail]) => (
+        <div className="p-4 h-fill w-full border border-red-300">
+            {jsonData[0].name}
+            <div className="p-4 ">
 
-                    <div key={key}>
-                        <CategoryAndValueSelector
-                            selectedDetail={selectedDetail}
-                            handleCategoryChange={handleCategoryChange}
-                            handleDetailChange={handleDetailChange}
-                            handleSubcategoryChange={handleSubcategoryChange}
-                            addSubcategory={addSubcategory}
-                            subcategories={selectedDetail.subcategories || []}
-                            category={selectedDetail.category || ""}
-                            identifier={key}
-                        />
-                    </div>
-                ))}
+                {Object.entries(selectedDetails) !== undefined && Object.entries(selectedDetails)
+                    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+                    .map(([key, selectedDetail]) => (
+
+                        <div className="flex flex-row" key={key}>
+                            <div className="ml-2 flex flex-row relative">
+                                <span className="absolute bg-gray-300 h-full w-0.5"></span>
+
+                                <CategoryAndValueSelector
+                                    selectedDetail={selectedDetail}
+                                    handleCategoryChange={handleCategoryChange}
+                                    handleDetailChange={handleDetailChange}
+                                    handleSubcategoryChange={handleSubcategoryChange}
+                                    addSubcategory={addSubcategory}
+                                    deleteSubcategory={deleteSubcategory}
+                                    subcategories={selectedDetail.subcategories || []}
+                                    category={selectedDetail.category || ""}
+                                    identifier={key}
+                                />
+                            </div>
+                        </div>
+                    ))}
 
 
-            <div className="ml-2 flex flex-row relative">
-                <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
+                <div className="ml-2 flex flex-row relative">
+                    <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
+                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
 
-                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
-                <button
-                    onClick={() => addCategory()}
-                    className="p-2 border-gray-300 shadow-md"
-                    type="button"
-                >
-                    <PlusIcon />
-                </button>
+                    <button
+                        onClick={() => addCategory()}
+                        className="p-2 border-gray-300 shadow-md"
+                        type="button"
+                    >
+                        <PlusIcon />
+                    </button>
+                </div>
             </div>
         </div>
     )
@@ -378,16 +409,16 @@ interface CollectionItem {
 }
 
 interface CategoryAndValueSelectorProps {
-    selectedDetail: SelectedDetail
+    selectedDetail: SelectedDetail;
     handleCategoryChange: (itemIndex: string, newCategoryName: string) => void;
     handleDetailChange: (itemIndex: string, detailIndex: any) => void;
-    handleSubcategoryChange: (itemIndex: string, subcatIndex: any) => void;
+    handleSubcategoryChange: (itemIndex: string, subcatIndex: number, newSubcatName: string) => void;
     addSubcategory: (identifier: string) => void;
-    subcategories: any[]
-    category: any
-    identifier: any
+    deleteSubcategory: (identifier: string, subcatIndex: number) => void;
+    subcategories: any[];
+    category: any;
+    identifier: any;
 }
-
 
 const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                                                                                selectedDetail,
@@ -395,58 +426,86 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                                                                                handleDetailChange,
                                                                                handleSubcategoryChange,
                                                                                addSubcategory,
+                                                                               deleteSubcategory,
                                                                                subcategories,
                                                                                category,
                                                                                identifier,
                                                                            }) => {
     return (
         <div>
-            <div key={identifier} className="mb-4">
-                <div>
-                    <label className="block mb-1">Kategoria:</label>
-                    <select
-                        className="mb-2 p-2 border rounded"
-                        value={selectedDetail.category || ""}
-                        onChange={(e) => handleCategoryChange(identifier, e.target.value)}
-                    >
-                        <option key={""} value={""} hidden>Wybierz kategorię</option>
+            <div key={identifier}>
+                <label className="ml-16 mb-1">Kategoria:</label>
 
-                        {jsonData[0].locationDetails.map((item, index) => (
-                            <option key={index} value={item.name}>
-                                {item.name}
-                            </option>
-                        ))}
-                    </select>
+                <div className="relative flex flex-row">
+                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center" />
+
+                    <div className="flex flex-col">
+                        <select
+                            className="p-2 border rounded"
+                            value={selectedDetail.category || ""}
+                            onChange={(e) => handleCategoryChange(identifier, e.target.value)}
+                        >
+                            <option key={""} value={""} hidden>Wybierz kategorię</option>
+
+                            {jsonData[0].locationDetails.map((item, index) => (
+                                <option key={index} value={item.name}>
+                                    {item.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="flex items-center ml-2 h-full">
+                        <button type="button"
+                                className="p-2 border-gray-300 shadow-md mr-1"
+                                onClick={() => addSubcategory(identifier)}>
+                            <PlusIcon />
+                        </button>
+                    </div>
                 </div>
             </div>
-            {selectedDetail && selectedDetail.subcategories && selectedDetail.subcategories.map((subcat, index) => (
-                <div key={index} className="mb-4">
-                    {subcat.name && <label className="block mb-1">{subcat.name}:</label>}
 
-                    {jsonData[0].locationDetails.find(detail => detail.name === selectedDetail.category)?.subcategories?.map((subcatDetail, subcatIndex) => (
-                        <>
-                            <p>{subcatDetail.name}</p>
-                            <select
-                                className="my-2 p-2 border rounded"
-                                onChange={(e) => handleSubcategoryChange(identifier, e.target.value)}
-                            >
+            <div className="flex flex-row ml-16 ">
+                <div className="flex flex-col">
+                    {selectedDetail?.subcategories.length !== 0 && selectedDetail?.subcategories?.map((subcatDetail, subcatIndex) => (
+                        <div className="flex flex-row mb-2">
+                            <span className="flex w-0.5 bg-gray-300 h-1/2"></span>
+                            <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center -ml-0.5" />
 
-                                {subcatDetail.values?.map((value: string, valueIndex: number) => (
-                                    <option key={valueIndex} value={value}>
-                                        {value}
-                                    </option>
-                                ))}
-                            </select>
-                        </>
+                            <div className="flex flex-col border border-gray-300 rounded-md py-2 px-4 shadow-md mt-4">
+                                <div className="flex flex-col my-2 items-end w-fit">
+                                    <div className="flex flex-row items-center">
+                                        <p className="w-full">{subcatDetail.name}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {subcatDetail.values?.length !== 0 && subcatDetail.values?.map((value, valueIndex) => (
+                                <p key={valueIndex} className="text-sm">{value}</p>
+                            ))}
+
+                            <div className="items-center flex">
+                                <button type="button"
+                                        className="p-2 border-gray-300 shadow-md ml-4 h-fit"
+                                        onClick={() => deleteSubcategory(identifier, subcatIndex)}>
+                                    <MinusIcon />
+                                </button>
+                            </div>
+                        </div>
                     ))}
-                </div>
-            ))}
 
-            <button type="button"
-                    className="p-2 border-gray-300 shadow-md"
-                    onClick={() => addSubcategory(identifier)}>
-                <PlusIcon />
-            </button>
+                    {selectedDetail.values?.length !== 0 && <div className="flex flex-row mb-2">
+                        <span className="flex w-0.5 bg-gray-300 h-1/2"></span>
+                        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center -ml-0.5" />
+
+                        <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md mt-4">
+                            {selectedDetail.values?.map((value, valueIndex) => (
+                                <option key={valueIndex} value={value}>{value}</option>
+                            ))}
+                        </select>
+                    </div>
+                    }
+                </div>
+            </div>
         </div>
     )
 }

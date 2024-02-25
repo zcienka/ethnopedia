@@ -161,7 +161,7 @@ const Artworks = () => {
             <Navbar />
 
             {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
-            {showCreateArtwork && <CreateArtwork onClose={() => setShowCreateArtwork(false)} />}
+            {/*{showCreateArtwork && <CreateArtwork onClose={() => setShowCreateArtwork(false)} />}*/}
             {showDeleteRecordsWarning &&
                 <WarningPopup onClose={() => setShowDeleteRecordsWarning(false)}
                               deleteSelected={deleteSelected}
@@ -215,11 +215,10 @@ const Artworks = () => {
                     <div className="flex w-full md:w-auto">
                         <div className="flex flex-1 space-x-2">
                             <button className="flex items-center justify-center dark:text-white
-                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
-                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
+                            hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                            dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                     type="button"
-                                    onClick={() => setShowCreateArtwork(showCreateArtwork => !showCreateArtwork)}>
-
+                                    onClick={() => navigate(`/collections/${collection}/create-artwork`)}>
                                     <span className="mr-2 text-white dark:text-gray-400">
                                         <PlusIcon />
                                     </span>
