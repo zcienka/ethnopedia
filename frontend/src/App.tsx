@@ -10,6 +10,7 @@ import NotFoundPage from "./pages/NotFoundPage"
 import Artworks from "./components/artwork/Artworks"
 import RegisterPage from "./pages/RegisterPage"
 import { UserProvider } from "./providers/UserProvider"
+import CreateArtwork from "./components/artwork/CreateArtwork"
 
 const queryClient = new QueryClient()
 
@@ -26,6 +27,7 @@ const App = () => {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/collections/:collection/artworks/:artworkId" element={<ArtworkPage />} />
+                        <Route path="/collections/:collection/create-artwork" element={<CreateArtwork />} />
 
                         <Route path="/" element={<Home />} />
                         <Route path="/collections/:collection/artworks" element={<Artworks />} />
