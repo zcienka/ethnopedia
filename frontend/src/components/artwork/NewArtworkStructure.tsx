@@ -15,6 +15,33 @@ interface SelectedDetail {
     values?: string[]
 }
 
+interface LocationDetail {
+    name: string
+    values?: string[]
+    subcategories?: Subcategory[]
+    isSelectable: boolean
+}
+
+interface CollectionItem {
+    _id: any
+    collectionId: any
+    category: string
+    name: string
+    locationDetails: LocationDetail[]
+}
+
+interface CategoryAndValueSelectorProps {
+    selectedDetail: SelectedDetail;
+    handleCategoryChange: (itemIndex: string, newCategoryName: string) => void;
+    handleDetailChange: (itemIndex: string, detailIndex: any) => void;
+    handleSubcategoryChange: (itemIndex: string, subcatIndex: number, newSubcatName: string) => void;
+    addSubcategory: (identifier: string) => void;
+    deleteSubcategory: (identifier: string, subcatIndex: number) => void;
+    subcategories: any[];
+    category: any;
+    identifier: any;
+}
+
 const jsonData: CollectionItem[] = [
     {
         "_id": "65ce9ec43171573092ad7e2e",
@@ -250,15 +277,12 @@ const jsonData: CollectionItem[] = [
     },
 ]
 
-const NewArtworkStructure = () => {
-    const defaultSelectedDetails: { [key: string]: SelectedDetail } = {
-        [`${Date.now()}`]: {
-            category: "",
-            values: [],
-            subcategories: [],
-        },
-    }
-    const [selectedDetails, setSelectedDetails] = useState<{ [key: string]: SelectedDetail }>(defaultSelectedDetails)
+interface NewArtworkStructureProps {
+    selectedDetails: { [key: string]: SelectedDetail };
+    setSelectedDetails: React.Dispatch<React.SetStateAction<{ [key: string]: SelectedDetail }>>;
+}
+
+const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetails, setSelectedDetails }) => {
     const addSubcategory = (identifier: string) => {
         setSelectedDetails(prevDetails => ({
             ...prevDetails,
@@ -347,9 +371,9 @@ const NewArtworkStructure = () => {
     console.log({ selectedDetails })
 
     return (
-        <div className="p-4 h-fill w-full border border-red-300">
+        <div className="flex flex-col p-4 w-full">
             {jsonData[0].name}
-            <div className="p-4 ">
+            <div className="p-4">
 
                 {Object.entries(selectedDetails) !== undefined && Object.entries(selectedDetails)
                     .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
@@ -374,7 +398,6 @@ const NewArtworkStructure = () => {
                         </div>
                     ))}
 
-
                 <div className="ml-2 flex flex-row relative">
                     <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
                     <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
@@ -390,34 +413,6 @@ const NewArtworkStructure = () => {
             </div>
         </div>
     )
-}
-
-
-interface LocationDetail {
-    name: string
-    values?: string[]
-    subcategories?: Subcategory[]
-    isSelectable: boolean
-}
-
-interface CollectionItem {
-    _id: any
-    collectionId: any
-    category: string
-    name: string
-    locationDetails: LocationDetail[]
-}
-
-interface CategoryAndValueSelectorProps {
-    selectedDetail: SelectedDetail;
-    handleCategoryChange: (itemIndex: string, newCategoryName: string) => void;
-    handleDetailChange: (itemIndex: string, detailIndex: any) => void;
-    handleSubcategoryChange: (itemIndex: string, subcatIndex: number, newSubcatName: string) => void;
-    addSubcategory: (identifier: string) => void;
-    deleteSubcategory: (identifier: string, subcatIndex: number) => void;
-    subcategories: any[];
-    category: any;
-    identifier: any;
 }
 
 const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
@@ -466,22 +461,39 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             </div>
 
             <div className="flex flex-row ml-16 ">
+
                 <div className="flex flex-col">
                     {selectedDetail?.subcategories.length !== 0 && selectedDetail?.subcategories?.map((subcatDetail, subcatIndex) => (
                         <div className="flex flex-row mb-2">
-                            <span className="flex w-0.5 bg-gray-300 h-1/2"></span>
-                            <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center -ml-0.5" />
+                            <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
 
-                            <div className="flex flex-col border border-gray-300 rounded-md py-2 px-4 shadow-md mt-4">
-                                <div className="flex flex-col my-2 items-end w-fit">
-                                    <div className="flex flex-row items-center">
-                                        <p className="w-full">{subcatDetail.name}</p>
+                            <div>
+                                <div className="flex flex-row">
+                                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+
+                                    <div
+                                        className="flex flex-col border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
+                                        <div className="flex flex-col my-2 items-end w-fit">
+                                            <div className="flex flex-row items-center">
+                                                <p className="w-full">{subcatDetail.name}</p>
+                                            </div>
+                                        </div>
                                     </div>
+                                    {subcatDetail.values?.length !== 0 &&
+                                        <select
+                                            className="border border-gray-300 rounded-md px-2 py-1 mt-2"
+                                            onChange={e => handleSubcategoryChange(identifier, subcatIndex, e.target.value)}
+                                        >
+                                            {subcatDetail.values?.map((value, index) => (
+                                                <option key={index} value={value}>{value}</option>
+                                            ))}
+                                        </select>
+                                    }
                                 </div>
+
+
                             </div>
-                            {subcatDetail.values?.length !== 0 && subcatDetail.values?.map((value, valueIndex) => (
-                                <p key={valueIndex} className="text-sm">{value}</p>
-                            ))}
+
 
                             <div className="items-center flex">
                                 <button type="button"
