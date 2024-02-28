@@ -431,12 +431,12 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             <div key={identifier}>
                 <label className="ml-16 mb-1">Kategoria:</label>
 
-                <div className="relative flex flex-row">
+                <div className="relative flex flex-row ">
                     <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center" />
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col ">
                         <select
-                            className="p-2 border rounded"
+                            className="p-2 border rounded "
                             value={selectedDetail.category || ""}
                             onChange={(e) => handleCategoryChange(identifier, e.target.value)}
                         >
@@ -462,60 +462,82 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
 
             <div className="flex flex-row ml-16 ">
 
-                <div className="flex flex-col">
+                <div className="flex flex-col ">
                     {selectedDetail?.subcategories.length !== 0 && selectedDetail?.subcategories?.map((subcatDetail, subcatIndex) => (
-                        <div className="flex flex-row mb-2">
-                            <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
-
+                        <div className="flex flex-row">
                             <div>
                                 <div className="flex flex-row">
+                                    <div className="flex relative">
+                                        <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
+                                    </div>
+
                                     <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
 
                                     <div
                                         className="flex flex-col border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-                                        <div className="flex flex-col my-2 items-end w-fit">
-                                            <div className="flex flex-row items-center">
-                                                <p className="w-full">{subcatDetail.name}</p>
-                                            </div>
+                                        <div className="flex flex-row items-center">
+                                            <p className="w-full">{subcatDetail.name}</p>
                                         </div>
                                     </div>
-                                    {subcatDetail.values?.length !== 0 &&
+                                    <div className="items-center flex">
+                                        <button type="button"
+                                                className="p-2 border-gray-300 shadow-md ml-2 mt-1"
+                                                onClick={() => deleteSubcategory(identifier, subcatIndex)}>
+                                            <MinusIcon />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {subcatDetail.values?.length !== 0 &&
+                                    <div className="flex flex-row">
+                                        <div className="flex relative">
+                                            <span className="justify-start bg-gray-300 h-full w-0.5"></span>
+                                        </div>
+
                                         <select
-                                            className="border border-gray-300 rounded-md px-2 py-1 mt-2"
+                                            className="border border-gray-300 rounded-md px-2 py-1 mt-2 ml-8"
                                             onChange={e => handleSubcategoryChange(identifier, subcatIndex, e.target.value)}
                                         >
                                             {subcatDetail.values?.map((value, index) => (
                                                 <option key={index} value={value}>{value}</option>
                                             ))}
                                         </select>
-                                    }
-                                </div>
-
-
+                                    </div>
+                                }
                             </div>
 
-
-                            <div className="items-center flex">
-                                <button type="button"
-                                        className="p-2 border-gray-300 shadow-md ml-4 h-fit"
-                                        onClick={() => deleteSubcategory(identifier, subcatIndex)}>
-                                    <MinusIcon />
-                                </button>
-                            </div>
                         </div>
                     ))}
 
-                    {selectedDetail.values?.length !== 0 && <div className="flex flex-row mb-2">
-                        <span className="flex w-0.5 bg-gray-300 h-1/2"></span>
+                    {selectedDetail.values?.length !== 0 && <div className="flex flex-row">
+                        <span className="flex w-0.5 bg-gray-300 h-full"></span>
                         <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center -ml-0.5" />
 
-                        <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md mt-4">
+                        <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">
                             {selectedDetail.values?.map((value, valueIndex) => (
                                 <option key={valueIndex} value={value}>{value}</option>
                             ))}
                         </select>
                     </div>
                     }
+
+                    <div className="flex flex-row items-center">
+                        <span className="bg-gray-300 h-1/2 flex self-start w-0.5"></span>
+
+                        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+
+                        <div className="flex items-center flex-row ">
+                            <button
+                                className="p-2 border-gray-300 shadow-md"
+                                type="button"
+                            >
+                                <PlusIcon />
+                            </button>
+                        </div>
+                        <div className="flex items-center flex-row pt-4 h-12">
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
