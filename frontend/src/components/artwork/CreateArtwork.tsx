@@ -2,11 +2,12 @@ import React, { useState } from "react"
 import { useQuery, useQueryClient } from "react-query"
 import { getCategories } from "../../api/categories"
 import { Form, Formik } from "formik"
-import { useCreateCollectionMutation } from "../../api/collections"
+import { useCreateRecordMutation } from "../../api/collections"
 import LoadingPage from "../../pages/LoadingPage"
 import NewArtworkStructure from "./NewArtworkStructure"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Navbar from "../navbar/Navbar"
+import { useUser } from "../../providers/UserProvider"
 
 type Subcategory = {
     name: string
@@ -22,9 +23,10 @@ interface SelectedDetail {
 }
 
 const CreateArtwork = () => {
-    const { mutate: createCollection } = useCreateCollectionMutation()
     const queryClient = useQueryClient()
-
+    const { jwtToken } = useUser()
+    const { mutate: createCollection } = useCreateRecordMutation(jwtToken)
+    const navigate = useNavigate()
 
     const defaultSelectedDetails: { [key: string]: SelectedDetail } = {
         [`${Date.now()}`]: {
@@ -45,7 +47,7 @@ const CreateArtwork = () => {
         },
     )
 
-
+    console.log({ selectedDetails })
     if (categoriesData === undefined) {
         return <LoadingPage />
     }
@@ -55,13 +57,20 @@ const CreateArtwork = () => {
             <Navbar />
             <div className="flex flex-1 justify-center h-fill">
                 <Formik
-                    initialValues={{ name: "", description: "" }}
+                    initialValues={{ defaultSelectedDetails }}
                     onSubmit={(values, { setSubmitting }) => {
-                        const { name, description } = values
 
-                        createCollection({ name, description }, {
+                        const detailsToSubmit = Object.values(selectedDetails).map(detail => ({
+                            category: detail.category,
+                            subcategories: detail.subcategories,
+                            values: detail.values,
+                        }))
+
+
+                        createCollection(detailsToSubmit, {
                             onSuccess: () => {
                                 queryClient.invalidateQueries(["collection"])
+                                navigate(-1)
                             },
                             onError: (error) => {
                                 console.error(error)
@@ -106,7 +115,8 @@ const CreateArtwork = () => {
 
 
                             <div className="flex-grow">
-                                <NewArtworkStructure selectedDetails={selectedDetails} setSelectedDetails={setSelectedDetails} />
+                                <NewArtworkStructure selectedDetails={selectedDetails}
+                                                     setSelectedDetails={setSelectedDetails} />
                             </div>
 
                             <div className="flex justify-end px-4 pb-4 border-t pt-4 h-auto">
