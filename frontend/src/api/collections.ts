@@ -10,6 +10,21 @@ interface CollectionsResponse {
     pageSize: number;
 }
 
+
+type Subcategory = {
+    name: string
+    values?: string[]
+    subcategories?: Subcategory[]
+    isSelectable?: boolean
+}
+
+interface SelectedDetail {
+    category: any;
+    subcategories: Subcategory[];
+    values?: string[]
+}
+
+
 export const getCollections = async (page: number = 1, pageSize: number = 10): Promise<CollectionsResponse> => {
     const response = await axios.get(`${API_URL}v1/collection`, {
         params: {
@@ -23,6 +38,17 @@ export const getCollections = async (page: number = 1, pageSize: number = 10): P
 export const useCreateCollectionMutation = () => {
     return useMutation(async (newCollectionData: Collection) => {
         const res = await axios.post(`${API_URL}v1/collection`, newCollectionData)
+        return res.data
+    })
+}
+
+export const useCreateRecordMutation = (jwtToken: string) => {
+    return useMutation(async (details: SelectedDetail[]) => {
+        const res = await axios.post(`${API_URL}v1/artworks`, details, {
+            headers: {
+                Authorization: `Bearer ${jwtToken}`,
+            },
+        })
         return res.data
     })
 }

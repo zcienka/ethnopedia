@@ -368,8 +368,6 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
         }))
     }
 
-    console.log({ selectedDetails })
-
     return (
         <div className="flex flex-col p-4 w-full">
             {jsonData[0].name}

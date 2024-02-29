@@ -18,6 +18,6 @@ router.route("/").get(getAllArtworks)
 router.route("/:artworkId").put(patchArtwork)
 router.route("/:artworkId").get(getArtwork)
 router.route("/:artwork").delete(batchDeleteArtworks)
-router.route("/:artworkId").post(createArtwork)
+router.route("/").post(createArtwork)
 
 module.exports = router
