@@ -7,7 +7,7 @@ const {
     getAllKeys
 } = require("../controllers/categories")
 
-router.route("/:id").get(getCategoriesById)
+router.route("/:name").get(getCategoriesById)
 router.route("/test").get(getAllKeys)
 
 module.exports = router

@@ -62,9 +62,9 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
         const page = parseInt(req.query.page as string) || 1
         const pageSize = parseInt(req.query.pageSize as string) || 10
 
-        const totalArtworks = await Artwork.countDocuments({ collectionId: req.params.id })
+        const totalArtworks = await Artwork.countDocuments({ collectionName: req.params.name })
 
-        const records = await Artwork.find({ collectionId: req.params.id })
+        const records = await Artwork.find({ collectionName: req.params.name })
             .skip((page - 1) * pageSize)
             .limit(pageSize)
             .exec()
@@ -81,14 +81,14 @@ const artworksInCollection = async (req: Request, res: Response, next: NextFunct
 }
 
 const getCollection = async (req: Request, res: Response, next: any) => {
-    const collectionId = req.params.id
+    const collectionName = req.params.name
 
     try {
         // if (!mongoose.isValidObjectId(collectionId)) {
         //     return res.status(400).json(`Invalid collection id: ${collectionId}`)
         // }
 
-        const collection = await Collection.find({ _id: collectionId }).exec()
+        const collection = await Collection.find({ name: collectionName }).exec()
 
         if (!collection) {
             return res.status(404).json("Collection not found")

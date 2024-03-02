@@ -1391,16 +1391,16 @@ const initializeDatabase = async () => {
         }))
 
         const insertedCollections = await Collection.insertMany(collectionsWithUser)
-
-        const collectionMap = insertedCollections.reduce((map: any, collection: any) => {
-            map[collection.name] = collection._id
-            return map
-        }, {})
+        //
+        // const collectionMap = insertedCollections.reduce((map: any, collection: any) => {
+        //     map[collection.name] = collection._id
+        //     return map
+        // }, {})
 
         const updatedArtworks = artworksData.map(artwork => {
             return {
                 ...artwork,
-                collectionId: collectionMap[artwork.Kategoria],
+                collectionName: "Wielkopolska",
                 userId: userId,
             }
         })
@@ -1410,7 +1410,7 @@ const initializeDatabase = async () => {
         const categoriesMap = categoryData.map(category => {
             return {
                 ...category,
-                collectionId: collectionMap["Wielkopolska"]._id,
+                collectionName: "Wielkopolska"
             }
         })
 

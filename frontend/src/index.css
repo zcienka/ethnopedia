@@ -24,6 +24,9 @@
     html {
         @apply text-gray-900;
     }
+    * {
+        box-sizing: border-box;
+    }
 
     button {
         @apply bg-white border border-gray-300 focus:outline-none
@@ -40,6 +43,16 @@
     input, textarea {
         @apply rounded-lg border border-gray-300 focus:outline-none dark:text-white dark:border-gray-600
         dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 dark:bg-gray-800;
+    }
+
+    textarea {
+        box-sizing: border-box;
+        line-height: normal;
+        overflow: auto;
+        display: block;
+        margin: 0;
+        padding: 0;
+        width:100%;
     }
 
     .half-border::after {

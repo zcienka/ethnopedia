@@ -11,10 +11,10 @@ const {
     patchCollection
 } = require("../controllers/collections")
 
-router.route("/:id/artworks").get(artworksInCollection)
+router.route("/:name/artworks").get(artworksInCollection)
 router.route("/").get(getAllCollections)
 router.route("/").post(createCollection)
-router.route("/:id").get(getCollection)
+router.route("/:name").get(getCollection)
 router.route("/:collection").delete(batchDeleteCollections)
 router.route("/:id").patch(patchCollection)
 
