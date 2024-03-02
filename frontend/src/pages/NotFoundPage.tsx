@@ -11,7 +11,7 @@ const NotFoundPage = () => {
                     Coś poszło nie tak.
                 </p>
                 <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
-                    Przepraszamy, nie możemy znaleźć tej strony.
+                    Przepraszamy, nie można znaleźć tej strony.
                 </p>
                 <button onClick={() => navigate("/")}
                    className="inline-flex text-white bg-primary-600 hover:bg-primary-800 focus:ring-4 focus:outline-none

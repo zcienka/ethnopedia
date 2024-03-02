@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg"
 
@@ -12,6 +12,7 @@ type Subcategory = {
 interface SelectedDetail {
     category: any;
     subcategories: Subcategory[];
+    collection: string
     values?: string[]
 }
 
@@ -35,11 +36,12 @@ interface CategoryAndValueSelectorProps {
     handleCategoryChange: (itemIndex: string, newCategoryName: string) => void;
     handleDetailChange: (itemIndex: string, detailIndex: any) => void;
     handleSubcategoryChange: (itemIndex: string, subcatIndex: number, newSubcatName: string) => void;
+    handleAddSubcategory: (itemIndex: string) => void;
     addSubcategory: (identifier: string) => void;
     deleteSubcategory: (identifier: string, subcatIndex: number) => void;
-    subcategories: any[];
+    subcategories: Subcategory[];
     category: any;
-    identifier: any;
+    identifier: string;
 }
 
 const jsonData: CollectionItem[] = [
@@ -302,6 +304,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                 category: "",
                 values: [],
                 subcategories: [],
+                collection: jsonData[0].name,
             },
         }))
     }
@@ -323,6 +326,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                     category: newCategoryName,
                     subcategories: newSubcategories || [],
                     values: categoryData?.values || [],
+                    collection: jsonData[0].name,
                 },
             }
 
@@ -337,6 +341,23 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                 ...prevDetails[itemIndex],
                 values: detailIndex,
                 subcategories: prevDetails[itemIndex]?.subcategories || [],
+            },
+        }))
+    }
+
+    const handleAddSubcategory = (itemIndex: string) => {
+        setSelectedDetails(prevDetails => ({
+            ...prevDetails,
+            [itemIndex]: {
+                ...prevDetails[itemIndex],
+                subcategories: [
+                    ...prevDetails[itemIndex].subcategories,
+                    {
+                        name: "",
+                        values: [],
+                        isSelectable: true,
+                    },
+                ],
             },
         }))
     }
@@ -386,6 +407,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                                     handleCategoryChange={handleCategoryChange}
                                     handleDetailChange={handleDetailChange}
                                     handleSubcategoryChange={handleSubcategoryChange}
+                                    handleAddSubcategory={handleAddSubcategory}
                                     addSubcategory={addSubcategory}
                                     deleteSubcategory={deleteSubcategory}
                                     subcategories={selectedDetail.subcategories || []}
@@ -413,26 +435,92 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
     )
 }
 
+interface EditingState {
+    isEditing: boolean;
+    editingIndex: number | null;
+    editValue: string;
+}
+
 const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                                                                                selectedDetail,
                                                                                handleCategoryChange,
                                                                                handleDetailChange,
                                                                                handleSubcategoryChange,
+                                                                               handleAddSubcategory,
                                                                                addSubcategory,
                                                                                deleteSubcategory,
                                                                                subcategories,
                                                                                category,
                                                                                identifier,
                                                                            }) => {
+
+
+    const [editingState, setEditingState] = useState<EditingState>({
+        isEditing: false,
+        editingIndex: null,
+        editValue: "",
+    })
+
+    const inputRef = useRef<HTMLTextAreaElement>(null)
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const value = e.target.value;
+        setEditingState(prevState => ({ ...prevState, editValue: value }));
+        resizeTextarea(e.target);
+    };
+
+    const resizeTextarea = (textarea: HTMLTextAreaElement) => {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+    };
+
+    const handleDoubleClick = (index: number | null, name: string) => {
+        setEditingState({
+            isEditing: true,
+            editingIndex: index,
+            editValue: name,
+        });
+        // Since state updates are asynchronous, use useEffect to resize after the update
+    };
+
+    React.useEffect(() => {
+        if (editingState.isEditing && inputRef.current) {
+            resizeTextarea(inputRef.current);
+        }
+    }, [editingState.isEditing, editingState.editValue]);
+
+    const handleBlur = () => {
+        if (editingState.isEditing && editingState.editingIndex !== null) {
+            handleSubcategoryChange(identifier, editingState.editingIndex, editingState.editValue);
+        }
+        setEditingState({
+            isEditing: false,
+            editingIndex: null,
+            editValue: "",
+        })
+    }
+
+    console.log(editingState)
+    // useEffect(() => {
+    //     const charsPerLine = 20; // Approximate chars per line, adjust based on your styling
+    //     const newRows = Math.ceil(editingState.editValue.length / charsPerLine);
+    //     // Ensure there is at least 1 row and optionally set a max
+    //     const rowsToUpdate = Math.max(newRows, 1); // Set a minimum of 1 row
+    //     if (inputRef.current) {
+    //         inputRef.current.rows = rowsToUpdate;
+    //     }
+    // }, [editingState.editValue]);
+
     return (
         <div>
             <div key={identifier}>
                 <label className="ml-16 mb-1">Kategoria:</label>
 
-                <div className="relative flex flex-row ">
+                <div className="relative flex flex-row">
                     <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center" />
 
-                    <div className="flex flex-col ">
+                    <div className="flex flex-col">
                         <select
                             className="p-2 border rounded "
                             value={selectedDetail.category || ""}
@@ -458,25 +546,36 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                 </div>
             </div>
 
-            <div className="flex flex-row ml-16 ">
-
-                <div className="flex flex-col ">
+            <div className="flex flex-row ml-16 w-full">
+                <div className="flex flex-col w-full">
                     {selectedDetail?.subcategories.length !== 0 && selectedDetail?.subcategories?.map((subcatDetail, subcatIndex) => (
-                        <div className="flex flex-row">
-                            <div>
-                                <div className="flex flex-row">
+                        <div className="flex flex-row w-full">
+                            <div className="w-full">
+                                <div className="flex flex-row w-full">
                                     <div className="flex relative">
                                         <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
                                     </div>
 
-                                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+                                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center min-w-8" />
 
-                                    <div
-                                        className="flex flex-col border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-                                        <div className="flex flex-row items-center">
+                                    {editingState.isEditing && editingState.editingIndex === subcatIndex ? (
+                                        <div
+                                            className="flex flex-row items-center w-fit border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
+                                            <textarea
+                                                ref={inputRef}
+                                                className="border-none h-fit w-96"
+                                                value={editingState.editValue}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                autoFocus
+                                            ></textarea>
+                                        </div>
+                                    ) : (
+                                        <div onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}
+                                             className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
                                             <p className="w-full">{subcatDetail.name}</p>
                                         </div>
-                                    </div>
+                                    )}
                                     <div className="items-center flex">
                                         <button type="button"
                                                 className="p-2 border-gray-300 shadow-md ml-2 mt-1"
@@ -494,8 +593,8 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
 
                                         <select
                                             className="border border-gray-300 rounded-md px-2 py-1 mt-2 ml-8"
-                                            onChange={e => handleSubcategoryChange(identifier, subcatIndex, e.target.value)}
-                                        >
+                                            onChange={e =>
+                                                handleSubcategoryChange(identifier, subcatIndex, e.target.value)}>
                                             {subcatDetail.values?.map((value, index) => (
                                                 <option key={index} value={value}>{value}</option>
                                             ))}
@@ -527,8 +626,8 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                         <div className="flex items-center flex-row ">
                             <button
                                 className="p-2 border-gray-300 shadow-md"
-                                type="button"
-                            >
+                                onClick={() => handleAddSubcategory(identifier)}
+                                type="button">
                                 <PlusIcon />
                             </button>
                         </div>

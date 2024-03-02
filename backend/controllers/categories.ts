@@ -57,9 +57,9 @@ const getCategoriesById = async (req: Request, res: Response, next: NextFunction
     // const categories = await Category.find({}).skip(skip).limit(limit)
     //eq.query.id
     try {
-        const id = req.params.id
+        const id = req.params.name
 
-        const categories = await Category.find({ collectionId: id })
+        const categories = await Category.find({ collectionName: id })
 
         res.status(200).json(categories)
     } catch (error) {

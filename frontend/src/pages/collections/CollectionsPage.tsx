@@ -100,7 +100,7 @@ const CollectionsPage = () => {
             <div
                 className="px-4 py-3 bg-white dark:bg-gray-800 shadow-md rounded-lg mb-4 border border-gray-300 dark:border-gray-600 cursor-pointer"
                 key={collection.id}
-                onClick={() => navigate(`/collections/${collection.id}/artworks`)}
+                onClick={() => navigate(`/collections/${collection.name}/artworks`)}
             >
 
                 <div className="flex flex-row justify-between">

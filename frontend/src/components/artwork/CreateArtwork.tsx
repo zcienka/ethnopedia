@@ -19,6 +19,7 @@ type Subcategory = {
 interface SelectedDetail {
     category: any;
     subcategories: Subcategory[];
+    collection: string
     values?: string[]
 }
 
@@ -33,6 +34,7 @@ const CreateArtwork = () => {
             category: "",
             values: [],
             subcategories: [],
+            collection: "",
         },
     }
     const [selectedDetails, setSelectedDetails] = useState<{ [key: string]: SelectedDetail }>(defaultSelectedDetails)
@@ -64,6 +66,7 @@ const CreateArtwork = () => {
                             category: detail.category,
                             subcategories: detail.subcategories,
                             values: detail.values,
+                            collection: detail.collection,
                         }))
 
 
