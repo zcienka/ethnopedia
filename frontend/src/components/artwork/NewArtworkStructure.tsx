@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg"
+import CategorySelector from "./recordBuilder/CategorySelector"
+import SubcategoryList from "./recordBuilder/SubcategoryList"
 
 type Subcategory = {
     name: string
@@ -458,41 +460,40 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
     const [editingState, setEditingState] = useState<EditingState>({
         isEditing: false,
         editingIndex: null,
-        editValue: "",
+        editValue: "Wybierz podkategorię",
     })
 
     const inputRef = useRef<HTMLTextAreaElement>(null)
 
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const value = e.target.value;
-        setEditingState(prevState => ({ ...prevState, editValue: value }));
-        resizeTextarea(e.target);
-    };
+        const value = e.target.value
+        setEditingState(prevState => ({ ...prevState, editValue: value }))
+        resizeTextarea(e.target)
+    }
 
     const resizeTextarea = (textarea: HTMLTextAreaElement) => {
-        textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`;
-    };
+        textarea.style.height = "auto"
+        textarea.style.height = `${textarea.scrollHeight}px`
+    }
 
     const handleDoubleClick = (index: number | null, name: string) => {
         setEditingState({
             isEditing: true,
             editingIndex: index,
             editValue: name,
-        });
-        // Since state updates are asynchronous, use useEffect to resize after the update
-    };
+        })
+    }
 
     React.useEffect(() => {
         if (editingState.isEditing && inputRef.current) {
-            resizeTextarea(inputRef.current);
+            resizeTextarea(inputRef.current)
         }
-    }, [editingState.isEditing, editingState.editValue]);
+    }, [editingState.isEditing, editingState.editValue])
 
     const handleBlur = () => {
         if (editingState.isEditing && editingState.editingIndex !== null) {
-            handleSubcategoryChange(identifier, editingState.editingIndex, editingState.editValue);
+            handleSubcategoryChange(identifier, editingState.editingIndex, editingState.editValue)
         }
         setEditingState({
             isEditing: false,
@@ -501,111 +502,31 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
         })
     }
 
-    console.log(editingState)
-    // useEffect(() => {
-    //     const charsPerLine = 20; // Approximate chars per line, adjust based on your styling
-    //     const newRows = Math.ceil(editingState.editValue.length / charsPerLine);
-    //     // Ensure there is at least 1 row and optionally set a max
-    //     const rowsToUpdate = Math.max(newRows, 1); // Set a minimum of 1 row
-    //     if (inputRef.current) {
-    //         inputRef.current.rows = rowsToUpdate;
-    //     }
-    // }, [editingState.editValue]);
-
     return (
         <div>
-            <div key={identifier}>
-                <label className="ml-16 mb-1">Kategoria:</label>
+                <CategorySelector
+                    identifier={identifier}
+                    selectedCategory={selectedDetail.category}
+                    handleCategoryChange={handleCategoryChange}
+                    addSubcategory={addSubcategory}
+                    locationDetails={jsonData[0].locationDetails}
+                />
 
-                <div className="relative flex flex-row">
-                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center" />
-
-                    <div className="flex flex-col">
-                        <select
-                            className="p-2 border rounded "
-                            value={selectedDetail.category || ""}
-                            onChange={(e) => handleCategoryChange(identifier, e.target.value)}
-                        >
-                            <option key={""} value={""} hidden>Wybierz kategorię</option>
-
-                            {jsonData[0].locationDetails.map((item, index) => (
-                                <option key={index} value={item.name}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="flex items-center ml-2 h-full">
-                        <button type="button"
-                                className="p-2 border-gray-300 shadow-md mr-1"
-                                onClick={() => addSubcategory(identifier)}>
-                            <PlusIcon />
-                        </button>
-                    </div>
-                </div>
+            <div className="ml-16">
+                <SubcategoryList
+                    identifier={identifier}
+                    subcategories={selectedDetail.subcategories}
+                    editingState={editingState}
+                    handleDoubleClick={handleDoubleClick}
+                    handleChange={handleChange}
+                    handleBlur={handleBlur}
+                    deleteSubcategory={deleteSubcategory}
+                    inputRef={inputRef}
+                    handleSubcategoryChange={handleSubcategoryChange} />
             </div>
 
             <div className="flex flex-row ml-16 w-full">
                 <div className="flex flex-col w-full">
-                    {selectedDetail?.subcategories.length !== 0 && selectedDetail?.subcategories?.map((subcatDetail, subcatIndex) => (
-                        <div className="flex flex-row w-full">
-                            <div className="w-full">
-                                <div className="flex flex-row w-full">
-                                    <div className="flex relative">
-                                        <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
-                                    </div>
-
-                                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center min-w-8" />
-
-                                    {editingState.isEditing && editingState.editingIndex === subcatIndex ? (
-                                        <div
-                                            className="flex flex-row items-center w-fit border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-                                            <textarea
-                                                ref={inputRef}
-                                                className="border-none h-fit w-96"
-                                                value={editingState.editValue}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                autoFocus
-                                            ></textarea>
-                                        </div>
-                                    ) : (
-                                        <div onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}
-                                             className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-                                            <p className="w-full">{subcatDetail.name}</p>
-                                        </div>
-                                    )}
-                                    <div className="items-center flex">
-                                        <button type="button"
-                                                className="p-2 border-gray-300 shadow-md ml-2 mt-1"
-                                                onClick={() => deleteSubcategory(identifier, subcatIndex)}>
-                                            <MinusIcon />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {subcatDetail.values?.length !== 0 &&
-                                    <div className="flex flex-row">
-                                        <div className="flex relative">
-                                            <span className="justify-start bg-gray-300 h-full w-0.5"></span>
-                                        </div>
-
-                                        <select
-                                            className="border border-gray-300 rounded-md px-2 py-1 mt-2 ml-8"
-                                            onChange={e =>
-                                                handleSubcategoryChange(identifier, subcatIndex, e.target.value)}>
-                                            {subcatDetail.values?.map((value, index) => (
-                                                <option key={index} value={value}>{value}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                }
-                            </div>
-
-                        </div>
-                    ))}
-
                     {selectedDetail.values?.length !== 0 && <div className="flex flex-row">
                         <span className="flex w-0.5 bg-gray-300 h-full"></span>
                         <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center -ml-0.5" />
@@ -639,6 +560,23 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             </div>
         </div>
     )
+}
+
+const AddNewSubcategory = () => {
+    return <div className="flex flex-row items-center">
+        <span className="bg-gray-300 h-1/2 flex self-start w-0.5"></span>
+
+        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+
+        <div className="flex items-center flex-row ">
+            <input type="text" className="border border-gray-300 rounded-md px-2 py-1"
+                   placeholder="Dodaj nazwę">
+            </input>
+        </div>
+        <div className="flex items-center flex-row pt-4 h-12">
+
+        </div>
+    </div>
 }
 
 export default NewArtworkStructure

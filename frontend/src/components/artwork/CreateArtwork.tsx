@@ -131,7 +131,7 @@ const CreateArtwork = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="ml-2 px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold border-none"
+                                    className="ml-2 color-button"
                                     disabled={isSubmitting}
                                 >
                                     Utwórz
