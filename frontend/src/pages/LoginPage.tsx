@@ -111,7 +111,7 @@ const LoginPage = () => {
                                                   className="text-red-600 text-sm" />
                                 </div>
                                 <button type="submit"
-                                        className="w-full text-white bg-primary-600 hover:bg-sky-400 bg-sky-500">
+                                        className="color-button w-full">
                                     Zaloguj się
                                 </button>
                             </Form>

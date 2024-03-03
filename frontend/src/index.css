@@ -64,4 +64,8 @@
         border-bottom: 2px solid red;
         bottom: 0;
     }
+
+    .color-button {
+        @apply px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold border-none;
+    }
 }
