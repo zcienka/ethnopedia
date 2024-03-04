@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
-import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg"
 import CategorySelector from "./recordBuilder/CategorySelector"
 import SubcategoryList from "./recordBuilder/SubcategoryList"
+import useSelectedDetails from "./recordBuilder/useSelectedDetails"
 
 type Subcategory = {
     name: string
@@ -35,14 +35,7 @@ interface CollectionItem {
 
 interface CategoryAndValueSelectorProps {
     selectedDetail: SelectedDetail;
-    handleCategoryChange: (itemIndex: string, newCategoryName: string) => void;
-    handleDetailChange: (itemIndex: string, detailIndex: any) => void;
-    handleSubcategoryChange: (itemIndex: string, subcatIndex: number, newSubcatName: string) => void;
-    handleAddSubcategory: (itemIndex: string) => void;
-    addSubcategory: (identifier: string) => void;
-    deleteSubcategory: (identifier: string, subcatIndex: number) => void;
-    subcategories: Subcategory[];
-    category: any;
+    setSelectedDetails: React.Dispatch<React.SetStateAction<{ [key: string]: SelectedDetail }>>;
     identifier: string;
 }
 
@@ -287,16 +280,6 @@ interface NewArtworkStructureProps {
 }
 
 const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetails, setSelectedDetails }) => {
-    const addSubcategory = (identifier: string) => {
-        setSelectedDetails(prevDetails => ({
-            ...prevDetails,
-            [identifier]: {
-                ...prevDetails[identifier],
-                subcategories: [...prevDetails[identifier]?.subcategories || []],
-            },
-        }))
-    }
-
     const addCategory = () => {
         const newCategoryId = `${Date.now()}`
 
@@ -307,86 +290,6 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                 values: [],
                 subcategories: [],
                 collection: jsonData[0].name,
-            },
-        }))
-    }
-
-    const handleCategoryChange = (identifier: string, newCategoryName: string) => {
-        setSelectedDetails(prevDetails => {
-            const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName)
-
-            const newSubcategories = categoryData?.subcategories?.map(subcat => ({
-                name: subcat.name,
-                values: subcat.values || [],
-                category: newCategoryName,
-                isSelectable: subcat.isSelectable,
-            })) || []
-
-            const updatedDetails = {
-                ...prevDetails,
-                [identifier]: {
-                    category: newCategoryName,
-                    subcategories: newSubcategories || [],
-                    values: categoryData?.values || [],
-                    collection: jsonData[0].name,
-                },
-            }
-
-            return updatedDetails
-        })
-    }
-
-    const handleDetailChange = (itemIndex: string, detailIndex: any) => {
-        setSelectedDetails(prevDetails => ({
-            ...prevDetails,
-            [itemIndex]: {
-                ...prevDetails[itemIndex],
-                values: detailIndex,
-                subcategories: prevDetails[itemIndex]?.subcategories || [],
-            },
-        }))
-    }
-
-    const handleAddSubcategory = (itemIndex: string) => {
-        setSelectedDetails(prevDetails => ({
-            ...prevDetails,
-            [itemIndex]: {
-                ...prevDetails[itemIndex],
-                subcategories: [
-                    ...prevDetails[itemIndex].subcategories,
-                    {
-                        name: "",
-                        values: [],
-                        isSelectable: true,
-                    },
-                ],
-            },
-        }))
-    }
-
-    const deleteSubcategory = (identifier: string, subcatIndex: number) => {
-        setSelectedDetails(prevDetails => {
-            const currentSubcategories = prevDetails[identifier].subcategories
-            const updatedSubcategories = currentSubcategories.filter((_, index) => index !== subcatIndex)
-
-            return {
-                ...prevDetails,
-                [identifier]: {
-                    ...prevDetails[identifier],
-                    subcategories: updatedSubcategories,
-                },
-            }
-        })
-    }
-
-    const handleSubcategoryChange = (itemIndex: string, subcatIndex: number, newName: string) => {
-        setSelectedDetails(prevDetails => ({
-            ...prevDetails,
-            [itemIndex]: {
-                ...prevDetails[itemIndex],
-                subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
-                    index === subcatIndex ? { ...subcat, name: newName } : subcat,
-                ),
             },
         }))
     }
@@ -406,14 +309,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
 
                                 <CategoryAndValueSelector
                                     selectedDetail={selectedDetail}
-                                    handleCategoryChange={handleCategoryChange}
-                                    handleDetailChange={handleDetailChange}
-                                    handleSubcategoryChange={handleSubcategoryChange}
-                                    handleAddSubcategory={handleAddSubcategory}
-                                    addSubcategory={addSubcategory}
-                                    deleteSubcategory={deleteSubcategory}
-                                    subcategories={selectedDetail.subcategories || []}
-                                    category={selectedDetail.category || ""}
+                                    setSelectedDetails={setSelectedDetails}
                                     identifier={key}
                                 />
                             </div>
@@ -445,47 +341,192 @@ interface EditingState {
 
 const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                                                                                selectedDetail,
-                                                                               handleCategoryChange,
-                                                                               handleDetailChange,
-                                                                               handleSubcategoryChange,
-                                                                               handleAddSubcategory,
-                                                                               addSubcategory,
-                                                                               deleteSubcategory,
-                                                                               subcategories,
-                                                                               category,
                                                                                identifier,
                                                                            }) => {
+    const {
+        selectedDetails,
+        setSelectedDetails,
+        updateSelectedDetails,
+        addSelectedDetail,
+        removeSelectedDetail,
+    } = useSelectedDetails()
+    const addSubcategory = (identifier: string) => {
+        setSelectedDetails(prevDetails => ({
+            ...prevDetails,
+            [identifier]: {
+                ...prevDetails[identifier],
+                subcategories: [...prevDetails[identifier]?.subcategories || []],
+            },
+        }))
+    }
+
+    const handleCategoryChange = (newCategoryName: string) => {
+        const categoryData = jsonData.find((item) => item.name === newCategoryName)?.locationDetails
+        const newSubcategories = categoryData?.map(subcat => ({
+            name: subcat.name,
+            values: subcat.values || [],
+            isSelectable: subcat.isSelectable,
+        })) || []
+
+        updateSelectedDetails(identifier, {
+            ...selectedDetails[identifier],
+            category: newCategoryName,
+            subcategories: newSubcategories,
+        })
+    }
+
+    // const handleSubcategoryChange = (itemIndex: string, subcatIndex: number, newName: string) => {
+    //     setSelectedDetails(prevDetails => ({
+    //         ...prevDetails,
+    //         [itemIndex]: {
+    //             ...prevDetails[itemIndex],
+    //             subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
+    //                 index === subcatIndex ? { ...subcat, name: newName } : subcat,
+    //             ),
+    //         },
+    //     }))
+    // }
+
+    const handleSubcategoryChange = (identifier: string, subcatIndex: number, newName: string) => {
+        const updatedSubcategories = selectedDetails[identifier].subcategories.map((subcat, index) =>
+            index === subcatIndex ? { ...subcat, name: newName } : subcat,
+        );
+
+        updateSelectedDetails(identifier, { subcategories: updatedSubcategories });
+    };
 
 
     const [editingState, setEditingState] = useState<EditingState>({
         isEditing: false,
         editingIndex: null,
-        editValue: "Wybierz podkategorię",
+        editValue: "",
     })
 
     const inputRef = useRef<HTMLTextAreaElement>(null)
 
-
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const value = e.target.value
-        setEditingState(prevState => ({ ...prevState, editValue: value }))
-        resizeTextarea(e.target)
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setEditingState({
+            ...editingState,
+            editValue: event.target.value,
+        })
     }
 
-    const resizeTextarea = (textarea: HTMLTextAreaElement) => {
-        textarea.style.height = "auto"
-        textarea.style.height = `${textarea.scrollHeight}px`
-    }
-
-    const handleDoubleClick = (index: number | null, name: string) => {
+    const handleDoubleClick = (index: number, name: string) => {
         setEditingState({
             isEditing: true,
             editingIndex: index,
             editValue: name,
         })
     }
+    // const handleCategoryChange = (identifier: string, newCategoryName: string) => {
+    //     setSelectedDetails(prevDetails => {
+    //         const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName)
+    //
+    //         const newSubcategories = categoryData?.subcategories?.map(subcat => ({
+    //             name: subcat.name,
+    //             values: subcat.values || [],
+    //             category: newCategoryName,
+    //             isSelectable: subcat.isSelectable,
+    //         })) || []
+    //
+    //         const updatedDetails = {
+    //             ...prevDetails,
+    //             [identifier]: {
+    //                 category: newCategoryName,
+    //                 subcategories: newSubcategories || [],
+    //                 values: categoryData?.values || [],
+    //                 collection: jsonData[0].name,
+    //             },
+    //         }
+    //
+    //         return updatedDetails
+    //     })
+    // }
+    //
+    // const handleDetailChange = (itemIndex: string, detailIndex: any) => {
+    //     setSelectedDetails(prevDetails => ({
+    //         ...prevDetails,
+    //         [itemIndex]: {
+    //             ...prevDetails[itemIndex],
+    //             values: detailIndex,
+    //             subcategories: prevDetails[itemIndex]?.subcategories || [],
+    //         },
+    //     }))
+    // }
+    //
+    const handleAddSubcategory = (itemIndex: string) => {
+        setSelectedDetails(prevDetails => ({
+            ...prevDetails,
+            [itemIndex]: {
+                ...prevDetails[itemIndex],
+                subcategories: [
+                    ...prevDetails[itemIndex].subcategories,
+                    {
+                        name: "",
+                        values: [],
+                        isSelectable: true,
+                    },
+                ],
+            },
+        }))
+    }
 
-    React.useEffect(() => {
+    const deleteSubcategory = (identifier: string, subcatIndex: number) => {
+        setSelectedDetails(prevDetails => {
+            const currentSubcategories = prevDetails[identifier].subcategories
+            const updatedSubcategories = currentSubcategories.filter((_, index) => index !== subcatIndex)
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: updatedSubcategories,
+                },
+            }
+        })
+    }
+    //
+    // const handleSubcategoryChange = (itemIndex: string, subcatIndex: number, newName: string) => {
+    //     setSelectedDetails(prevDetails => ({
+    //         ...prevDetails,
+    //         [itemIndex]: {
+    //             ...prevDetails[itemIndex],
+    //             subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
+    //                 index === subcatIndex ? { ...subcat, name: newName } : subcat,
+    //             ),
+    //         },
+    //     }))
+    // }
+
+
+    // const [editingState, setEditingState] = useState<EditingState>({
+    //     isEditing: false,
+    //     editingIndex: null,
+    //     editValue: "",
+    // })
+    //
+    // const inputRef = useRef<HTMLTextAreaElement>(null)
+    //
+    // const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    //     const value = e.target.value
+    //     setEditingState(prevState => ({ ...prevState, editValue: value }))
+    //     resizeTextarea(e.target)
+    // }
+    //
+    const resizeTextarea = (textarea: HTMLTextAreaElement) => {
+        textarea.style.height = "auto"
+        textarea.style.height = `${textarea.scrollHeight}px`
+    }
+
+    // const handleDoubleClick = (index: number | null, name: string) => {
+    //     setEditingState({
+    //         isEditing: true,
+    //         editingIndex: index,
+    //         editValue: name,
+    //     })
+    // }
+
+    useEffect(() => {
         if (editingState.isEditing && inputRef.current) {
             resizeTextarea(inputRef.current)
         }
@@ -504,13 +545,13 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
 
     return (
         <div>
-                <CategorySelector
-                    identifier={identifier}
-                    selectedCategory={selectedDetail.category}
-                    handleCategoryChange={handleCategoryChange}
-                    addSubcategory={addSubcategory}
-                    locationDetails={jsonData[0].locationDetails}
-                />
+            <CategorySelector
+                identifier={identifier}
+                selectedCategory={selectedDetail.category}
+                handleCategoryChange={handleCategoryChange}
+                addSubcategory={addSubcategory}
+                locationDetails={jsonData[0].locationDetails}
+            />
 
             <div className="ml-16">
                 <SubcategoryList
@@ -529,19 +570,17 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                 <div className="flex flex-col w-full">
                     {selectedDetail.values?.length !== 0 && <div className="flex flex-row">
                         <span className="flex w-0.5 bg-gray-300 h-full"></span>
-                        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center -ml-0.5" />
+                        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5" />
 
                         <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">
                             {selectedDetail.values?.map((value, valueIndex) => (
                                 <option key={valueIndex} value={value}>{value}</option>
                             ))}
                         </select>
-                    </div>
-                    }
+                    </div>}
 
                     <div className="flex flex-row items-center">
                         <span className="bg-gray-300 h-1/2 flex self-start w-0.5"></span>
-
                         <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
 
                         <div className="flex items-center flex-row ">

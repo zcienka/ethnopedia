@@ -25,7 +25,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
 
                 <div className="flex flex-col">
                     <select
-                        className="p-2 border rounded "
+                        className="p-2 border rounded"
                         value={selectedCategory || ""}
                         onChange={(e) => handleCategoryChange(identifier, e.target.value)}
                     >
