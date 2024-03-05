@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import CategorySelector from "./recordBuilder/CategorySelector"
 import SubcategoryList from "./recordBuilder/SubcategoryList"
-import useSelectedDetails from "./recordBuilder/useSelectedDetails"
 
 type Subcategory = {
     name: string
@@ -311,6 +310,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                                     selectedDetail={selectedDetail}
                                     setSelectedDetails={setSelectedDetails}
                                     identifier={key}
+                                    // jsonData={jsonData} // Assuming you're passing the entire jsonData for the component to use
                                 />
                             </div>
                         </div>
@@ -341,15 +341,10 @@ interface EditingState {
 
 const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                                                                                selectedDetail,
+                                                                               setSelectedDetails,
                                                                                identifier,
                                                                            }) => {
-    const {
-        selectedDetails,
-        setSelectedDetails,
-        updateSelectedDetails,
-        addSelectedDetail,
-        removeSelectedDetail,
-    } = useSelectedDetails()
+
     const addSubcategory = (identifier: string) => {
         setSelectedDetails(prevDetails => ({
             ...prevDetails,
@@ -360,100 +355,56 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
         }))
     }
 
-    const handleCategoryChange = (newCategoryName: string) => {
-        const categoryData = jsonData.find((item) => item.name === newCategoryName)?.locationDetails
-        const newSubcategories = categoryData?.map(subcat => ({
-            name: subcat.name,
-            values: subcat.values || [],
-            isSelectable: subcat.isSelectable,
-        })) || []
+    const addCategory = () => {
+        const newCategoryId = `${Date.now()}`
 
-        updateSelectedDetails(identifier, {
-            ...selectedDetails[identifier],
-            category: newCategoryName,
-            subcategories: newSubcategories,
+        setSelectedDetails(prevDetails => ({
+            ...prevDetails,
+            [newCategoryId]: {
+                category: "",
+                values: [],
+                subcategories: [],
+                collection: jsonData[0].name,
+            },
+        }))
+    }
+
+    const handleCategoryChange = (identifier: string, newCategoryName: string) => {
+        setSelectedDetails(prevDetails => {
+            const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName)
+
+            const newSubcategories = categoryData?.subcategories?.map(subcat => ({
+                name: subcat.name,
+                values: subcat.values || [],
+                category: newCategoryName,
+                isSelectable: subcat.isSelectable,
+            })) || []
+
+            const updatedDetails = {
+                ...prevDetails,
+                [identifier]: {
+                    category: newCategoryName,
+                    subcategories: newSubcategories || [],
+                    values: categoryData?.values || [],
+                    collection: jsonData[0].name,
+                },
+            }
+
+            return updatedDetails
         })
     }
 
-    // const handleSubcategoryChange = (itemIndex: string, subcatIndex: number, newName: string) => {
-    //     setSelectedDetails(prevDetails => ({
-    //         ...prevDetails,
-    //         [itemIndex]: {
-    //             ...prevDetails[itemIndex],
-    //             subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
-    //                 index === subcatIndex ? { ...subcat, name: newName } : subcat,
-    //             ),
-    //         },
-    //     }))
-    // }
-
-    const handleSubcategoryChange = (identifier: string, subcatIndex: number, newName: string) => {
-        const updatedSubcategories = selectedDetails[identifier].subcategories.map((subcat, index) =>
-            index === subcatIndex ? { ...subcat, name: newName } : subcat,
-        );
-
-        updateSelectedDetails(identifier, { subcategories: updatedSubcategories });
-    };
-
-
-    const [editingState, setEditingState] = useState<EditingState>({
-        isEditing: false,
-        editingIndex: null,
-        editValue: "",
-    })
-
-    const inputRef = useRef<HTMLTextAreaElement>(null)
-
-    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setEditingState({
-            ...editingState,
-            editValue: event.target.value,
-        })
+    const handleDetailChange = (itemIndex: string, detailIndex: any) => {
+        setSelectedDetails(prevDetails => ({
+            ...prevDetails,
+            [itemIndex]: {
+                ...prevDetails[itemIndex],
+                values: detailIndex,
+                subcategories: prevDetails[itemIndex]?.subcategories || [],
+            },
+        }))
     }
 
-    const handleDoubleClick = (index: number, name: string) => {
-        setEditingState({
-            isEditing: true,
-            editingIndex: index,
-            editValue: name,
-        })
-    }
-    // const handleCategoryChange = (identifier: string, newCategoryName: string) => {
-    //     setSelectedDetails(prevDetails => {
-    //         const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName)
-    //
-    //         const newSubcategories = categoryData?.subcategories?.map(subcat => ({
-    //             name: subcat.name,
-    //             values: subcat.values || [],
-    //             category: newCategoryName,
-    //             isSelectable: subcat.isSelectable,
-    //         })) || []
-    //
-    //         const updatedDetails = {
-    //             ...prevDetails,
-    //             [identifier]: {
-    //                 category: newCategoryName,
-    //                 subcategories: newSubcategories || [],
-    //                 values: categoryData?.values || [],
-    //                 collection: jsonData[0].name,
-    //             },
-    //         }
-    //
-    //         return updatedDetails
-    //     })
-    // }
-    //
-    // const handleDetailChange = (itemIndex: string, detailIndex: any) => {
-    //     setSelectedDetails(prevDetails => ({
-    //         ...prevDetails,
-    //         [itemIndex]: {
-    //             ...prevDetails[itemIndex],
-    //             values: detailIndex,
-    //             subcategories: prevDetails[itemIndex]?.subcategories || [],
-    //         },
-    //     }))
-    // }
-    //
     const handleAddSubcategory = (itemIndex: string) => {
         setSelectedDetails(prevDetails => ({
             ...prevDetails,
@@ -485,46 +436,47 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             }
         })
     }
-    //
-    // const handleSubcategoryChange = (itemIndex: string, subcatIndex: number, newName: string) => {
-    //     setSelectedDetails(prevDetails => ({
-    //         ...prevDetails,
-    //         [itemIndex]: {
-    //             ...prevDetails[itemIndex],
-    //             subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
-    //                 index === subcatIndex ? { ...subcat, name: newName } : subcat,
-    //             ),
-    //         },
-    //     }))
-    // }
+
+    const handleSubcategoryChange = (itemIndex: string, subcatIndex: number, newName: string) => {
+        setSelectedDetails(prevDetails => ({
+            ...prevDetails,
+            [itemIndex]: {
+                ...prevDetails[itemIndex],
+                subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
+                    index === subcatIndex ? { ...subcat, name: newName } : subcat,
+                ),
+            },
+        }))
+    }
 
 
-    // const [editingState, setEditingState] = useState<EditingState>({
-    //     isEditing: false,
-    //     editingIndex: null,
-    //     editValue: "",
-    // })
-    //
-    // const inputRef = useRef<HTMLTextAreaElement>(null)
-    //
-    // const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    //     const value = e.target.value
-    //     setEditingState(prevState => ({ ...prevState, editValue: value }))
-    //     resizeTextarea(e.target)
-    // }
-    //
+    const [editingState, setEditingState] = useState<EditingState>({
+        isEditing: false,
+        editingIndex: null,
+        editValue: "",
+    })
+
+    const inputRef = useRef<HTMLTextAreaElement>(null)
+
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const value = e.target.value
+        setEditingState(prevState => ({ ...prevState, editValue: value }))
+        resizeTextarea(e.target)
+    }
+
     const resizeTextarea = (textarea: HTMLTextAreaElement) => {
         textarea.style.height = "auto"
         textarea.style.height = `${textarea.scrollHeight}px`
     }
 
-    // const handleDoubleClick = (index: number | null, name: string) => {
-    //     setEditingState({
-    //         isEditing: true,
-    //         editingIndex: index,
-    //         editValue: name,
-    //     })
-    // }
+    const handleDoubleClick = (index: number | null, name: string) => {
+        setEditingState({
+            isEditing: true,
+            editingIndex: index,
+            editValue: name,
+        })
+    }
 
     useEffect(() => {
         if (editingState.isEditing && inputRef.current) {
