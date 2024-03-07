@@ -310,7 +310,6 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                                     selectedDetail={selectedDetail}
                                     setSelectedDetails={setSelectedDetails}
                                     identifier={key}
-                                    // jsonData={jsonData} // Assuming you're passing the entire jsonData for the component to use
                                 />
                             </div>
                         </div>
@@ -351,20 +350,6 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             [identifier]: {
                 ...prevDetails[identifier],
                 subcategories: [...prevDetails[identifier]?.subcategories || []],
-            },
-        }))
-    }
-
-    const addCategory = () => {
-        const newCategoryId = `${Date.now()}`
-
-        setSelectedDetails(prevDetails => ({
-            ...prevDetails,
-            [newCategoryId]: {
-                category: "",
-                values: [],
-                subcategories: [],
-                collection: jsonData[0].name,
             },
         }))
     }
@@ -503,19 +488,24 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                 handleCategoryChange={handleCategoryChange}
                 addSubcategory={addSubcategory}
                 locationDetails={jsonData[0].locationDetails}
+                setEditingState={setEditingState}
             />
 
             <div className="ml-16">
                 <SubcategoryList
                     identifier={identifier}
                     subcategories={selectedDetail.subcategories}
+                    selectedDetail={selectedDetail}
+                    setSelectedDetail={setSelectedDetails}
                     editingState={editingState}
                     handleDoubleClick={handleDoubleClick}
                     handleChange={handleChange}
                     handleBlur={handleBlur}
                     deleteSubcategory={deleteSubcategory}
                     inputRef={inputRef}
-                    handleSubcategoryChange={handleSubcategoryChange} />
+                    handleSubcategoryChange={handleSubcategoryChange}
+                    setEditingState={setEditingState}
+                />
             </div>
 
             <div className="flex flex-row ml-16 w-full">

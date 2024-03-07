@@ -1,12 +1,19 @@
 import React from "react"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
 
+interface EditingState {
+    isEditing: boolean;
+    editingIndex: number | null;
+    editValue: string;
+}
+
 interface CategorySelectorProps {
     identifier: string;
     selectedCategory: string;
     handleCategoryChange: (identifier: string, newCategory: string) => void;
     addSubcategory: (identifier: string) => void;
     locationDetails: Array<{ name: string }>;
+    setEditingState: React.Dispatch<React.SetStateAction<EditingState>>
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({
@@ -15,6 +22,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                                                                handleCategoryChange,
                                                                addSubcategory,
                                                                locationDetails,
+                                                               setEditingState
                                                            }) => {
     return (
         <div key={identifier}>

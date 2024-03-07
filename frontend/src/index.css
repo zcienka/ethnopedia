@@ -68,4 +68,10 @@
     .color-button {
         @apply px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold border-none;
     }
+
+    .logo {
+        font-family: "Jomhuria", serif;
+        font-weight: 400;
+        font-style: normal;
+    }
 }

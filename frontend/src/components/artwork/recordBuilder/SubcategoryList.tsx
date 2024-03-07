@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import SubcategoryComponent from "./SubcategoryComponent"
 
@@ -13,10 +13,18 @@ interface EditingState {
     editValue: string;
 }
 
+interface SelectedDetail {
+    category: any;
+    subcategories: Subcategory[];
+    collection: string
+    values?: string[]
+}
 
 interface SubcategoryListProps {
     identifier: string;
     subcategories: Subcategory[];
+    selectedDetail: SelectedDetail;
+    setSelectedDetail: React.Dispatch<React.SetStateAction<{ [key: string]: SelectedDetail }>>;
     editingState: EditingState;
     handleDoubleClick: (index: number, name: string) => void;
     handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -24,11 +32,41 @@ interface SubcategoryListProps {
     deleteSubcategory: (identifier: string, index: number) => void;
     inputRef: React.RefObject<HTMLTextAreaElement>;
     handleSubcategoryChange: (identifier: string, index: number, value: string) => void;
+    setEditingState: React.Dispatch<React.SetStateAction<EditingState>>;
 }
+
+interface NestedSubcategory {
+    category: string
+    values: string[]
+}
+
+interface MainCategory {
+    name: string
+    values?: string[]
+    subcategories?: NestedSubcategory[]
+}
+
+interface NestedSubcategory {
+    category: string
+    values: string[]
+}
+
+interface SubcategoriesMap {
+    [key: string]: {
+        name: string;
+        values?: string[];
+        subcategories?: NestedSubcategory[]
+    }
+}
+
+const initialSubcategories: SubcategoriesMap = {}
+
 
 const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                                              identifier,
                                                              subcategories,
+                                                             selectedDetail,
+                                                             setSelectedDetail,
                                                              editingState,
                                                              handleDoubleClick,
                                                              handleChange,
@@ -36,6 +74,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                                              deleteSubcategory,
                                                              inputRef,
                                                              handleSubcategoryChange,
+                                                             setEditingState,
                                                          }) => {
 
     const [localEditingState, setLocalEditingState] = useState<EditingState>({
@@ -43,6 +82,10 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
         editingIndex: null,
         editValue: "",
     })
+
+    const [localSubcategories, setLocalSubcategories] = useState<SubcategoriesMap>({})    // useEffect(() => {
+    //     setLocalSubcategories(subcategories)
+    // }, [initialSubcategories])
 
     const handleLocalDoubleClick = (index: number | null, name: string) => {
         setLocalEditingState({
@@ -52,17 +95,48 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
         })
     }
 
-    const handleAddNestedValue = (subcatIndex: number) => {
-        const newSubcategories = subcategories.map((subcat, index) => {
-            if (index === subcatIndex) {
-                return {
-                    ...subcat,
-                    values: [...(subcat.values || []), "New Nested Value"],
-                }
-            }
-            return subcat
-        })
+    const handleAddNestedValue = (subcatIdentifier: string) => {
+        const newNestedSubcategory: NestedSubcategory = {
+            category: "New Category",
+            values: ["New Nested Value"],
+        }
+
+        setLocalSubcategories(prev => ({
+            ...prev,
+            [subcatIdentifier]: {
+                ...prev[subcatIdentifier],
+                values: [...(prev[subcatIdentifier]?.values || []), Math.random().toString()],
+            },
+        }))
     }
+
+    const renderSubcategory = (subcatIndex: number) => {
+        const subcategoryEntry = Object.entries(localSubcategories)[subcatIndex]
+        if (!subcategoryEntry) return null // or some fallback UI
+
+        const [key, value] = subcategoryEntry
+
+        return (
+            <div key={key} onDoubleClick={() => handleLocalDoubleClick(subcatIndex, value.name)}>
+                <h3>{value.name}</h3>
+                {value.values && value.values.map((val, i) => <p key={i}>{val}</p>)}
+
+                <ul className="list-disc pl-8">
+                    <SubcategoryComponent
+                        subcatIndex={subcatIndex}
+                        editingState={localEditingState}
+                        handleChange={handleChange}
+                        handleBlur={handleBlur}
+                        inputRef={inputRef}
+                        handleDoubleClick={handleLocalDoubleClick}
+                        selectedDetail={selectedDetail}
+                        setSelectedDetail={setSelectedDetail}
+                    />
+                </ul>
+            </div>
+        )
+    }
+
 
     return (
         <>
@@ -105,29 +179,34 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                 </div>
                             </div>
 
-                            <button type="button"
-                                    onClick={() => handleAddNestedValue(subcatIndex)}
-                                    className="ml-2">
-                                Add Nested Value
-                            </button>
 
                             <div className="flex flex-row w-full h-full">
                                 <div className="flex relative">
                                     <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
                                 </div>
-                                {/*<div className="ml-8">*/}
-                                {/*    <SubcategoryComponent*/}
-                                {/*        subcatIndex={subcatIndex}*/}
-                                {/*        subcatDetail={subcatDetail}*/}
-                                {/*        editingState={localEditingState}*/}
-                                {/*        handleChange={handleChange}*/}
-                                {/*        handleBlur={handleBlur}*/}
-                                {/*        inputRef={inputRef}*/}
-                                {/*        handleDoubleClick={handleLocalDoubleClick}*/}
-                                {/*    />*/}
-                                {/*</div>*/}
+
+                                <div className="flex flex-col">
+                                    {renderSubcategory(subcatIndex)}
+                                    {/*{localSubcategories.map((subcat: NestedSubcategory, index: number) => (*/}
+                                    {/*    <div key={index} className="mb-4">*/}
+
+
+                                    {/*        <div*/}
+                                    {/*            className="ml-8">{subcat.category || "Unnamed Category"}</div>*/}
+                                    {/*        {subcat.values && subcat.values.length > 0 && (*/}
+
+                                    {/*        )}*/}
+                                    {/*    </div>*/}
+                                    {/*))}*/}
+                                </div>
                             </div>
                         </div>
+
+                        <button type="button"
+                                onClick={() => handleAddNestedValue(subcatDetail.name.toString())}
+                                className="ml-2">
+                            Add Nested Value
+                        </button>
 
                         {subcatDetail.values?.length !== 0 &&
                             <div className="flex flex-row">

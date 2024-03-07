@@ -6,19 +6,33 @@ interface EditingState {
     editValue: string;
 }
 
+interface SelectedDetail {
+    category: any;
+    subcategories: Subcategory[];
+    collection: string
+    values?: string[]
+}
+
 interface SubcategoryComponentProps {
     subcatIndex: number;
-    subcatDetail: { name: string };
+    // subcatDetail: { name: string };
     editingState: EditingState;
     handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
     handleBlur: () => void;
     inputRef?: React.RefObject<HTMLTextAreaElement>;
     handleDoubleClick: (index: number | null, name: string) => void;
+    selectedDetail: SelectedDetail;
+    setSelectedDetail: React.Dispatch<React.SetStateAction<{ [key: string]: SelectedDetail }>>;
+}
+
+interface Subcategory {
+    name: string;
+    values?: string[];
 }
 
 const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
                                                                        subcatIndex,
-                                                                       subcatDetail,
+                                                                       // subcatDetail,
                                                                        editingState,
                                                                        handleChange,
                                                                        handleBlur,
@@ -42,10 +56,11 @@ const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
           ></textarea>
                 </div>
             ) : (
-                <div className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2"
-                     onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}>
-                    <p className="w-full">{subcatDetail.name === "" ? "Wybierz podkategorię" : subcatDetail.name}</p>
-                </div>
+                <div>{subcatIndex}</div>
+                // <div className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2"
+                //      onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}>
+                //     <p className="w-full">{subcatDetail.name === "" ? "Wybierz podkategorię" : subcatDetail.name}</p>
+                // </div>
             )}
         </>
     )

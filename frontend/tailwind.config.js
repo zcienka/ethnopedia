@@ -9,6 +9,7 @@ module.exports = {
     theme: {
         fontFamily: {
             roboto: ["Roboto", "sans-serif"],
+            jomhuria: ["Jomhuria", "sans-serif"],
         },
         extend: {
             spacing: {
