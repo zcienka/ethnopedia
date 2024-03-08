@@ -6,6 +6,6 @@ const {
     getXlsxWithAllData
 } = require("../controllers/xlsx")
 
-router.route("/").get(getXlsxWithAllData)
+router.route("/:collectionName").get(getXlsxWithAllData)
 
 module.exports = router

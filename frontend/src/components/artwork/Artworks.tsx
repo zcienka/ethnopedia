@@ -62,9 +62,9 @@ const Artworks = () => {
         }, {})
         setSelectedArtworks(newSelection)
     }
-
+    
     const exportToExcel = () => {
-        getXlsxWithAllData()
+        getXlsxWithAllData(collection as string)
         // const ws = XLSX.utils.json_to_sheet(artworkData)
         // const wb = XLSX.utils.book_new()
         // XLSX.utils.book_append_sheet(wb, ws, "DataSheet")
