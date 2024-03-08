@@ -15,7 +15,6 @@ interface SelectedDetail {
 
 interface SubcategoryComponentProps {
     subcatIndex: number;
-    // subcatDetail: { name: string };
     editingState: EditingState;
     handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
     handleBlur: () => void;
@@ -28,6 +27,7 @@ interface SubcategoryComponentProps {
 interface Subcategory {
     name: string;
     values?: string[];
+    subcategories?: Subcategory[];
 }
 
 const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
@@ -38,6 +38,7 @@ const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
                                                                        handleBlur,
                                                                        inputRef,
                                                                        handleDoubleClick,
+                                                                       selectedDetail
                                                                    }) => {
 
 
@@ -52,11 +53,10 @@ const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
               value={editingState.editValue}
               onChange={handleChange}
               onBlur={handleBlur}
-              autoFocus
-          ></textarea>
+              autoFocus></textarea>
                 </div>
             ) : (
-                <div>{subcatIndex}</div>
+                <div>{selectedDetail.category}</div>
                 // <div className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2"
                 //      onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}>
                 //     <p className="w-full">{subcatDetail.name === "" ? "Wybierz podkategorię" : subcatDetail.name}</p>

@@ -9,7 +9,6 @@ import FileDropzone from "../FileDropzone"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.svg"
 import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
-import CreateArtwork from "./CreateArtwork"
 import WarningPopup from "../../pages/collections/WarningPopup"
 import CustomDropdown from "../CustomDropdown"
 import { getSingleCollection, useBatchDeleteCollectionMutation } from "../../api/collections"
@@ -215,7 +214,7 @@ const Artworks = () => {
                     <div className="flex w-full md:w-auto">
                         <div className="flex flex-1 space-x-2">
                             <button className="flex items-center justify-center dark:text-white
-                            hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                            hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 px-4 py-2
                             dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                     type="button"
                                     onClick={() => navigate(`/collections/${collection}/create-artwork`)}>
@@ -225,7 +224,7 @@ const Artworks = () => {
                                 Nowy rekord
                             </button>
                             <button className="flex items-center justify-center dark:text-white
-                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                     type="button"
                                     onClick={() => exportToExcel()}
@@ -248,7 +247,7 @@ const Artworks = () => {
                             </button>
 
                             <button className="flex items-center justify-center dark:text-white
-                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                     type="button"
                                     onClick={selectAll}
@@ -257,7 +256,7 @@ const Artworks = () => {
                             </button>
 
                             <button className="flex items-center justify-center dark:text-white
-                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                     type="button"
                                     onClick={deselectAll}
@@ -266,7 +265,7 @@ const Artworks = () => {
                             </button>
 
                             <button className="flex items-center justify-center dark:text-white
-                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                     type="button"
                                     onClick={() => {

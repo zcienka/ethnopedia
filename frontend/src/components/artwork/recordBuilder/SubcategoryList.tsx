@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
-import SubcategoryComponent from "./SubcategoryComponent"
+import NestedSubcategoryComponent from "./SubcategoryComponent"
 
 interface Subcategory {
     name: string;
     values?: string[];
+    subcategories?: Subcategory[];
 }
 
 interface EditingState {
@@ -97,32 +98,53 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
 
     const handleAddNestedValue = (subcatIdentifier: string) => {
         const newNestedSubcategory: NestedSubcategory = {
-            category: "New Category",
-            values: ["New Nested Value"],
+            category: "categorycategorycategorycategorycategorycategory",
+            values: [],
         }
 
         setLocalSubcategories(prev => ({
             ...prev,
             [subcatIdentifier]: {
                 ...prev[subcatIdentifier],
-                values: [...(prev[subcatIdentifier]?.values || []), Math.random().toString()],
+                subcategories: [...(prev[subcatIdentifier]?.subcategories || []), newNestedSubcategory],
+                values: [...(prev[subcatIdentifier]?.values || []), "asdasdasdsdas"],
             },
         }))
     }
-
-    const renderSubcategory = (subcatIndex: number) => {
+    
+    const displayNestedSubcategory = (subcatIndex: number) => {
         const subcategoryEntry = Object.entries(localSubcategories)[subcatIndex]
-        if (!subcategoryEntry) return null // or some fallback UI
+        if (!subcategoryEntry) return null
 
         const [key, value] = subcategoryEntry
 
+        setSelectedDetail((prevDetail: any) => {
+            console.log(prevDetail.subcategories)
+            if (!prevDetail.subcategories) {
+                return prevDetail
+            }
+
+            const updatedSubcategories = prevDetail.subcategories.map((subcat: Subcategory, index: number) => {
+                if (index === subcatIndex) {
+                    return {
+                        ...subcat,
+                        values: [...(subcat.values || []), "daihodahslkdahsl"],
+                    }
+                }
+                return subcat
+            })
+
+            return {
+                ...prevDetail,
+                subcategories: updatedSubcategories,
+            }
+        })
+
+
         return (
             <div key={key} onDoubleClick={() => handleLocalDoubleClick(subcatIndex, value.name)}>
-                <h3>{value.name}</h3>
-                {value.values && value.values.map((val, i) => <p key={i}>{val}</p>)}
-
-                <ul className="list-disc pl-8">
-                    <SubcategoryComponent
+                <ul className="pl-8">
+                    <NestedSubcategoryComponent
                         subcatIndex={subcatIndex}
                         editingState={localEditingState}
                         handleChange={handleChange}
@@ -186,7 +208,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                 </div>
 
                                 <div className="flex flex-col">
-                                    {renderSubcategory(subcatIndex)}
+                                    {displayNestedSubcategory(subcatIndex)}
                                     {/*{localSubcategories.map((subcat: NestedSubcategory, index: number) => (*/}
                                     {/*    <div key={index} className="mb-4">*/}
 
