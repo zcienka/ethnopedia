@@ -13,6 +13,7 @@ const sections = require("./routes/section")
 const subsections = require("./routes/subsection")
 const categories = require("./routes/category")
 const general = require("./routes/general")
+const xlsx = require("./routes/xlsx")
 
 const {connectMongoDBNativeDriver} = require("./db/connect")
 import initializeDatabase from "./initialization"
@@ -28,6 +29,7 @@ app.use("/api/v1/sections", sections)
 app.use("/api/v1/subsections", subsections)
 app.use("/api/v1/categories", categories)
 app.use("/api/v1", general)
+app.use("/api/v1/xlsx", xlsx)
 
 const port = process.env.PORT || 5000
 
