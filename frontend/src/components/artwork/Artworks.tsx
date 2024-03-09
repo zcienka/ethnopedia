@@ -7,6 +7,7 @@ import Navbar from "../navbar/Navbar"
 import { useNavigate, useParams } from "react-router-dom"
 import SearchComponent from "../search/SearchComponent"
 import FileDropzone from "../FileDropzone"
+import ExportOptions from "../ExportOptions"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import { ReactComponent as FileImportIcon } from "../../assets/icons/fileImport.svg"
 import { ReactComponent as FileExportIcon } from "../../assets/icons/fileExport.svg"
@@ -23,6 +24,7 @@ import category from "../Category"
 const Artworks = () => {
     const [selectedArtworks, setSelectedArtworks] = useState<{ [key: string]: boolean }>({})
     const [showFileDropzone, setShowFileDropzone] = useState<boolean>(false)
+    const [showExportOptions, setShowExportOptions] = useState<boolean>(false)
     const [showCreateArtwork, setShowCreateArtwork] = useState<boolean>(false)
     const [showDeleteRecordsWarning, setShowDeleteRecordsWarning] = useState(false)
     const [showDeleteCollectionWarning, setShowDeleteCollectionWarning] = useState(false)
@@ -163,6 +165,7 @@ const Artworks = () => {
             <Navbar />
 
             {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
+            {showExportOptions && <ExportOptions onClose={() => setShowExportOptions(false)} />}
             {/*{showCreateArtwork && <CreateArtwork onClose={() => setShowCreateArtwork(false)} />}*/}
             {showDeleteRecordsWarning &&
                 <WarningPopup onClose={() => setShowDeleteRecordsWarning(false)}
@@ -226,19 +229,17 @@ const Artworks = () => {
                                     </span>
                                 Nowy rekord
                             </button>
-                            <form>
                                 <button className="flex items-center justify-center dark:text-white
                                             hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                             dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                         type="button"
-                                        onClick={() => exportToExcel()}
+                                        onClick={() => setShowExportOptions(showExportOptions => !showExportOptions)}
                                 >
                                 <span className="text-white dark:text-gray-400">
                                     <FileExportIcon />
                                 </span>
                                     Eksportuj plik
                                 </button>
-                            </form>
                             <button className="flex items-center justify-center dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
@@ -290,6 +291,7 @@ const Artworks = () => {
                             </span>
                     </div>
                     {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
+                    {showExportOptions && <ExportOptions onClose={() => setShowExportOptions(false)} />}
                 </div>
             </div>
 
