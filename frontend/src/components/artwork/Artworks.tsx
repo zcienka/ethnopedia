@@ -65,14 +65,6 @@ const Artworks = () => {
         }, {})
         setSelectedArtworks(newSelection)
     }
-    
-    const exportToExcel = () => {
-        getXlsxWithAllData(collection as string)
-        // const ws = XLSX.utils.json_to_sheet(artworkData)
-        // const wb = XLSX.utils.book_new()
-        // XLSX.utils.book_append_sheet(wb, ws, "DataSheet")
-        // XLSX.writeFile(wb, "DataExport.xlsx")
-    }
 
     const sortArtworks = (artworks: any[], order: string) => {
         switch (order) {
