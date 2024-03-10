@@ -11,6 +11,7 @@ interface SelectedDetail {
     subcategories: Subcategory[];
     collection: string
     values?: string[]
+    date: string
 }
 
 interface SubcategoryComponentProps {
@@ -56,7 +57,7 @@ const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
               autoFocus></textarea>
                 </div>
             ) : (
-                <div>{selectedDetail.category}</div>
+                <div>{subcatIndex}</div>
                 // <div className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2"
                 //      onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}>
                 //     <p className="w-full">{subcatDetail.name === "" ? "Wybierz podkategorię" : subcatDetail.name}</p>

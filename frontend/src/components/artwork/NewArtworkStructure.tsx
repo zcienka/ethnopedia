@@ -15,6 +15,7 @@ interface SelectedDetail {
     subcategories: Subcategory[];
     collection: string
     values?: string[]
+    date: string;
 }
 
 interface LocationDetail {
@@ -34,6 +35,7 @@ interface CollectionItem {
 
 interface CategoryAndValueSelectorProps {
     selectedDetail: SelectedDetail;
+    selectedDetails: { [key: string]: SelectedDetail };
     setSelectedDetails: React.Dispatch<React.SetStateAction<{ [key: string]: SelectedDetail }>>;
     identifier: string;
 }
@@ -289,6 +291,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                 values: [],
                 subcategories: [],
                 collection: jsonData[0].name,
+                date: new Date().toISOString(),
             },
         }))
     }
@@ -308,7 +311,9 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
 
                                 <CategoryAndValueSelector
                                     selectedDetail={selectedDetail}
+                                    selectedDetails={selectedDetails}
                                     setSelectedDetails={setSelectedDetails}
+                                    // setSelectedDetails={setSelectedDetails}
                                     identifier={key}
                                 />
                             </div>
@@ -339,6 +344,7 @@ interface EditingState {
 }
 
 const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
+                                                                               selectedDetails,
                                                                                selectedDetail,
                                                                                setSelectedDetails,
                                                                                identifier,
@@ -363,6 +369,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                 values: subcat.values || [],
                 category: newCategoryName,
                 isSelectable: subcat.isSelectable,
+                date: new Date().toISOString(),
             })) || []
 
             const updatedDetails = {
@@ -372,6 +379,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                     subcategories: newSubcategories || [],
                     values: categoryData?.values || [],
                     collection: jsonData[0].name,
+                    date: new Date().toISOString(),
                 },
             }
 
@@ -496,7 +504,8 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                     identifier={identifier}
                     subcategories={selectedDetail.subcategories}
                     selectedDetail={selectedDetail}
-                    setSelectedDetail={setSelectedDetails}
+                    selectedDetails={selectedDetails}
+                    setSelectedDetails={setSelectedDetails}
                     editingState={editingState}
                     handleDoubleClick={handleDoubleClick}
                     handleChange={handleChange}

@@ -21,6 +21,7 @@ interface SelectedDetail {
     subcategories: Subcategory[];
     collection: string
     values?: string[]
+    date: string
 }
 
 const CreateArtwork = () => {
@@ -35,6 +36,7 @@ const CreateArtwork = () => {
             values: [],
             subcategories: [],
             collection: "",
+            date: ""
         },
     }
     const [selectedDetails, setSelectedDetails] = useState<{ [key: string]: SelectedDetail }>(defaultSelectedDetails)
