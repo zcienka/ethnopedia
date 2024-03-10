@@ -5,22 +5,29 @@ import { getXlsxWithAllData } from "../api/xlsxFileHandler"
 
 type Props = {
     onClose: () => void,
-    keys: any
+    keys: Array<string>
 }
 
-
 const ExportOptions = (props: Props) => {
-    const [, setWindowOpen] = useState(false)
-
     const { collection } = useParams()
+    const [selectedKeys, setSelectedKeys] = useState<any>([]);
+
+    const handleCheckboxChange = (event: any) => {
+        const key = event.target.value
+        if(event.target.checked){
+            setSelectedKeys([...selectedKeys,key])
+        } else {
+            setSelectedKeys(selectedKeys.filter((id: any) => id !== key))
+        }
+    }
 
     function AllKeysWithCheckboxes(props: any) {
         const keys = props.keys;
-        const listItems = keys.map((key: any) =>
-        <span>
-        <input type="checkbox" id={key} name={key} value={key} checked></input>
-        <label> {key}</label>
-        </span>
+        const listItems = keys.map((key: string) =>
+            <span>
+                <input type="checkbox" id={key} name={key} value={key} onChange={event => handleCheckboxChange(event)} checked={selectedKeys.includes(key)}></input>
+                <label> {key}</label>
+            </span>
         );
         return (
           <>{listItems}</>
