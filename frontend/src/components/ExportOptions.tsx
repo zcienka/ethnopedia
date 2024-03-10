@@ -11,6 +11,7 @@ type Props = {
 const ExportOptions = (props: Props) => {
     const { collection } = useParams()
     const [selectedKeys, setSelectedKeys] = useState<any>([]);
+    const [exportSelectedRecords, setExportSelectedRecords] = useState<boolean>(false)
 
     const handleCheckboxChange = (event: any) => {
         const key = event.target.value
@@ -18,6 +19,16 @@ const ExportOptions = (props: Props) => {
             setSelectedKeys([...selectedKeys,key])
         } else {
             setSelectedKeys(selectedKeys.filter((id: any) => id !== key))
+        }
+    }
+
+    const handleExportSelectedRecordsChange = (event: any) => {
+        const chosen = event.target.value
+        console.log(chosen)
+        if(chosen === "onlyChecked") {
+            setExportSelectedRecords(true)
+        } else {
+            setExportSelectedRecords(false)
         }
     }
 
@@ -91,11 +102,11 @@ const ExportOptions = (props: Props) => {
                         </div>
                         <div className="flex flex-row space-x-2 text-sm px-4">
                                 <span className="py-1">
-                                    <input type="checkbox" id="onlyChecked" name="onlyChecked" value="onlyChecked"></input>
-                                    <label> Eksportuj tylko metadane zaznaczonych utworów</label>
+                                    <input type="checkbox" id="onlyChecked" name="onlyChecked" value="onlyChecked" onChange={event => handleExportSelectedRecordsChange(event)} checked={exportSelectedRecords}></input>
+                                    <label> Eksportuj metadane zaznaczonych utworów</label>
                                 </span>
                                 <span className="py-1">
-                                    <input type="checkbox" id="exportAll" name="exportAll" value="exportAll"></input>
+                                    <input type="checkbox" id="exportAll" name="exportAll" value="exportAll" onChange={event => handleExportSelectedRecordsChange(event)} checked={!exportSelectedRecords}></input>
                                     <label> Eksportuj metadane wszystkich utworów</label>
                                 </span>  
                         </div>
@@ -103,7 +114,7 @@ const ExportOptions = (props: Props) => {
                             <input className="flex items-center justify-end dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                        type="submit" value="Eksportuj dane" onClick={() => {getXlsxWithAllData(collection as string, sortKeysInRightOrder(props.keys))}}></input>
+                                        type="submit" value="Eksportuj metadane" onClick={() => {getXlsxWithAllData(collection as string, sortKeysInRightOrder(props.keys))}}></input>
                         </div>
                     </div>                   
                 </div>
