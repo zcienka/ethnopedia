@@ -4,13 +4,28 @@ import { useParams } from "react-router-dom"
 import { getXlsxWithAllData } from "../api/xlsxFileHandler"
 
 type Props = {
-    onClose: () => void
+    onClose: () => void,
+    keys: any
 }
 
-const ExportOptions = ({ onClose }: Props) => {
+
+const ExportOptions = (props: Props) => {
     const [, setWindowOpen] = useState(false)
 
     const { collection } = useParams()
+
+    function AllKeysWithCheckboxes(props: any) {
+        const keys = props.keys;
+        const listItems = keys.map((key: any) =>
+        <span>
+        <input type="checkbox" id={key} name={key} value={key} checked></input>
+        <label> {key}</label>
+        </span>
+        );
+        return (
+          <>{listItems}</>
+        );
+      }
 
     return <div
         id="default-modal"
@@ -30,32 +45,21 @@ const ExportOptions = ({ onClose }: Props) => {
                                 text-sm w-4 h-4 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600
                                 dark:hover:text-white"
                                 data-modal-hide="default-modal"
-                        onClick={onClose}>
+                        onClick={props.onClose}>
                             <Close />
                         </button>
                     </div>
                     <div>
-                            <div className="flex flex-col items-start px-4">   
-                                <p className="flex py-2">Wybierz kolumny do wyeksportowania:</p>                         
-                                <span>
-                                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></input>
-                                    <label> a</label>
-                                </span>
-                                <span>
-                                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></input>
-                                    <label> b</label>
-                                </span>
-                                <span>
-                                    <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></input>
-                                    <label> c</label>
-                                </span>                
-                            </div>
-                            <div className="flex justify-end px-4 py-4">
-                                <input className="flex items-center justify-end dark:text-white
-                                            hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
-                                            dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                            type="submit" value="Eksportuj dane" onClick={() => {getXlsxWithAllData(collection as string)}}></input>
-                            </div>
+                        <p className="flex py-2 px-4">Wybierz kolumny do wyeksportowania:</p>
+                        <div className="flex flex-col items-start px-4 h-64 overflow-y-auto">   
+                            <AllKeysWithCheckboxes keys={props.keys}/>                                    
+                        </div>
+                        <div className="flex justify-end px-4 py-4">
+                            <input className="flex items-center justify-end dark:text-white
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
+                                        type="submit" value="Eksportuj dane" onClick={() => {getXlsxWithAllData(collection as string)}}></input>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ const mongoClient = getMongoDBNativeDriverClient()
 
 const Subsection = require("../models/subsection")
 
+
 const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
     try {
         const collectionName = decodeURIComponent(req.params.collectionName)
@@ -63,6 +64,32 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
     }
 }
 
+const getAllCaterories = async (req: Request, res: Response, next: any) => {
+    try {
+        const collectionName = decodeURIComponent(req.params.collectionName)
+
+        const records = await mongoClient.db().collection('artworks').find({collectionName: collectionName}).toArray()
+        
+        // find keys
+        let keys: any = []
+        records.forEach((record: any) => {
+            for (const property in record) {
+                if (property != "_id") {
+                    keys.push(property)
+                }
+            }
+        })
+        let keysUnique = keys.filter((value: any, index: number, array: any) => {
+            return array.indexOf(value) === index
+        })
+        console.log(keysUnique)
+        return res.status(200).json({ keysUnique })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
-    getXlsxWithAllData
+    getXlsxWithAllData,
+    getAllCaterories
 }

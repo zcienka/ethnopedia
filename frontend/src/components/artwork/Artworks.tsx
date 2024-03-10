@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "react-query"
 import { getArtworksByCategory, useBatchDeleteArtworkMutation } from "../../api/artworks"
-import { getXlsxWithAllData } from "../../api/xlsxFileHandler"
+import { getXlsxWithAllData, getAllKeys } from "../../api/xlsxFileHandler"
 import LoadingPage from "../../pages/LoadingPage"
 import React, { useMemo, useState } from "react"
 import Navbar from "../navbar/Navbar"
@@ -30,6 +30,7 @@ const Artworks = () => {
     const [showDeleteCollectionWarning, setShowDeleteCollectionWarning] = useState(false)
     const [sortOrder, setSortOrder] = useState<string>("default")
     const [showEditCollection, setShowEditCollection] = useState<boolean>(false)
+    const [keys, setKeys] = useState<Array<string>>([])
 
     const [currentPage, setCurrentPage] = useState(1)
     const pageSize = 10
@@ -164,8 +165,8 @@ const Artworks = () => {
         return <>
             <Navbar />
 
-            {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
-            {showExportOptions && <ExportOptions onClose={() => setShowExportOptions(false)} />}
+            {/* {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
+            {showExportOptions && <ExportOptions onClose={() => setShowExportOptions(false)} />} */}
             {/*{showCreateArtwork && <CreateArtwork onClose={() => setShowCreateArtwork(false)} />}*/}
             {showDeleteRecordsWarning &&
                 <WarningPopup onClose={() => setShowDeleteRecordsWarning(false)}
@@ -233,7 +234,11 @@ const Artworks = () => {
                                             hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                             dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                         type="button"
-                                        onClick={() => setShowExportOptions(showExportOptions => !showExportOptions)}
+                                        onClick={async () => {
+                                            const keyData = await getAllKeys(collection as string);
+                                            setKeys(keyData.keysUnique);
+                                            setShowExportOptions(showExportOptions => !showExportOptions)
+                                        }}
                                 >
                                 <span className="text-white dark:text-gray-400">
                                     <FileExportIcon />
@@ -291,7 +296,7 @@ const Artworks = () => {
                             </span>
                     </div>
                     {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
-                    {showExportOptions && <ExportOptions onClose={() => setShowExportOptions(false)} />}
+                    {showExportOptions && <ExportOptions keys={keys} onClose={() => setShowExportOptions(false)} />}
                 </div>
             </div>
 

@@ -23,3 +23,8 @@ export const getXlsxWithAllData = async (collectionName: string) => {
         URL.revokeObjectURL(href);
     });
 }
+
+export const getAllKeys = async (collectionName: string) => {
+    return await axios.get(`${API_URL}v1/xlsx/keys/${collectionName}`)
+        .then(res => res.data)
+}
