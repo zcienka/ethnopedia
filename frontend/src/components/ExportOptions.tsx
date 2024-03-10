@@ -21,10 +21,9 @@ const ExportOptions = (props: Props) => {
         }
     }
 
+    // without this function excel columns are generated in the same order in which the checkboxes were checked
     const sortKeysInRightOrder = (allKeys: Array<string>) => {
         let keysInRightOrder: Array<string> = []
-        console.log(allKeys)
-        console.log(selectedKeys)
         allKeys.forEach((key) => {
             if(selectedKeys.includes(key)) {
                 keysInRightOrder.push(key)
@@ -58,7 +57,7 @@ const ExportOptions = (props: Props) => {
                 <div className="relative bg-white rounded-lg shadow dark:bg-gray-800 border dark:border-gray-600">
                     <div className="flex items-start justify-between p-4 rounded-t">
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                            Ustawienia eksportu
+                            Ustawienia eksportu metadanych do pliku .xlsx
                         </h3>
                         <button type="button"
                                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg
@@ -69,18 +68,44 @@ const ExportOptions = (props: Props) => {
                             <Close />
                         </button>
                     </div>
-                    <div>
-                        <p className="flex py-2 px-4">Wybierz kolumny do wyeksportowania:</p>
+                    <div>          
+                        <p className="flex py-2 px-4 text-base font-medium">Kolumny do wyeksportowania:</p>     
                         <div className="flex flex-col items-start px-4 h-64 overflow-y-auto">   
                             <AllKeysWithCheckboxes keys={props.keys}/>                                    
                         </div>
-                        <div className="flex justify-end px-4 py-4">
+                        <div className="flex flex-row space-x-2 items-start px-4 py-4">
+                            <input className="flex items-center justify-end dark:text-white text-xs
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
+                                        type="button"
+                                        id="checkAllKeys"
+                                        name="checkAllKeys"
+                                        value="Zaznacz wszystkie"></input>
+                            <input className="flex items-center justify-end dark:text-white text-xs
+                                        hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
+                                        dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
+                                        type="button"
+                                        id="uncheckAllKeys"
+                                        name="uncheckAllKeys"
+                                        value="Odznacz wszystkie"></input>
+                        </div>
+                        <div className="flex flex-row space-x-2 text-sm px-4">
+                                <span className="py-1">
+                                    <input type="checkbox" id="onlyChecked" name="onlyChecked" value="onlyChecked"></input>
+                                    <label> Eksportuj tylko metadane zaznaczonych utworów</label>
+                                </span>
+                                <span className="py-1">
+                                    <input type="checkbox" id="exportAll" name="exportAll" value="exportAll"></input>
+                                    <label> Eksportuj metadane wszystkich utworów</label>
+                                </span>  
+                        </div>
+                        <div className="flex justify-end px-4 py-4">  
                             <input className="flex items-center justify-end dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                         type="submit" value="Eksportuj dane" onClick={() => {getXlsxWithAllData(collection as string, sortKeysInRightOrder(props.keys))}}></input>
                         </div>
-                    </div>
+                    </div>                   
                 </div>
             </div>
         </div>
