@@ -6,6 +6,7 @@ import { getXlsxWithAllData } from "../api/xlsxFileHandler"
 type Props = {
     onClose: () => void,
     keys: Array<string>
+    selectedArtworks: { [key: string]: boolean }
 }
 
 const ExportOptions = (props: Props) => {
@@ -122,7 +123,8 @@ const ExportOptions = (props: Props) => {
                             <input className="flex items-center justify-end dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                        type="submit" value="Eksportuj metadane" onClick={() => {getXlsxWithAllData(collection as string, sortKeysInRightOrder(props.keys))}}></input>
+                                        type="submit" value="Eksportuj metadane" onClick={() => {getXlsxWithAllData(collection as string, sortKeysInRightOrder(props.keys), props.selectedArtworks, exportSelectedRecords)}}
+                                        ></input>
                         </div>
                     </div>                   
                 </div>

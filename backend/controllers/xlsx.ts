@@ -10,6 +10,10 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
     try {
         const collectionName = decodeURIComponent(req.params.collectionName)
         const keysToInclude: any = req.query.keysToInclude
+        const selectedArtworks: any = req.query.selectedArtworks
+        const selectedArtworksIds: any = Object.values(selectedArtworks)
+        const exportSelectedRecords: any = req.query.exportSelectedRecords
+
         let workbook = new excelJS.Workbook()
         const sheet = workbook.addWorksheet("test")
 
@@ -21,8 +25,6 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
                 columnNames.push({header: key, key: key})
             })
         } else {
-            console.log("WRONG")
-            console.log(keysToInclude)
             Object.keys(keysToInclude).forEach((k: any) => {
                 columnNames.push({header: keysToInclude[k], key: keysToInclude[k]})
             })
@@ -30,9 +32,17 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
         
         sheet.columns = columnNames
 
-        records.forEach((record: any) => {
-            sheet.addRow(record)
-        })
+        if(exportSelectedRecords === "true") {
+            records.forEach((record: any) => {
+                if(selectedArtworksIds.includes(record._id.toString())) {
+                    sheet.addRow(record)
+                }            
+            })
+        } else {
+            records.forEach((record: any) => {
+                sheet.addRow(record)         
+            })
+        }        
         
         //cell formatting
         sheet.columns.forEach(function (column, i) {
@@ -76,7 +86,6 @@ const getAllCaterories = async (req: Request, res: Response, next: any) => {
         let keysUnique = keys.filter((value: any, index: number, array: any) => {
             return array.indexOf(value) === index
         })
-        // console.log(keysUnique)
         return res.status(200).json({ keysUnique })
     } catch (error) {
         next(error)

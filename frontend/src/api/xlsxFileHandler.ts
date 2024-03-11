@@ -2,11 +2,15 @@ import axios from "axios"
 import { API_URL } from "../config"
 import { useMutation } from "react-query"
 
-export const getXlsxWithAllData = async (collectionName: string, keysToInclude: Array<string>) => {
+export const getXlsxWithAllData = async (collectionName: string, keysToInclude: Array<string>, selectedArtworksIds: { [key: string]: boolean }, exportSelectedRecords: boolean) => {
     const params = new URLSearchParams(); 
     keysToInclude.forEach((value, index) => { 
         params.append(`keysToInclude[${index}]`, value); 
-    }); 
+    });
+    for(const v in selectedArtworksIds) {
+        params.append(`selectedArtworks[${v}]`, v);
+    }
+    params.append(`exportSelectedRecords`, exportSelectedRecords.toString())
     return await axios({
         url: `${API_URL}v1/xlsx/${collectionName}`,
         method: 'GET',

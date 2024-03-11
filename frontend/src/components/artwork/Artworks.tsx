@@ -288,7 +288,7 @@ const Artworks = () => {
                             </span>
                     </div>
                     {showFileDropzone && <FileDropzone onClose={() => setShowFileDropzone(false)} />}
-                    {showExportOptions && <ExportOptions keys={keys} onClose={() => setShowExportOptions(false)} />}
+                    {showExportOptions && <ExportOptions keys={keys} selectedArtworks={selectedArtworks} onClose={() => setShowExportOptions(false)} />}
                 </div>
             </div>
 
