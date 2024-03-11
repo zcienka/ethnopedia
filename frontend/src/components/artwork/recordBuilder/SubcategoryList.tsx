@@ -45,12 +45,6 @@ interface NestedSubcategory {
     values: string[]
 }
 
-interface MainCategory {
-    name: string
-    values?: string[]
-    subcategories?: NestedSubcategory[]
-}
-
 interface NestedSubcategory {
     category: string
     values: string[]
@@ -72,6 +66,7 @@ interface RecursiveSubcategoryProps {
     addValueToSubcategory: (path: number[], newValue: string) => void;
     deleteSubcategory: (path: number[]) => void;
     path?: number[];
+    handleSubcategoryNameChange: (path: number[], newName: string) => void;
 }
 
 // const SubcategoryList: React.FC<SubcategoryListProps> = ({
@@ -335,13 +330,11 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
         setSelectedDetails((prevDetails) => {
             const deleteSubcategoryAtPath = (subcategories: Subcategory[], path: number[]): Subcategory[] => {
                 if (path.length === 0) {
-                    return [] // If path is empty, nothing to delete
+                    return []
                 }
                 if (path.length === 1) {
-                    // We're at the target level, remove the subcategory
                     return subcategories.filter((_, index) => index !== path[0])
                 }
-                // Recursively navigate to the target subcategory
                 const [currentIndex, ...restOfPath] = path
                 return subcategories.map((subcat, index) => {
                     if (index === currentIndex) {
@@ -394,6 +387,38 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
         })
     }, [setSelectedDetails, identifier])
 
+    const handleSubcategoryNameChange = useCallback((path: number[], newName: string) => {
+        setSelectedDetails((prevDetails) => {
+            const updateSubcategoryNameAtPath = (subcategories: Subcategory[], path: number[]): Subcategory[] => {
+                if (path.length === 0) {
+                    return subcategories
+                }
+                const [currentIndex, ...restOfPath] = path
+                return subcategories.map((subcat, index) => {
+                    if (index === currentIndex) {
+                        if (restOfPath.length === 0) {
+                            return { ...subcat, name: newName }
+                        } else {
+                            return {
+                                ...subcat,
+                                subcategories: updateSubcategoryNameAtPath(subcat.subcategories ?? [], restOfPath),
+                            }
+                        }
+                    }
+                    return subcat
+                })
+            }
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: updateSubcategoryNameAtPath(prevDetails[identifier].subcategories ?? [], path),
+                },
+            }
+        })
+    }, [setSelectedDetails, identifier])
+
     return (
         <div>
             <button type="button" onClick={() => addSubcategory([])}>Add Root Subcategory</button>
@@ -402,12 +427,11 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                     subcategories={selectedDetails[identifier].subcategories}
                     addSubcategory={addSubcategory}
                     addValueToSubcategory={addValueToSubcategory}
-                    path={[]}
                     deleteSubcategory={deleteSubcategory}
+                    path={[]}
+                    handleSubcategoryNameChange={handleSubcategoryNameChange}
                 />
             )}
-
-
         </div>
     )
 }
@@ -416,76 +440,64 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                                        subcategories,
                                                                        addSubcategory,
                                                                        addValueToSubcategory,
-                                                                       path = [],
                                                                        deleteSubcategory,
+                                                                       path = [],
+                                                                       handleSubcategoryNameChange,
                                                                    }) => {
+    const [isEditing, setIsEditing] = useState<number | null>(null)
+    const [editingName, setEditingName] = useState("")
 
-    console.log({ path })
+    const startEditing = (index: number, name: string) => {
+        setIsEditing(index)
+        setEditingName(name)
+    }
+
+    const stopEditing = (index: number) => {
+        if (isEditing !== null) {
+            handleSubcategoryNameChange([...path, index], editingName)
+            setIsEditing(null)
+            setEditingName("")
+        }
+    }
+
     return (
-        <span style={{ marginLeft: `${path.length * 16}px` }}>
+        <div>
             {subcategories.map((subcat, index) => (
-                <div key={index}
-                     className="flex flex-col h-full ">
-                    <div className="flex flex-col border-l-2 border-gray-300">
-                        <div className="flex relative w-full h-full">
-                            <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
+                <div key={index} style={{ marginLeft: `${path.length * 40}px` }}>
+                    {isEditing === index ? (
+                        <input
+                            type="text"
+                            value={editingName}
+                            onChange={(e) => setEditingName(e.target.value)}
+                            onBlur={() => stopEditing(index)}
+                            autoFocus
+                        />
+                    ) : (
+                        <div onDoubleClick={() => startEditing(index, subcat.name)} className="cursor-pointer">
+                            {subcat.name || "Unnamed Subcategory"}
                         </div>
-                        {/*<hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center min-w-8" />*/}
-
-                        <div className="flex flex-row items-center">
-                            <hr className={`border-t-2 border-gray-300 dark:border-gray-700 w-8 ${
-                                subcat.subcategories && subcat.subcategories.length > 0 ? "self-start mt-6" : "self-top"
-                            }`} />
-                            <div className="flex flex-col">
-                                <div
-                                    className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1
-                                shadow-md mt-2 w-fit">
-                                    <p className="w-fit">
-                                        {subcat.name == "" ? "Wybierz podkategorię" : subcat.name}
-                                    </p>
-                                </div>
-
-                                {subcat.subcategories && subcat.subcategories.length > 0 && (
-                                    <RecursiveSubcategory
-                                        subcategories={subcat.subcategories}
-                                        addSubcategory={addSubcategory}
-                                        addValueToSubcategory={addValueToSubcategory}
-                                        path={[...path, index]}
-                                        deleteSubcategory={deleteSubcategory}
-                                    />
-                                )}
-                            </div>
-                            <div className="flex items-center flex-row pt-4 h-12">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-row items-center">
-                        <span className="bg-gray-300 h-1/2 flex self-start w-0.5"></span>
-
-                        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
-
-                        <div className="flex items-center flex-row">
-                            <button
-                                className="p-2 border-gray-300 shadow-md"
-                                onClick={() => addSubcategory([...path, index])}
-                                type="button">
-                                <PlusIcon />
-                            </button>
-                        </div>
-
-                        <button
-                            className="p-2 border-gray-300 shadow-md"
-                            onClick={() => deleteSubcategory([...path, index])}
-                            type="button">
-                            Delete
-                        </button>
-                        <div className="flex items-center flex-row pt-4 h-12">
-                        </div>
-                    </div>
+                    )}
+                    <button onClick={() => addSubcategory([...path, index])}>
+                        <PlusIcon />
+                    </button>
+                    <button onClick={() => deleteSubcategory([...path, index])}>
+                        Delete
+                    </button>
+                    {subcat.subcategories && subcat.subcategories.length > 0 && (
+                        <RecursiveSubcategory
+                            subcategories={subcat.subcategories}
+                            addSubcategory={addSubcategory}
+                            addValueToSubcategory={addValueToSubcategory}
+                            deleteSubcategory={deleteSubcategory}
+                            path={[...path, index]}
+                            handleSubcategoryNameChange={handleSubcategoryNameChange}
+                        />
+                    )}
                 </div>
             ))}
-        </span>
+            <button onClick={() => addSubcategory(path)}>Add Subcategory</button>
+        </div>
     )
 }
+
 export default SubcategoryList
