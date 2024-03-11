@@ -16,9 +16,18 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
         const records = await mongoClient.db().collection('artworks').find({collectionName: collectionName}).toArray()
         
         let columnNames: Array<any> = []
-        keysToInclude.forEach((key: any) => {
-            columnNames.push({header: key, key: key})
-        })
+        if(Array.isArray(keysToInclude)) {
+            keysToInclude.forEach((key: any) => {
+                columnNames.push({header: key, key: key})
+            })
+        } else {
+            console.log("WRONG")
+            console.log(keysToInclude)
+            Object.keys(keysToInclude).forEach((k: any) => {
+                columnNames.push({header: keysToInclude[k], key: keysToInclude[k]})
+            })
+        }
+        
         sheet.columns = columnNames
 
         records.forEach((record: any) => {

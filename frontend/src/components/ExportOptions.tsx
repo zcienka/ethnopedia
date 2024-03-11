@@ -91,14 +91,22 @@ const ExportOptions = (props: Props) => {
                                         type="button"
                                         id="checkAllKeys"
                                         name="checkAllKeys"
-                                        value="Zaznacz wszystkie"></input>
+                                        value="Zaznacz wszystkie"
+                                        onClick={() => {
+                                            setSelectedKeys(props.keys)
+                                        }}
+                                        ></input>
                             <input className="flex items-center justify-end dark:text-white text-xs
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
                                         type="button"
                                         id="uncheckAllKeys"
                                         name="uncheckAllKeys"
-                                        value="Odznacz wszystkie"></input>
+                                        value="Odznacz wszystkie"
+                                        onClick={() => {
+                                            setSelectedKeys([])
+                                        }}
+                                        ></input>
                         </div>
                         <div className="flex flex-row space-x-2 text-sm px-4">
                                 <span className="py-1">
