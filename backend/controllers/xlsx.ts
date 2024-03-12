@@ -6,7 +6,7 @@ const mongoClient = getMongoDBNativeDriverClient()
 const Subsection = require("../models/subsection")
 
 
-const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
+const getXlsxWithArtworksData = async (req: Request, res: Response, next: any) => {
     try {
         const collectionName = decodeURIComponent(req.params.collectionName)
         const filename = req.query.exportFilename
@@ -67,6 +67,61 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
     }
 }
 
+const getXlsxWithCollectionData = async (req: Request, res: Response, next: any) => {
+    try {
+        const collectionName = decodeURIComponent(req.params.collectionName)
+
+        let workbook = new excelJS.Workbook()
+        const sheet = workbook.addWorksheet("test")
+
+        const records = await mongoClient.db().collection('artworks').find({collectionName: collectionName}).toArray()
+
+        let columnNames: Array<any> = []      
+        // find keys
+        let keys: any = []
+        records.forEach((record: any) => {
+            for (const property in record) {
+                if (property != "_id") {
+                    keys.push(property)
+                }
+            }
+        })
+        let keysUnique = keys.filter((value: any, index: number, array: any) => {
+            return array.indexOf(value) === index
+        })
+
+        keysUnique.forEach((k: any) => {
+            columnNames.push({header: k, key: k})
+        })
+        sheet.columns = columnNames
+
+        records.forEach((record: any) => {
+            sheet.addRow(record)         
+        })        
+        
+        // //cell formatting
+        sheet.columns.forEach(function (column, i) {
+            let maxLength = 0;
+            column["eachCell"]!({ includeEmpty: true }, function (cell) {
+                var columnLength = cell.value ? cell.value.toString().length : 10;
+                if (columnLength > maxLength ) {
+                    maxLength = columnLength;
+                }
+            });
+            column.width = maxLength < 10 ? 10 : maxLength;
+        });
+        
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader("Content-Disposition", "attachment; filename=" + "test.xlsx");
+
+        await workbook.xlsx.write(res)
+        
+        res.end()
+    } catch (error) {
+        next(error)
+    }
+}
+
 const getAllCaterories = async (req: Request, res: Response, next: any) => {
     try {
         const collectionName = decodeURIComponent(req.params.collectionName)
@@ -92,6 +147,7 @@ const getAllCaterories = async (req: Request, res: Response, next: any) => {
 }
 
 module.exports = {
-    getXlsxWithAllData,
+    getXlsxWithArtworksData,
+    getXlsxWithCollectionData,
     getAllCaterories
 }
