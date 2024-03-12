@@ -9,14 +9,13 @@ const Subsection = require("../models/subsection")
 const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
     try {
         const collectionName = decodeURIComponent(req.params.collectionName)
+        const filename = req.query.exportFilename
         const keysToInclude: any = req.query.keysToInclude
         const exportSelectedRecords: any = req.query.exportSelectedRecords
         let selectedArtworks: any = []
         if(exportSelectedRecords === "true" && req.query.selectedArtworks) {
             selectedArtworks = Object.values(req.query.selectedArtworks)
         }
-
-        
 
         let workbook = new excelJS.Workbook()
         const sheet = workbook.addWorksheet("test")
@@ -56,10 +55,9 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
             });
             column.width = maxLength < 10 ? 10 : maxLength;
         });
-
-        const fileName = "test.xlsx"
+        
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+        res.setHeader("Content-Disposition", "attachment; filename=" + filename);
 
         await workbook.xlsx.write(res)
         

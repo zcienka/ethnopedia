@@ -2,7 +2,7 @@ import axios from "axios"
 import { API_URL } from "../config"
 import { useMutation } from "react-query"
 
-export const getXlsxWithAllData = async (collectionName: string, keysToInclude: Array<string>, selectedArtworksIds: { [key: string]: boolean }, exportSelectedRecords: boolean) => {
+export const getXlsxWithAllData = async (collectionName: string, keysToInclude: Array<string>, selectedArtworksIds: { [key: string]: boolean }, exportSelectedRecords: boolean, filename: string) => {
     const params = new URLSearchParams(); 
     keysToInclude.forEach((value, index) => { 
         params.append(`keysToInclude[${index}]`, value); 
@@ -11,6 +11,7 @@ export const getXlsxWithAllData = async (collectionName: string, keysToInclude: 
         params.append(`selectedArtworks[${v}]`, v);
     }
     params.append(`exportSelectedRecords`, exportSelectedRecords.toString())
+    params.append(`exportFilename`, filename)
     return await axios({
         url: `${API_URL}v1/xlsx/${collectionName}`,
         method: 'GET',
@@ -23,7 +24,7 @@ export const getXlsxWithAllData = async (collectionName: string, keysToInclude: 
         // create "a" HTML element with href to file & click
         const link = document.createElement('a');
         link.href = href;
-        link.setAttribute('download', 'test.xlsx');
+        link.setAttribute('download', filename);
         document.body.appendChild(link);
         link.click();
     

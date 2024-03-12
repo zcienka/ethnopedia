@@ -13,6 +13,7 @@ const ExportOptions = (props: Props) => {
     const { collection } = useParams()
     const [selectedKeys, setSelectedKeys] = useState<any>(props.keys);
     const [exportSelectedRecords, setExportSelectedRecords] = useState<boolean>(false)
+    const [filename, setFilename] = useState(`${collection}.xlsx`);
 
     const handleCheckboxChange = (event: any) => {
         const key = event.target.value
@@ -119,11 +120,15 @@ const ExportOptions = (props: Props) => {
                                     <label> Eksportuj metadane wszystkich utworów</label>
                                 </span>  
                         </div>
+                        <div className="flex flex-row space-x-2 text-sm px-4 py-2">
+                            <label className="px-1 py-1">Nazwa pliku:</label>
+                            <input className="px-1 py-1" value={filename} onChange={e => setFilename(e.target.value)}></input>
+                        </div>
                         <div className="flex justify-end px-4 py-4">  
                             <input className="flex items-center justify-end dark:text-white
                                         hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium px-4 py-2
                                         dark:focus:ring-primary-800 font-semibold text-white bg-gray-800 hover:bg-gray-700 border-gray-800"
-                                        type="submit" value="Eksportuj metadane" onClick={() => {getXlsxWithAllData(collection as string, sortKeysInRightOrder(props.keys), props.selectedArtworks, exportSelectedRecords)}}
+                                        type="submit" value="Eksportuj metadane" onClick={() => {getXlsxWithAllData(collection as string, sortKeysInRightOrder(props.keys), props.selectedArtworks, exportSelectedRecords, filename)}}
                                         ></input>
                         </div>
                     </div>                   
