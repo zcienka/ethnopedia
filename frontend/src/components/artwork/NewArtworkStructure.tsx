@@ -534,7 +534,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                         <span className="bg-gray-300 h-1/2 flex self-start w-0.5"></span>
                         <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
 
-                        <div className="flex items-center flex-row ">
+                        <div className="flex items-center flex-row">
                             <button
                                 className="p-2 border-gray-300 shadow-md"
                                 onClick={() => handleAddSubcategory(identifier)}
