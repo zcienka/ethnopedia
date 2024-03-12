@@ -10,9 +10,13 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
     try {
         const collectionName = decodeURIComponent(req.params.collectionName)
         const keysToInclude: any = req.query.keysToInclude
-        const selectedArtworks: any = req.query.selectedArtworks
-        const selectedArtworksIds: any = Object.values(selectedArtworks)
         const exportSelectedRecords: any = req.query.exportSelectedRecords
+        let selectedArtworks: any = []
+        if(exportSelectedRecords === "true" && req.query.selectedArtworks) {
+            selectedArtworks = Object.values(req.query.selectedArtworks)
+        }
+
+        
 
         let workbook = new excelJS.Workbook()
         const sheet = workbook.addWorksheet("test")
@@ -20,11 +24,8 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
         const records = await mongoClient.db().collection('artworks').find({collectionName: collectionName}).toArray()
         
         let columnNames: Array<any> = []
-        if(Array.isArray(keysToInclude)) {
-            keysToInclude.forEach((key: any) => {
-                columnNames.push({header: key, key: key})
-            })
-        } else {
+        
+        if(keysToInclude !== undefined) {
             Object.keys(keysToInclude).forEach((k: any) => {
                 columnNames.push({header: keysToInclude[k], key: keysToInclude[k]})
             })
@@ -34,7 +35,7 @@ const getXlsxWithAllData = async (req: Request, res: Response, next: any) => {
 
         if(exportSelectedRecords === "true") {
             records.forEach((record: any) => {
-                if(selectedArtworksIds.includes(record._id.toString())) {
+                if(selectedArtworks.includes(record._id.toString())) {
                     sheet.addRow(record)
                 }            
             })

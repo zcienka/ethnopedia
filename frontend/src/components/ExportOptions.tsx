@@ -11,7 +11,7 @@ type Props = {
 
 const ExportOptions = (props: Props) => {
     const { collection } = useParams()
-    const [selectedKeys, setSelectedKeys] = useState<any>([]);
+    const [selectedKeys, setSelectedKeys] = useState<any>(props.keys);
     const [exportSelectedRecords, setExportSelectedRecords] = useState<boolean>(false)
 
     const handleCheckboxChange = (event: any) => {
