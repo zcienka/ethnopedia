@@ -262,35 +262,46 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
 interface RenameModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (newName: string, index: number) => void;
-    initialValue: string;
-    index: number;
+    onSubmit: (newValues: string[]) => void;
+    initialValues: string[];
 }
 
+const RenameModal: FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, initialValues }) => {
+    const [values, setValues] = useState<string[]>(initialValues)
 
-const RenameModal: FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, initialValue, index }) => {
-    const [value, setValue] = useState(initialValue)
-    console.log({ isOpen })
+    const handleChange = (index: number, newValue: string) => {
+        const updatedValues = values.map((value, idx) => idx === index ? newValue : value)
+        setValues(updatedValues)
+    }
+
     const handleSubmit = () => {
-        onSubmit(value, index)
+        onSubmit(values)
         onClose()
     }
+
 
     if (!isOpen) return null
 
     return (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white rounded-md p-4">
-                <input
-                    type="text"
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
-                    className="border p-2"
-                />
-                <button onClick={handleSubmit} className="border p-2 m-2">
-                    Rename
-                </button>
-                <button onClick={onClose} className="border p-2 m-2">
+                {initialValues.map((value, index) => (
+                    <div key={index}>
+                        <input
+                            type="text"
+                            value={values[index]}
+                            onChange={(e) => handleChange(index, e.target.value)}
+                            className="border p-2 m-2"
+                        >
+                        </input>
+                    </div>
+                ))}
+                <button
+                    type="button"
+                    onClick={handleSubmit}>Submit</button>
+                <button
+                    type="button"
+                    onClick={onClose} className="border p-2 m-2">
                     Cancel
                 </button>
             </div>
@@ -310,34 +321,28 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                                        addDropdownOption,
                                                                    }) => {
 
-    const [isRenameModalOpen, setIsRenameModalOpen] = useState<boolean>(false)
-    const [renameModalInitialValue, setRenameModalInitialValue] = useState<string>("")
-    const [renamePath, setRenamePath] = useState<number[]>([])
-    const [renameIndex, setRenameIndex] = useState<number>(-1)
-
+    const [editingValues, setEditingValues] = useState<string[]>([])
+    const [renameModalOpen, setRenameModalOpen] = useState(false)
+    const [currentPath, setCurrentPath] = useState<number[]>([])
     const [renameModal, setRenameModal] = useState<{
         isOpen: boolean;
-        initialValue: string;
-        index: number;
-        path: number[]
-    }>({ isOpen: false, initialValue: "", index: -1, path: [] })
+        initialValues: string[];
+        path: number[];
+    }>({ isOpen: false, initialValues: [], path: [] })
 
-    const openRenameModal = (path: number[], initialValue: string, index: number) => {
-        setRenameModal({ isOpen: true, initialValue, index, path })
+    const openRenameModal = (path: number[], values: string[]) => {
+        setEditingValues(values)
+        setCurrentPath(path)
+        setRenameModalOpen(true)
     }
 
-    const handleRenameSubmit = (newValue: string, index: number) => {
-        const newPath = [...renameModal.path]
-        addValueToSubcategory(newPath, newValue, index)
-        setRenameModal({ isOpen: false, initialValue: "", index: -1, path: [] })
+    const handleRenameSubmit = (newValues: string[]) => {
+        newValues.forEach(newValue => {
+            addValueToSubcategory(renameModal.path, newValue)
+        })
+        setRenameModal({ isOpen: false, initialValues: [], path: [] })
     }
 
-    const handleRenameForValue = (newName: string, index: number) => {
-        if (index !== -1 && renamePath.length > 0) {
-            addValueToSubcategory(renamePath, newName, index)
-        }
-        setIsRenameModalOpen(false)
-    }
 
 
     const [isEditing, setIsEditing] = useState<number | null>(null)
@@ -405,7 +410,8 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                         <MinusIcon />
                                     </button>
                                     <select
-                                        onChange={(e) => openRenameModal(currentPath, e.target.value, e.target.selectedIndex)}>
+                                        // onChange={(e) => openRenameModal(currentPath, subcat.values)}
+                                    >
                                         {subcat.values?.map((value, valueIndex) => (
                                             <option key={valueIndex} value={value}>{value}</option>
                                         ))}
@@ -415,6 +421,10 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                         onClick={() => addDropdownOption(currentPath, `Option ${currentPath.join("-")}-${subcat.values?.length || 0}`)}
                                     >
                                         Add Dropdown Option
+                                    </button>
+
+                                    <button onClick={() => openRenameModal([...path, index], subcat.values || [])}>Edit
+                                        Values
                                     </button>
                                 </div>
                             </div>
@@ -438,11 +448,10 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
         )
     })}
             <RenameModal
-                isOpen={renameModal.isOpen}
-                onClose={() => setRenameModal({ isOpen: false, initialValue: "", index: -1, path: [] })}
+                isOpen={renameModalOpen}
+                onClose={() => setRenameModalOpen(false)}
                 onSubmit={handleRenameSubmit}
-                initialValue={renameModal.initialValue}
-                index={renameModal.index}
+                initialValues={editingValues}
             />
         </span>
     )
