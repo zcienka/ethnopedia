@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { ReactComponent as DragAndDrop } from "../assets/icons/dragAndDrop.svg"
 import { ReactComponent as Close } from "../assets/icons/close.svg"
+import * as XLSX from 'xlsx';
 
 type Props = {
     onClose: () => void
@@ -11,12 +12,25 @@ const FileDropzone = ({ onClose }: Props) => {
     const [, setUploadedFile] = useState(null)
 
     const handleFileUpload = (event: any) => {
+        console.log("HI")
         const file = event.target.files[0]
+        var name = file.name;
+        const reader = new FileReader();
+        reader.onload = (evt: any) => {
+            const bString = evt.target.result;
+            const workbook = XLSX.read(bString, {type:'binary'});
+            
+            const worksheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[worksheetName];
 
-        if (file) {
-            setUploadedFile(file)
-            setWindowOpen(true)
-        }
+            const parsedData = XLSX.utils.sheet_to_json(worksheet, {header:1, defval: ""});
+        };
+        reader.readAsBinaryString(file);
+
+        // if (file) {
+        //     setUploadedFile(file)
+        //     setWindowOpen(true)
+        // }
     }
 
     return <div

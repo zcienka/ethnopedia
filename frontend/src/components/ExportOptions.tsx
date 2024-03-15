@@ -42,7 +42,6 @@ const ExportOptions = (props: Props) => {
                 keysInRightOrder.push(key)
             }
         })
-        console.log(keysInRightOrder)
         return keysInRightOrder
     }
 
