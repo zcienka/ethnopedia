@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from "react"
+import React, { FC, useCallback, useEffect, useState } from "react"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
 
@@ -50,6 +50,10 @@ interface RecursiveSubcategoryProps {
     toggleDropdown: (path: number[]) => void;
     isDropdownVisible: (path: number[]) => boolean;
     addDropdownOption: (path: number[], newOption: string) => void;
+    replaceValuesInSubcategory: (path: number[], newValues: string[]) => void;
+    values: string[];
+    setValues: React.Dispatch<React.SetStateAction<string[]>>;
+    onOpenRenameModal?: (path: number[], values: string[]) => void;
 }
 
 const SubcategoryList: React.FC<SubcategoryListProps> = ({
@@ -58,6 +62,9 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                                              selectedDetails,
                                                              setSelectedDetails,
                                                          }) => {
+
+    const [values, setValues] = useState<string[]>([])
+
 
     const addSubcategory = useCallback((path: number[]) => {
         const newSubcategory: Subcategory = {
@@ -202,43 +209,70 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
         JSON.stringify(activeDropdownPath) === JSON.stringify(path)
     ), [activeDropdownPath])
 
-    const addDropdownOption = useCallback(
-        (path: number[], newOption: string) => {
+    const addDropdownOption = useCallback((path: number[], newOption: string) => {
             setSelectedDetails((prevDetails) => {
-                const updateValuesAtPath = (subcategories: Subcategory[], path: number[]): Subcategory[] => {
-                    if (path.length === 1) {
-                        return subcategories.map((subcat, index) => {
-                            if (index === path[0]) {
-                                const newValues = subcat.values ? [...subcat.values, newOption] : [newOption]
-                                return { ...subcat, values: newValues }
-                            }
-                            return subcat
-                        })
-                    } else {
-                        const [currentIndex, ...restOfPath] = path
-                        return subcategories.map((subcat, index) => {
-                            if (index === currentIndex) {
-                                return {
-                                    ...subcat,
-                                    subcategories: updateValuesAtPath(subcat.subcategories ?? [], restOfPath),
-                                }
-                            }
-                            return subcat
-                        })
+                const newDetails = { ...prevDetails }
+                let currentSubcategories = newDetails[identifier].subcategories
+
+                const newPath = [...path]
+                while (newPath.length > 1) {
+                    const nextIndex = newPath.shift()
+                    if (typeof nextIndex !== "undefined")
+                        currentSubcategories = currentSubcategories[nextIndex].subcategories || []
+                }
+
+                if (currentSubcategories && newPath.length === 1) {
+                    const targetIndex = newPath[0]
+                    const targetSubcategory = currentSubcategories[targetIndex]
+                    const updatedValues = [...(targetSubcategory.values || []), newOption]
+
+                    currentSubcategories[targetIndex] = {
+                        ...targetSubcategory,
+                        values: updatedValues,
+                    }
+
+                    setValues(updatedValues)
+                }
+
+                return newDetails
+            })
+            setValues(prevValues => [...prevValues, newOption])
+        },
+        [setSelectedDetails, identifier, setValues],
+    )
+    const replaceValuesInSubcategory = useCallback((path: number[], newValues: string[]) => {
+        setSelectedDetails(prevDetails => {
+            const updateSubcategories = (subcategories: Subcategory[], pathIndex: number): Subcategory[] => {
+                if (pathIndex >= path.length) return subcategories
+
+                const newSubcategories = [...subcategories]
+
+                if (pathIndex === path.length - 1) {
+                    const targetSubcategory = newSubcategories[path[pathIndex]]
+                    newSubcategories[path[pathIndex]] = {
+                        ...targetSubcategory,
+                        values: newValues,
+                    }
+                } else {
+                    const targetSubcategory = newSubcategories[path[pathIndex]]
+                    newSubcategories[path[pathIndex]] = {
+                        ...targetSubcategory,
+                        subcategories: updateSubcategories(targetSubcategory.subcategories || [], pathIndex + 1),
                     }
                 }
 
-                return {
-                    ...prevDetails,
-                    [identifier]: {
-                        ...prevDetails[identifier],
-                        subcategories: updateValuesAtPath(prevDetails[identifier].subcategories ?? [], path),
-                    },
-                }
-            })
-        },
-        [setSelectedDetails, identifier],
-    )
+                return newSubcategories
+            }
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: updateSubcategories(prevDetails[identifier].subcategories, 0),
+                },
+            }
+        })
+    }, [setSelectedDetails, identifier])
 
     return (
         <div>
@@ -253,6 +287,9 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                     toggleDropdown={toggleDropdown}
                     isDropdownVisible={isDropdownVisible}
                     addDropdownOption={addDropdownOption}
+                    replaceValuesInSubcategory={replaceValuesInSubcategory}
+                    values={values}
+                    setValues={setValues}
                 />
             )}
         </div>
@@ -263,33 +300,36 @@ interface RenameModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (newValues: string[]) => void;
-    initialValues: string[];
+    values: string[];
+    setValues: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const RenameModal: FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, initialValues }) => {
-    const [values, setValues] = useState<string[]>(initialValues)
+const RenameModal: FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, values, setValues }) => {
+    const [localValues, setLocalValues] = useState<string[]>(values)
 
     const handleChange = (index: number, newValue: string) => {
-        const updatedValues = values.map((value, idx) => idx === index ? newValue : value)
-        setValues(updatedValues)
+        const updatedValues = localValues.map((value, idx) => idx === index ? newValue : value)
+        setLocalValues(updatedValues)
     }
-
+console.log({localValues})
     const handleSubmit = () => {
-        onSubmit(values)
+        if (setValues) {
+            setValues(localValues)
+        }
+        onSubmit(localValues)
         onClose()
     }
-
 
     if (!isOpen) return null
 
     return (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white rounded-md p-4">
-                {initialValues.map((value, index) => (
+                {localValues.map((value, index) => (
                     <div key={index}>
                         <input
                             type="text"
-                            value={values[index]}
+                            value={value}
                             onChange={(e) => handleChange(index, e.target.value)}
                             className="border p-2 m-2"
                         >
@@ -298,7 +338,8 @@ const RenameModal: FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, initialV
                 ))}
                 <button
                     type="button"
-                    onClick={handleSubmit}>Submit</button>
+                    onClick={handleSubmit}>Submit
+                </button>
                 <button
                     type="button"
                     onClick={onClose} className="border p-2 m-2">
@@ -319,9 +360,12 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                                        toggleDropdown,
                                                                        isDropdownVisible,
                                                                        addDropdownOption,
+                                                                       replaceValuesInSubcategory,
+                                                                       values,
+                                                                       setValues,
+                                                                       onOpenRenameModal,
                                                                    }) => {
 
-    const [editingValues, setEditingValues] = useState<string[]>([])
     const [renameModalOpen, setRenameModalOpen] = useState(false)
     const [currentPath, setCurrentPath] = useState<number[]>([])
     const [renameModal, setRenameModal] = useState<{
@@ -331,18 +375,25 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
     }>({ isOpen: false, initialValues: [], path: [] })
 
     const openRenameModal = (path: number[], values: string[]) => {
-        setEditingValues(values)
+        setValues(values)
         setCurrentPath(path)
         setRenameModalOpen(true)
+        //
+        // setRenameModal({
+        //     isOpen: true,
+        //     initialValues: values,
+        //     path: path,
+        // });
     }
 
     const handleRenameSubmit = (newValues: string[]) => {
         newValues.forEach(newValue => {
             addValueToSubcategory(renameModal.path, newValue)
         })
+
+        replaceValuesInSubcategory(currentPath, newValues)
         setRenameModal({ isOpen: false, initialValues: [], path: [] })
     }
-
 
 
     const [isEditing, setIsEditing] = useState<number | null>(null)
@@ -439,6 +490,9 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                     toggleDropdown={toggleDropdown}
                                     isDropdownVisible={isDropdownVisible}
                                     addDropdownOption={addDropdownOption}
+                                    replaceValuesInSubcategory={replaceValuesInSubcategory}
+                                    values={values}
+                                    setValues={setValues}
                                 />
                             )}
                         </div>
@@ -447,12 +501,13 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
             </div>
         )
     })}
-            <RenameModal
+            {renameModalOpen && <RenameModal
                 isOpen={renameModalOpen}
                 onClose={() => setRenameModalOpen(false)}
                 onSubmit={handleRenameSubmit}
-                initialValues={editingValues}
-            />
+                values={values}
+                setValues={setValues}
+            />}
         </span>
     )
 }
