@@ -304,50 +304,79 @@ interface RenameModalProps {
     setValues: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const RenameModal: FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, values, setValues }) => {
+interface RenameModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (newValues: string[]) => void;
+    values: string[];
+    setValues: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+const RenameModal: React.FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, values, setValues }) => {
     const [localValues, setLocalValues] = useState<string[]>(values)
 
+    useEffect(() => {
+        setLocalValues(values)
+    }, [values])
+
     const handleChange = (index: number, newValue: string) => {
-        const updatedValues = localValues.map((value, idx) => idx === index ? newValue : value)
+        const updatedValues = localValues.map((value, i) => i === index ? newValue : value)
         setLocalValues(updatedValues)
     }
-console.log({localValues})
+
+    const handleAddDropdownOption = () => {
+        setLocalValues([...localValues, ""])
+    }
+
+    const handleDeleteDropdownOption = (index: number) => {
+        const filteredValues = localValues.filter((_, i) => i !== index)
+        setLocalValues(filteredValues)
+    }
+
     const handleSubmit = () => {
-        if (setValues) {
-            setValues(localValues)
-        }
         onSubmit(localValues)
         onClose()
     }
 
-    if (!isOpen) return null
-
-    return (
+    return isOpen ? (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white rounded-md p-4">
+            <div className="bg-white rounded-md p-4 w-96">
+                <div className="flex items-start rounded-t border-b pb-2">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                        Dodaj nową opcję
+                    </h3>
+                </div>
                 {localValues.map((value, index) => (
-                    <div key={index}>
+                    <div key={index} className="flex items-center space-x-2">
                         <input
                             type="text"
                             value={value}
+                            placeholder="Dodaj nową opcję"
                             onChange={(e) => handleChange(index, e.target.value)}
-                            className="border p-2 m-2"
+                            className="border mt-2 px-4 py-2"
+                        />
+                        <button
+                            className="w-fit p-2 border-gray-300 shadow-md h-fit ml-1 mt-2"
+                            onClick={() => handleDeleteDropdownOption(index)}
                         >
-                        </input>
+                            <MinusIcon />
+                        </button>
                     </div>
                 ))}
-                <button
-                    type="button"
-                    onClick={handleSubmit}>Submit
-                </button>
-                <button
-                    type="button"
-                    onClick={onClose} className="border p-2 m-2">
-                    Cancel
-                </button>
+                <div className="flex justify-between items-center mt-4">
+                    <button onClick={handleAddDropdownOption} className="py-2 px-4 bg-gray-700 text-white hover:bg-gray-600">
+                        Nowa opcja
+                    </button>
+                    <div className="flex space-x-2">
+                        <button onClick={onClose} className="py-2 px-4 border">Anuluj</button>
+                        <button onClick={handleSubmit} className="py-2 px-4 bg-blue-500 text-white hover:bg-blue-400">
+                            Zapisz
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-    )
+    ) : null
 }
 
 const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
@@ -460,22 +489,13 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                     >
                                         <MinusIcon />
                                     </button>
-                                    <select
-                                        // onChange={(e) => openRenameModal(currentPath, subcat.values)}
-                                    >
+                                    <select>
                                         {subcat.values?.map((value, valueIndex) => (
                                             <option key={valueIndex} value={value}>{value}</option>
                                         ))}
                                     </select>
-                                    <button
-                                        type="button"
-                                        onClick={() => addDropdownOption(currentPath, `Option ${currentPath.join("-")}-${subcat.values?.length || 0}`)}
-                                    >
-                                        Add Dropdown Option
-                                    </button>
-
-                                    <button onClick={() => openRenameModal([...path, index], subcat.values || [])}>Edit
-                                        Values
+                                    <button onClick={() => openRenameModal([...path, index], subcat.values || [])}>
+                                        Edytuj opcje
                                     </button>
                                 </div>
                             </div>
