@@ -14,6 +14,7 @@ const subsections = require("./routes/subsection")
 const categories = require("./routes/category")
 const general = require("./routes/general")
 const xlsx = require("./routes/xlsx")
+const importFromFile = require("./routes/import")
 
 const {connectMongoDBNativeDriver} = require("./db/connect")
 import initializeDatabase from "./initialization"
@@ -30,6 +31,7 @@ app.use("/api/v1/subsections", subsections)
 app.use("/api/v1/categories", categories)
 app.use("/api/v1", general)
 app.use("/api/v1/xlsx", xlsx)
+app.use("/api/v1/import", importFromFile)
 
 const port = process.env.PORT || 5000
 
