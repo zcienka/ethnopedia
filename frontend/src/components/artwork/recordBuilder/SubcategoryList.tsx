@@ -1,6 +1,8 @@
 import React, { FC, useCallback, useEffect, useState } from "react"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
+import { ReactComponent as EditIcon } from "../../../assets/icons/edit.svg"
+
 
 interface Subcategory {
     name: string
@@ -65,6 +67,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
 
     const [values, setValues] = useState<string[]>([])
 
+    console.log({ selectedDetails })
 
     const addSubcategory = useCallback((path: number[]) => {
         const newSubcategory: Subcategory = {
@@ -356,20 +359,28 @@ const RenameModal: React.FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, va
                             className="border mt-2 px-4 py-2"
                         />
                         <button
+                            type="button"
                             className="w-fit p-2 border-gray-300 shadow-md h-fit ml-1 mt-2"
-                            onClick={() => handleDeleteDropdownOption(index)}
-                        >
+                            onClick={() => handleDeleteDropdownOption(index)}>
                             <MinusIcon />
                         </button>
                     </div>
                 ))}
                 <div className="flex justify-between items-center mt-4">
-                    <button onClick={handleAddDropdownOption} className="py-2 px-4 bg-gray-700 text-white hover:bg-gray-600">
+                    <button onClick={handleAddDropdownOption}
+                            type="button"
+                            className="py-2 px-4 bg-gray-700 text-white hover:bg-gray-600">
                         Nowa opcja
                     </button>
                     <div className="flex space-x-2">
-                        <button onClick={onClose} className="py-2 px-4 border">Anuluj</button>
-                        <button onClick={handleSubmit} className="py-2 px-4 bg-blue-500 text-white hover:bg-blue-400">
+                        <button
+                            type="button"
+                            onClick={onClose} className="py-2 px-4 border">
+                            Anuluj
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleSubmit} className="py-2 px-4 bg-blue-500 text-white hover:bg-blue-400">
                             Zapisz
                         </button>
                     </div>
@@ -407,7 +418,7 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
         setValues(values)
         setCurrentPath(path)
         setRenameModalOpen(true)
-        //
+
         // setRenameModal({
         //     isOpen: true,
         //     initialValues: values,
@@ -440,63 +451,96 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
         }
     }
 
+
     return (
         <span style={{ marginLeft: `${path.length * 16}px` }}>
     {subcategories.map((subcat, index) => {
         const currentPath = [...path, index]
         return (
-            <div key={index} className="flex flex-col h-full ">
+            <div key={index} className="flex flex-col h-full">
                 <div className="flex flex-col border-l-2 border-gray-300">
                     <div className="flex relative w-full h-full">
                         <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
                     </div>
 
-                    <div className="flex flex-row items-center">
+                    <div className="flex flex-row items-center mt-4">
                         <hr className={`border-t-2 border-gray-300 dark:border-gray-700 w-8 ${
-                            subcat.subcategories && subcat.subcategories.length > 0 ? "self-start mt-6" : "self-center"
+                            subcat.subcategories && subcat.subcategories.length > 0 ? "self-start mt-6" : "self-start mt-6"
                         }`} />
                         <div className="flex flex-col">
-                            <div className="flex flex-row">
-                                {isEditing === index ? (
-                                    <input
-                                        type="text"
-                                        value={editingName}
-                                        onChange={(e) => setEditingName(e.target.value)}
-                                        onBlur={() => stopEditing(index)}
-                                        autoFocus
-                                        className="border border-gray-300 rounded-md px-2 py-1 shadow-md mt-4 w-fit"
-                                    />
-                                ) : (
-                                    <div
-                                        className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-4 w-fit"
-                                        onDoubleClick={() => startEditing(index, subcat.name)}
-                                    >
-                                        <p className="w-fit">{subcat.name || "Nowa kategoria"}</p>
+                            <div className="flex flex-col">
+                                <div className="flex flex-col">
+                                    <div className="flex flex-row">
+                                        {isEditing === index ? (
+                                            <input
+                                                type="text"
+                                                value={editingName}
+                                                onChange={(e) => setEditingName(e.target.value)}
+                                                onBlur={() => stopEditing(index)}
+                                                autoFocus
+                                                className="border border-gray-300 rounded-md px-2 py-1 shadow-md mt-4 w-fit"
+                                            />
+                                        ) : (
+                                            <div
+                                                className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md  w-fit"
+                                                onDoubleClick={() => startEditing(index, subcat.name)}>
+                                                <p className="w-fit">{subcat.name || "Nowa kategoria"}</p>
+                                            </div>
+                                        )}
+                                        <div className="flex flex-row items-center justify-center mt-4">
+                                            <button
+                                                type="button"
+                                                className="w-fit p-2 border-gray-300 shadow-md h-fit ml-2"
+                                                onClick={() => addSubcategory(currentPath)}
+                                            >
+                                                <PlusIcon />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="w-fit p-2 border-gray-300 shadow-md h-fit ml-1"
+                                                onClick={() => deleteSubcategory(currentPath)}
+                                            >
+                                                <MinusIcon />
+                                            </button>
+
+                                            {subcat.name !== "" && subcat.values?.length === 0 &&
+                                                <button
+                                                    type="button"
+                                                    onClick={() => addValueToSubcategory(currentPath, "")}
+                                                    className="">
+                                                    Utwórz opcję
+                                                </button>
+                                            }
+                                        </div>
                                     </div>
-                                )}
-                                <div className="flex flex-row items-center justify-center mt-4">
-                                    <button
-                                        type="button"
-                                        className="w-fit p-2 border-gray-300 shadow-md h-fit ml-2"
-                                        onClick={() => addSubcategory(currentPath)}
-                                    >
-                                        <PlusIcon />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="w-fit p-2 border-gray-300 shadow-md h-fit ml-1"
-                                        onClick={() => deleteSubcategory(currentPath)}
-                                    >
-                                        <MinusIcon />
-                                    </button>
-                                    <select>
-                                        {subcat.values?.map((value, valueIndex) => (
-                                            <option key={valueIndex} value={value}>{value}</option>
-                                        ))}
-                                    </select>
-                                    <button onClick={() => openRenameModal([...path, index], subcat.values || [])}>
-                                        Edytuj opcje
-                                    </button>
+
+                                    {subcat.name !== "" && (
+                                        subcat.values && subcat.values[0] === "" ? (
+                                            <div>Wybierz opcję</div>
+                                        ) : (
+                                            <>
+                                                {subcat?.values && subcat?.values[0] !== "" && (
+                                                    <select className="px-4 py-2" defaultValue="">
+                                                        {subcat.values?.map((value, valueIndex) =>
+                                                            value !== "" ? (
+                                                                <option key={valueIndex} value={value}>
+                                                                    {value}
+                                                                </option>
+                                                            ) : null
+                                                        )}
+                                                    </select>
+                                                )}
+
+                                                <button
+                                                    type="button"
+                                                    className="px-4 py-2 ml-2"
+                                                    onClick={() => openRenameModal([...path, index], subcat.values || [])}
+                                                >
+                                                    <EditIcon />
+                                                </button>
+                                            </>
+                                        )
+                                    )}
                                 </div>
                             </div>
                             {subcat.subcategories && subcat.subcategories.length > 0 && (
