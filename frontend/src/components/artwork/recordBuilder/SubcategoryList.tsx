@@ -1,7 +1,8 @@
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
 import { ReactComponent as EditIcon } from "../../../assets/icons/edit.svg"
+import ValueDropdown from "./ValueDropdown"
 
 
 interface Subcategory {
@@ -139,23 +140,31 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
     const addValueToSubcategory = useCallback((path: number[], newValue: string) => {
         setSelectedDetails((prevDetails) => {
             const updateValuesAtPath = (subcategories: Subcategory[], path: number[]): Subcategory[] => {
-                if (path.length === 0) {
-                    return subcategories
-                } else {
-                    const newPath = [...path]
-                    const indexToAddValue = newPath.pop()
+                if (path.length === 1) {
                     return subcategories.map((subcat, index) => {
-                        if (index === indexToAddValue) {
-                            return { ...subcat, values: [...subcat.values || [], newValue] }
-                        } else if (newPath.length > 0 && index === newPath[0]) {
-                            return {
-                                ...subcat,
-                                subcategories: updateValuesAtPath(subcat.subcategories || [], newPath.slice(1)),
-                            }
+                        if (index === path[0]) {
+                            // Add newValue to the correct subcategory
+                            const updatedValues = subcat.values ? [...subcat.values, newValue] : [newValue]
+                            return { ...subcat, values: updatedValues }
                         }
                         return subcat
                     })
+                } else {
+                    const newPath = [...path]
+                    const index = newPath.shift()
+                    if (index !== undefined) {
+                        return subcategories.map((subcat, subIndex) => {
+                            if (subIndex === index) {
+                                return {
+                                    ...subcat,
+                                    subcategories: updateValuesAtPath(subcat.subcategories || [], newPath),
+                                }
+                            }
+                            return subcat
+                        })
+                    }
                 }
+                return subcategories
             }
 
             return {
@@ -218,6 +227,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                 let currentSubcategories = newDetails[identifier].subcategories
 
                 const newPath = [...path]
+
                 while (newPath.length > 1) {
                     const nextIndex = newPath.shift()
                     if (typeof nextIndex !== "undefined")
@@ -299,96 +309,6 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
     )
 }
 
-interface RenameModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSubmit: (newValues: string[]) => void;
-    values: string[];
-    setValues: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-interface RenameModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    onSubmit: (newValues: string[]) => void;
-    values: string[];
-    setValues: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-const RenameModal: React.FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, values, setValues }) => {
-    const [localValues, setLocalValues] = useState<string[]>(values)
-
-    useEffect(() => {
-        setLocalValues(values)
-    }, [values])
-
-    const handleChange = (index: number, newValue: string) => {
-        const updatedValues = localValues.map((value, i) => i === index ? newValue : value)
-        setLocalValues(updatedValues)
-    }
-
-    const handleAddDropdownOption = () => {
-        setLocalValues([...localValues, ""])
-    }
-
-    const handleDeleteDropdownOption = (index: number) => {
-        const filteredValues = localValues.filter((_, i) => i !== index)
-        setLocalValues(filteredValues)
-    }
-
-    const handleSubmit = () => {
-        onSubmit(localValues)
-        onClose()
-    }
-
-    return isOpen ? (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white rounded-md p-4 w-96">
-                <div className="flex items-start rounded-t border-b pb-2">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                        Dodaj nową opcję
-                    </h3>
-                </div>
-                {localValues.map((value, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            value={value}
-                            placeholder="Dodaj nową opcję"
-                            onChange={(e) => handleChange(index, e.target.value)}
-                            className="border mt-2 px-4 py-2"
-                        />
-                        <button
-                            type="button"
-                            className="w-fit p-2 border-gray-300 shadow-md h-fit ml-1 mt-2"
-                            onClick={() => handleDeleteDropdownOption(index)}>
-                            <MinusIcon />
-                        </button>
-                    </div>
-                ))}
-                <div className="flex justify-between items-center mt-4">
-                    <button onClick={handleAddDropdownOption}
-                            type="button"
-                            className="py-2 px-4 bg-gray-700 text-white hover:bg-gray-600">
-                        Nowa opcja
-                    </button>
-                    <div className="flex space-x-2">
-                        <button
-                            type="button"
-                            onClick={onClose} className="py-2 px-4 border">
-                            Anuluj
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleSubmit} className="py-2 px-4 bg-blue-500 text-white hover:bg-blue-400">
-                            Zapisz
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    ) : null
-}
 
 const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                                        subcategories,
@@ -414,26 +334,11 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
         path: number[];
     }>({ isOpen: false, initialValues: [], path: [] })
 
-    const openRenameModal = (path: number[], values: string[]) => {
+    const openRenameModal = useCallback((path: number[], values: string[]) => {
         setValues(values)
         setCurrentPath(path)
         setRenameModalOpen(true)
-
-        // setRenameModal({
-        //     isOpen: true,
-        //     initialValues: values,
-        //     path: path,
-        // });
-    }
-
-    const handleRenameSubmit = (newValues: string[]) => {
-        newValues.forEach(newValue => {
-            addValueToSubcategory(renameModal.path, newValue)
-        })
-
-        replaceValuesInSubcategory(currentPath, newValues)
-        setRenameModal({ isOpen: false, initialValues: [], path: [] })
-    }
+    }, [])
 
 
     const [isEditing, setIsEditing] = useState<number | null>(null)
@@ -451,6 +356,29 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
         }
     }
 
+    const handleDeleteValues = (path: number[]) => {
+        replaceValuesInSubcategory(path, [])
+        setRenameModal({ isOpen: false, initialValues: [], path: [] })
+    }
+
+    const handleRenameSubmit = (path1: number[], newValues: string[]) => {
+        newValues.forEach(newValue => {
+            addValueToSubcategory(path1, newValue)
+        })
+
+        replaceValuesInSubcategory(path1, newValues)
+        setRenameModal({ isOpen: false, initialValues: [], path: [] })
+        setRenameModalOpen(false)
+    }
+
+    // const handleRenameSubmit = (newValues: string[]) => {
+    //     newValues.forEach(newValue => {
+    //         addValueToSubcategory(renameModal.path, newValue)
+    //     })
+    //
+    //     replaceValuesInSubcategory(currentPath, newValues)
+    //     setRenameModal({ isOpen: false, initialValues: [], path: [] })
+    // }
 
     return (
         <span style={{ marginLeft: `${path.length * 16}px` }}>
@@ -463,14 +391,12 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                         <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
                     </div>
 
-                    <div className="flex flex-row items-center mt-4">
-                        <hr className={`border-t-2 border-gray-300 dark:border-gray-700 w-8 ${
-                            subcat.subcategories && subcat.subcategories.length > 0 ? "self-start mt-6" : "self-start mt-6"
-                        }`} />
+                    <div className="flex flex-row items-center">
+                        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-start mt-8" />
                         <div className="flex flex-col">
                             <div className="flex flex-col">
                                 <div className="flex flex-col">
-                                    <div className="flex flex-row">
+                                    <div className="flex flex-row mt-4">
                                         {isEditing === index ? (
                                             <input
                                                 type="text"
@@ -482,22 +408,22 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                             />
                                         ) : (
                                             <div
-                                                className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md  w-fit"
+                                                className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md w-fit"
                                                 onDoubleClick={() => startEditing(index, subcat.name)}>
                                                 <p className="w-fit">{subcat.name || "Nowa kategoria"}</p>
                                             </div>
                                         )}
-                                        <div className="flex flex-row items-center justify-center mt-4">
+                                        <div className="flex flex-row items-center justify-center">
                                             <button
                                                 type="button"
-                                                className="w-fit p-2 border-gray-300 shadow-md h-fit ml-2"
+                                                className="w-fit p-2 border-gray-300 shadow-md ml-2"
                                                 onClick={() => addSubcategory(currentPath)}
                                             >
                                                 <PlusIcon />
                                             </button>
                                             <button
                                                 type="button"
-                                                className="w-fit p-2 border-gray-300 shadow-md h-fit ml-1"
+                                                className="w-fit p-2 border-gray-300 shadow-md ml-1"
                                                 onClick={() => deleteSubcategory(currentPath)}
                                             >
                                                 <MinusIcon />
@@ -507,40 +433,25 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                 <button
                                                     type="button"
                                                     onClick={() => addValueToSubcategory(currentPath, "")}
-                                                    className="">
+                                                    className="ml-2">
                                                     Utwórz opcję
                                                 </button>
                                             }
                                         </div>
                                     </div>
-
-                                    {subcat.name !== "" && (
-                                        subcat.values && subcat.values[0] === "" ? (
-                                            <div>Wybierz opcję</div>
-                                        ) : (
-                                            <>
-                                                {subcat?.values && subcat?.values[0] !== "" && (
-                                                    <select className="px-4 py-2" defaultValue="">
-                                                        {subcat.values?.map((value, valueIndex) =>
-                                                            value !== "" ? (
-                                                                <option key={valueIndex} value={value}>
-                                                                    {value}
-                                                                </option>
-                                                            ) : null
-                                                        )}
-                                                    </select>
-                                                )}
-
-                                                <button
-                                                    type="button"
-                                                    className="px-4 py-2 ml-2"
-                                                    onClick={() => openRenameModal([...path, index], subcat.values || [])}
-                                                >
-                                                    <EditIcon />
-                                                </button>
-                                            </>
-                                        )
-                                    )}
+                                    {subcat.name !== "" && <ValueDropdown
+                                        subcategoryName={subcat.name}
+                                        values={subcat.values || []}
+                                        path={currentPath}
+                                        index={index}
+                                        openRenameModal={openRenameModal}
+                                        handleDeleteValues={handleDeleteValues}
+                                        addValueToSubcategory={addValueToSubcategory}
+                                        replaceValuesInSubcategory={replaceValuesInSubcategory}
+                                        renameModalOpen={renameModalOpen}
+                                        setRenameModalOpen={setRenameModalOpen}
+                                        onSubmit={handleRenameSubmit}
+                                    />}
                                 </div>
                             </div>
                             {subcat.subcategories && subcat.subcategories.length > 0 && (
@@ -565,13 +476,6 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
             </div>
         )
     })}
-            {renameModalOpen && <RenameModal
-                isOpen={renameModalOpen}
-                onClose={() => setRenameModalOpen(false)}
-                onSubmit={handleRenameSubmit}
-                values={values}
-                setValues={setValues}
-            />}
         </span>
     )
 }

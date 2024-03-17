@@ -51,7 +51,6 @@ const CreateArtwork = () => {
         },
     )
 
-    console.log({ selectedDetails })
     if (categoriesData === undefined) {
         return <LoadingPage />
     }
@@ -86,7 +85,7 @@ const CreateArtwork = () => {
                     {({ isSubmitting }) => (
                         <Form
                             className="flex flex-col bg-white rounded-lg max-w-screen-xl w-full dark:bg-gray-800 border dark:border-gray-600 ">
-                            <div className="flex items-start p-4 pb-0 rounded-t border-b pb-2 ">
+                            <div className="flex items-start p-4 pb-0 rounded-t border-b pb-2">
                                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                                     Dodaj nowy rekord
                                 </h3>

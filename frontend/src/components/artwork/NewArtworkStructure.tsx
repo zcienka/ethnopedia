@@ -500,6 +500,16 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             />
 
             <div className="ml-16">
+                {selectedDetail.values?.length !== 0 && <div className="flex flex-row">
+                    <span className="flex w-0.5 bg-gray-300 h-full"></span>
+                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5" />
+
+                    <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">
+                        {selectedDetail.values?.map((value, valueIndex) => (
+                            <option key={valueIndex} value={value}>{value}</option>
+                        ))}
+                    </select>
+                </div>}
                 <SubcategoryList
                     identifier={identifier}
                     subcategories={selectedDetail.subcategories}
@@ -519,16 +529,16 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
 
             <div className="flex flex-row ml-16 w-full">
                 <div className="flex flex-col w-full">
-                    {selectedDetail.values?.length !== 0 && <div className="flex flex-row">
-                        <span className="flex w-0.5 bg-gray-300 h-full"></span>
-                        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5" />
+                    {/*{selectedDetail.values?.length !== 0 && <div className="flex flex-row">*/}
+                    {/*    <span className="flex w-0.5 bg-gray-300 h-full"></span>*/}
+                    {/*    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5" />*/}
 
-                        <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">
-                            {selectedDetail.values?.map((value, valueIndex) => (
-                                <option key={valueIndex} value={value}>{value}</option>
-                            ))}
-                        </select>
-                    </div>}
+                    {/*    <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">*/}
+                    {/*        {selectedDetail.values?.map((value, valueIndex) => (*/}
+                    {/*            <option key={valueIndex} value={value}>{value}</option>*/}
+                    {/*        ))}*/}
+                    {/*    </select>*/}
+                    {/*</div>}*/}
 
                     <div className="flex flex-row items-center">
                         <span className="bg-gray-300 h-1/2 flex self-start w-0.5"></span>
