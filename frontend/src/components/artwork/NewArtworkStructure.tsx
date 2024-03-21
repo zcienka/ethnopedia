@@ -2,20 +2,13 @@ import React, { useEffect, useRef, useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import CategorySelector from "./recordBuilder/CategorySelector"
 import SubcategoryList from "./recordBuilder/SubcategoryList"
+import {SelectedDetail, SubcategoryValue} from "./types/ArtworkTypes";
 
 type Subcategory = {
     name: string
     values?: string[]
     subcategories?: Subcategory[]
     isSelectable?: boolean
-}
-
-interface SelectedDetail {
-    category: any;
-    subcategories: Subcategory[];
-    collection: string
-    values?: string[]
-    date: string;
 }
 
 interface LocationDetail {
@@ -313,24 +306,31 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                                     selectedDetail={selectedDetail}
                                     selectedDetails={selectedDetails}
                                     setSelectedDetails={setSelectedDetails}
-                                    // setSelectedDetails={setSelectedDetails}
                                     identifier={key}
                                 />
                             </div>
                         </div>
                     ))}
 
-                <div className="ml-2 flex flex-row relative">
-                    <span className="absolute bg-gray-300 h-1/2 w-0.5"></span>
-                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
+                <div className="flex flex-row w-full ml-2">
+                    <div className="flex flex-col w-full">
+                        <div className="flex flex-row items-center">
+                            <span className="border-l-2 border-gray-300 h-1/2 flex self-start"></span>
+                            <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
 
-                    <button
-                        onClick={() => addCategory()}
-                        className="p-2 border-gray-300 shadow-md"
-                        type="button"
-                    >
-                        <PlusIcon />
-                    </button>
+                            <div className="flex items-center flex-row">
+                                <button
+                                    className="p-2 border-gray-300 shadow-md"
+                                    onClick={() => addCategory()}
+                                    type="button">
+                                    <PlusIcon />
+                                </button>
+                            </div>
+                            <div className="flex items-center flex-row pt-4 h-12">
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -362,7 +362,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
 
     const handleCategoryChange = (identifier: string, newCategoryName: string) => {
         setSelectedDetails(prevDetails => {
-            const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName)
+            const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName);
 
             const newSubcategories = categoryData?.subcategories?.map(subcat => ({
                 name: subcat.name,
@@ -370,20 +370,18 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                 category: newCategoryName,
                 isSelectable: subcat.isSelectable,
                 date: new Date().toISOString(),
-            })) || []
+            })) || [];
 
-            const updatedDetails = {
+            return {
                 ...prevDetails,
                 [identifier]: {
                     category: newCategoryName,
-                    subcategories: newSubcategories || [],
+                    subcategories: newSubcategories,
                     values: categoryData?.values || [],
                     collection: jsonData[0].name,
                     date: new Date().toISOString(),
-                },
-            }
-
-            return updatedDetails
+                } as unknown as SelectedDetail,
+            };
         })
     }
 
@@ -506,7 +504,9 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
 
                     <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">
                         {selectedDetail.values?.map((value, valueIndex) => (
-                            <option key={valueIndex} value={value}>{value}</option>
+                            <option key={valueIndex} value={value.value}>
+                                {value.value}
+                            </option>
                         ))}
                     </select>
                 </div>}
@@ -526,57 +526,8 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                     setEditingState={setEditingState}
                 />
             </div>
-
-            <div className="flex flex-row ml-16 w-full">
-                <div className="flex flex-col w-full">
-                    {/*{selectedDetail.values?.length !== 0 && <div className="flex flex-row">*/}
-                    {/*    <span className="flex w-0.5 bg-gray-300 h-full"></span>*/}
-                    {/*    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5" />*/}
-
-                    {/*    <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">*/}
-                    {/*        {selectedDetail.values?.map((value, valueIndex) => (*/}
-                    {/*            <option key={valueIndex} value={value}>{value}</option>*/}
-                    {/*        ))}*/}
-                    {/*    </select>*/}
-                    {/*</div>}*/}
-
-                    <div className="flex flex-row items-center">
-                        <span className="bg-gray-300 h-1/2 flex self-start w-0.5"></span>
-                        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
-
-                        <div className="flex items-center flex-row">
-                            <button
-                                className="p-2 border-gray-300 shadow-md"
-                                onClick={() => handleAddSubcategory(identifier)}
-                                type="button">
-                                <PlusIcon />
-                            </button>
-                        </div>
-                        <div className="flex items-center flex-row pt-4 h-12">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     )
-}
-
-const AddNewSubcategory = () => {
-    return <div className="flex flex-row items-center">
-        <span className="bg-gray-300 h-1/2 flex self-start w-0.5"></span>
-
-        <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center" />
-
-        <div className="flex items-center flex-row ">
-            <input type="text" className="border border-gray-300 rounded-md px-2 py-1"
-                   placeholder="Dodaj nazwę">
-            </input>
-        </div>
-        <div className="flex items-center flex-row pt-4 h-12">
-
-        </div>
-    </div>
 }
 
 export default NewArtworkStructure

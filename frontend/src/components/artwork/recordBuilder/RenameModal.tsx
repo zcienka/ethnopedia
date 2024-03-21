@@ -1,85 +1,73 @@
 import React, { useEffect, useState } from "react"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
+import { SubcategoryValue } from "../types/ArtworkTypes"
 
 interface RenameModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (path: number[], newValues: string[]) => void;
-    values: string[];
+    values: SubcategoryValue[];
     path: number[];
     index: number;
 }
 
 const RenameModal: React.FC<RenameModalProps> = ({ isOpen, onClose, onSubmit, values, path, index }) => {
-    const [localValues, setLocalValues] = useState<string[]>(values)
+    const [localValues, setLocalValues] = useState<SubcategoryValue[]>(values)
 
     useEffect(() => {
         setLocalValues(values)
     }, [values])
-
-    const handleChange = (index: number, newValue: string) => {
-        const updatedValues = localValues.map((value, i) => i === index ? newValue : value)
+console.log({path})
+    const handleChange = (valueIndex: number, newValue: string) => {
+        const updatedValues = localValues.map((value, i) => {
+            return i === valueIndex ? { ...value, value: newValue } : value
+        })
         setLocalValues(updatedValues)
     }
 
     const handleAddDropdownOption = () => {
-        setLocalValues([...localValues, ""])
+        setLocalValues([...localValues, { index: localValues.length, value: "", row: localValues.length + 1 }])
     }
 
-    const handleDeleteDropdownOption = (index: number) => {
-        const filteredValues = localValues.filter((_, i) => i !== index)
+    const handleDeleteDropdownOption = (deleteIndex: number) => {
+        const filteredValues = localValues.filter((_, i) => i !== deleteIndex)
         setLocalValues(filteredValues)
     }
 
     const handleSubmit = () => {
-        onSubmit(path, localValues)
+        onSubmit(path, localValues.map(v => v.value)) // Assuming onSubmit expects path and an array of string values
         onClose()
     }
 
     return isOpen ? (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
             <div className="bg-white rounded-md p-4 w-96">
-                <div className="flex items-start rounded-t border-b pb-2">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                        Dodaj nową opcję
-                    </h3>
-                </div>
-                {localValues.map((value, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+                {/* Modal Content */}
+                {localValues.map((value, i) => (
+                    <div key={i} className="flex items-center space-x-2">
                         <input
                             type="text"
-                            value={value}
-                            placeholder="Dodaj nową opcję"
-                            onChange={(e) => handleChange(index, e.target.value)}
-                            className="border mt-2 px-4 py-2"
+                            value={value.value}
+                            placeholder="Value"
+                            onChange={(e) => handleChange(i, e.target.value)}
+                            className="input-class"
                         />
                         <button
                             type="button"
-                            className="w-fit p-2 border-gray-300 shadow-md h-fit ml-1 mt-2"
-                            onClick={() => handleDeleteDropdownOption(index)}>
+                            onClick={() => handleDeleteDropdownOption(i)}>
                             <MinusIcon />
                         </button>
                     </div>
                 ))}
-                <div className="flex justify-between items-center mt-4">
-                    <button onClick={handleAddDropdownOption}
-                            type="button"
-                            className="py-2 px-4 bg-gray-700 text-white hover:bg-gray-600">
-                        Nowa opcja
-                    </button>
-                    <div className="flex space-x-2">
-                        <button
-                            type="button"
-                            onClick={onClose} className="py-2 px-4 border">
-                            Anuluj
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleSubmit} className="py-2 px-4 bg-blue-500 text-white hover:bg-blue-400">
-                            Zapisz
-                        </button>
-                    </div>
-                </div>
+                <button
+                    type="button"
+                    onClick={handleAddDropdownOption}>Add Option</button>
+                <button
+                    type="button"
+                    onClick={handleSubmit}>Submit</button>
+                <button
+                    type="button"
+                    onClick={onClose}>Close</button>
             </div>
         </div>
     ) : null

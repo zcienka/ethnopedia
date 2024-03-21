@@ -8,21 +8,7 @@ import NewArtworkStructure from "./NewArtworkStructure"
 import { useNavigate, useParams } from "react-router-dom"
 import Navbar from "../navbar/Navbar"
 import { useUser } from "../../providers/UserProvider"
-
-type Subcategory = {
-    name: string
-    values?: string[]
-    subcategories?: Subcategory[]
-    isSelectable?: boolean
-}
-
-interface SelectedDetail {
-    category: any;
-    subcategories: Subcategory[];
-    collection: string
-    values?: string[]
-    date: string
-}
+import {SelectedDetail} from "./types/ArtworkTypes";
 
 const CreateArtwork = () => {
     const queryClient = useQueryClient()
@@ -33,11 +19,11 @@ const CreateArtwork = () => {
     const defaultSelectedDetails: { [key: string]: SelectedDetail } = {
         [`${Date.now()}`]: {
             category: "",
-            values: [],
             subcategories: [],
+            values: [],
             collection: "",
             date: ""
-        },
+        } as SelectedDetail,
     }
     const [selectedDetails, setSelectedDetails] = useState<{ [key: string]: SelectedDetail }>(defaultSelectedDetails)
 
@@ -68,6 +54,7 @@ const CreateArtwork = () => {
                             subcategories: detail.subcategories,
                             values: detail.values,
                             collection: detail.collection,
+                            date: detail.date || "2024-01-01"
                         }))
 
 
