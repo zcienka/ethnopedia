@@ -1,14 +1,8 @@
 import React from "react"
 
-export interface SubcategoryValue {
-    index: number;
-    value: string;
-    row: number;
-}
-
 export interface Subcategory {
     name: string;
-    values: SubcategoryValue[];
+    values: string[];
     subcategories?: Subcategory[];
 }
 
@@ -22,7 +16,7 @@ export interface SelectedDetail {
     category: any
     subcategories: Subcategory[]
     collection: string
-    values?: SubcategoryValue[]
+    values?: string[]
     date: string
 }
 
@@ -55,8 +49,8 @@ export interface RecursiveSubcategoryProps {
     isDropdownVisible: (path: number[]) => boolean;
     addDropdownOption: (path: number[], newOption: string, row: number, index: number) => void;
     replaceValuesInSubcategory: (path: number[], newValues: string[]) => void;
-    values: SubcategoryValue[];
-    setValues: React.Dispatch<React.SetStateAction<SubcategoryValue[]>>;
+    values: string[];
+    setValues: React.Dispatch<React.SetStateAction<string[]>>;
     onOpenRenameModal?: (path: number[], values: string[]) => void;
     modalState: ModalState;
     setModalState: React.Dispatch<React.SetStateAction<ModalState>>;
@@ -65,7 +59,7 @@ export interface RecursiveSubcategoryProps {
 export interface ModalState {
     isOpen: boolean
     data: {
-        values: SubcategoryValue[]
+        values: string[]
         path: number[]
         index: number
     }

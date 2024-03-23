@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import CategorySelector from "./recordBuilder/CategorySelector"
 import SubcategoryList from "./recordBuilder/SubcategoryList"
-import {SelectedDetail, SubcategoryValue} from "./types/ArtworkTypes";
+import { SelectedDetail } from "./types/ArtworkTypes"
 
 type Subcategory = {
     name: string
@@ -362,7 +362,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
 
     const handleCategoryChange = (identifier: string, newCategoryName: string) => {
         setSelectedDetails(prevDetails => {
-            const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName);
+            const categoryData = jsonData[0].locationDetails.find(detail => detail.name === newCategoryName)
 
             const newSubcategories = categoryData?.subcategories?.map(subcat => ({
                 name: subcat.name,
@@ -370,7 +370,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                 category: newCategoryName,
                 isSelectable: subcat.isSelectable,
                 date: new Date().toISOString(),
-            })) || [];
+            })) || []
 
             return {
                 ...prevDetails,
@@ -381,7 +381,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                     collection: jsonData[0].name,
                     date: new Date().toISOString(),
                 } as unknown as SelectedDetail,
-            };
+            }
         })
     }
 
@@ -504,8 +504,8 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
 
                     <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">
                         {selectedDetail.values?.map((value, valueIndex) => (
-                            <option key={valueIndex} value={value.value}>
-                                {value.value}
+                            <option key={valueIndex} value={value}>
+                                {value}
                             </option>
                         ))}
                     </select>

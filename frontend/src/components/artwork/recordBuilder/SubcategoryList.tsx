@@ -1,13 +1,12 @@
-import React, {useCallback, useState} from "react"
-import {ReactComponent as MinusIcon} from "../../../assets/icons/minus.svg"
-import {ReactComponent as PlusIcon} from "../../../assets/icons/plus.svg"
+import React, { useCallback, useState } from "react"
+import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
+import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
 import ValueDropdown from "./ValueDropdown"
 import {
     ModalState,
     RecursiveSubcategoryProps,
     Subcategory,
     SubcategoryListProps,
-    SubcategoryValue,
 } from "../types/ArtworkTypes"
 
 
@@ -18,7 +17,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                                              setSelectedDetails,
                                                          }) => {
 
-    const [values, setValues] = useState<SubcategoryValue[]>([])
+    const [values, setValues] = useState<string[]>([])
 
     const addSubcategory = useCallback((path: number[]) => {
         const newSubcategory: Subcategory = {
@@ -93,10 +92,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                 if (path.length === 1) {
                     return subcategories.map((subcat, index) => {
                         if (index === path[0]) {
-                            const nextIndex = subcat.values?.length ? Math.max(...subcat.values.map(v => v.index)) + 1 : 0
-                            const nextRow = subcat.values?.length ? Math.max(...subcat.values.map(v => v.row)) + 1 : 1 // Start row numbers at 1
-                            const updatedValues = subcat.values ? [...subcat.values, {index: nextIndex, value: newValue, row: nextRow}] : [{index: 0, value: newValue, row: nextRow}]
-                            return {...subcat, values: updatedValues}
+                            return { ...subcat, values: [...subcat.values, newValue] }
                         }
                         return subcat
                     })
@@ -139,7 +135,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                 return subcategories.map((subcat, index) => {
                     if (index === currentIndex) {
                         if (restOfPath.length === 0) {
-                            return {...subcat, name: newName}
+                            return { ...subcat, name: newName }
                         } else {
                             return {
                                 ...subcat,
@@ -175,7 +171,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
 
     const addDropdownOption = useCallback((path: number[], option: string, index: number, row: number) => {
             setSelectedDetails((prevDetails) => {
-                const newDetails = {...prevDetails}
+                const newDetails = { ...prevDetails }
                 let currentSubcategories = newDetails[identifier].subcategories
 
                 const newPath = [...path]
@@ -189,9 +185,8 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                 if (currentSubcategories && newPath.length === 1) {
                     const targetIndex = newPath[0]
                     const targetSubcategory = currentSubcategories[targetIndex]
-                    const newOption: SubcategoryValue = {index: index + 1, value: option, row: row + 1};
 
-                    const updatedValues = [...(targetSubcategory.values || []), newOption]
+                    const updatedValues = [...(targetSubcategory.values || []), option]
 
                     currentSubcategories[targetIndex] = {
                         ...targetSubcategory,
@@ -203,9 +198,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
 
                 return newDetails
             })
-            const newOption: SubcategoryValue = {index: index + 1, value: option, row: row + 1};
-
-            setValues(prevValues => [...prevValues, newOption])
+            setValues(prevValues => [...prevValues, option])
         },
         [setSelectedDetails, identifier, setValues],
     )
@@ -214,33 +207,27 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
     const replaceValuesInSubcategory = useCallback((path: number[], newValues: string[]) => {
         setSelectedDetails(prevDetails => {
             const updateSubcategories = (subcategories: Subcategory[], pathIndex: number): Subcategory[] => {
-                if (pathIndex >= path.length) return subcategories;
+                if (pathIndex >= path.length) return subcategories
 
-                const newSubcategories = [...subcategories];
+                const newSubcategories = [...subcategories]
 
                 if (pathIndex === path.length - 1) {
-                    const targetSubcategory = newSubcategories[path[pathIndex]];
-
-                    const convertedNewValues = newValues.map((value, index) => ({
-                        index,
-                        value,
-                        row: index + 1
-                    }))
+                    const targetSubcategory = newSubcategories[path[pathIndex]]
 
                     newSubcategories[path[pathIndex]] = {
                         ...targetSubcategory,
-                        values: convertedNewValues,
+                        values: newValues,
                     }
                 } else {
-                    const targetSubcategory = newSubcategories[path[pathIndex]];
+                    const targetSubcategory = newSubcategories[path[pathIndex]]
                     newSubcategories[path[pathIndex]] = {
                         ...targetSubcategory,
                         subcategories: updateSubcategories(targetSubcategory.subcategories || [], pathIndex + 1),
-                    };
+                    }
                 }
 
-                return newSubcategories;
-            };
+                return newSubcategories
+            }
 
             return {
                 ...prevDetails,
@@ -250,12 +237,12 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                 },
             }
         })
-    }, [setSelectedDetails, identifier]);
+    }, [setSelectedDetails, identifier])
 
     const [modalState, setModalState] = useState<ModalState>({
         isOpen: false,
         data: {
-            values: [{ index: 0, value: "", row: 0 }] as SubcategoryValue[],
+            values: [""],
             path: [],
             index: -1,
         },
@@ -308,17 +295,17 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
         isOpen: boolean;
         initialValues: string[];
         path: number[];
-    }>({isOpen: false, initialValues: [], path: []})
+    }>({ isOpen: false, initialValues: [], path: [] })
 
 
-    const openRenameModal = useCallback((path: number[], values: SubcategoryValue[], index: number) => {
-        setValues(values);
-        setCurrentPath(path);
+    const openRenameModal = useCallback((path: number[], values: string[], index: number) => {
+        setValues(values)
+        setCurrentPath(path)
         setModalState({
             isOpen: true,
-            data: {values, path, index},
-        });
-    }, [setValues, setCurrentPath, setModalState]);
+            data: { values, path, index },
+        })
+    }, [setValues, setCurrentPath, setModalState])
 
 
     const [isEditing, setIsEditing] = useState<number | null>(null)
@@ -338,7 +325,7 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
 
     const handleDeleteValues = (path: number[]) => {
         replaceValuesInSubcategory(path, [])
-        setRenameModal({isOpen: false, initialValues: [], path: []})
+        setRenameModal({ isOpen: false, initialValues: [], path: [] })
     }
 
     const handleRenameSubmit = (path: number[], newValues: string[]) => {
@@ -352,7 +339,7 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
         }))
 
         replaceValuesInSubcategory(path, newValues)
-        setRenameModal({isOpen: false, initialValues: [], path: []})
+        setRenameModal({ isOpen: false, initialValues: [], path: [] })
     }
 
     const closeModal = useCallback(() => {
@@ -363,7 +350,7 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
     }, [setModalState])
 
     return (
-        <div style={{marginLeft: `${path.length * 16}px`}}>
+        <div>
             {subcategories.map((subcat, index) => {
                 const currentPath = [...path, index]
 
@@ -372,7 +359,8 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                         <div className="flex flex-col border-l-4 border-gray-300">
 
                             <div className="flex flex-row items-center">
-                                <hr className="border-t-4 border-gray-300 dark:border-gray-700 w-8 self-start mt-8"/>
+                                <hr className="border-t-4 border-gray-300 dark:border-gray-700 w-16 self-start mt-8" />
+
                                 <div className="flex flex-col">
                                     <div className="flex flex-col">
                                         <div className="flex flex-col">
@@ -400,14 +388,14 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                         className="w-fit p-2 border-gray-300 shadow-md ml-2"
                                                         onClick={() => addSubcategory(currentPath)}
                                                     >
-                                                        <PlusIcon/>
+                                                        <PlusIcon />
                                                     </button>
                                                     <button
                                                         type="button"
                                                         className="w-fit p-2 border-gray-300 shadow-md ml-1"
                                                         onClick={() => deleteSubcategory(currentPath)}
                                                     >
-                                                        <MinusIcon/>
+                                                        <MinusIcon />
                                                     </button>
 
                                                     {subcat.name !== "" && subcat.values?.length === 0 &&
@@ -430,10 +418,9 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                 handleDeleteValues={handleDeleteValues}
                                                 addValueToSubcategory={addValueToSubcategory}
                                                 replaceValuesInSubcategory={replaceValuesInSubcategory}
-                                                // renameModalOpen={renameModalOpen}
                                                 onSubmit={handleRenameSubmit}
                                                 closeModal={closeModal}
-                                                modalState={modalState}/>}
+                                                modalState={modalState} />}
                                         </div>
                                     </div>
                                     {subcat.subcategories && subcat.subcategories.length > 0 && (
@@ -463,14 +450,14 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                 <div className="flex flex-col w-full">
                                     <div className="flex flex-row items-center">
                                         <span className="border-l-4 border-gray-300 h-1/2 flex self-start"></span>
-                                        <hr className="border-t-4 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5"/>
+                                        <hr className="border-t-4 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5" />
 
                                         <div className="flex items-center flex-row">
                                             <button
                                                 className="p-2 border-gray-300 shadow-md"
                                                 onClick={() => addSubcategory(path)}
                                                 type="button">
-                                                <PlusIcon/>
+                                                <PlusIcon />
                                             </button>
                                         </div>
 

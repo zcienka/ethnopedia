@@ -2,19 +2,19 @@ import React from "react"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
 import { ReactComponent as EditIcon } from "../../../assets/icons/edit.svg"
 import RenameModal from "./RenameModal"
-import { ModalState, SubcategoryValue } from "../types/ArtworkTypes"
+import { ModalState } from "../types/ArtworkTypes"
 
 
 interface ValueDropdownProps {
     subcategoryName: string;
-    values: SubcategoryValue[];
+    values: string[];
     path: number[];
     index: number;
     handleDeleteValues: (path: number[]) => void;
     addValueToSubcategory: (path: number[], newValue: string) => void;
     replaceValuesInSubcategory: (path: number[], newValues: string[]) => void;
     onSubmit: (path: number[], newValues: string[]) => void;
-    openRenameModal: (path: number[], values: SubcategoryValue[], index: number) => void
+    openRenameModal: (path: number[], values: string[], index: number) => void
     closeModal: () => void;
     modalState: ModalState;
 }
@@ -32,13 +32,13 @@ const ValueDropdown: React.FC<ValueDropdownProps> = ({
                                                          openRenameModal,
                                                          closeModal,
                                                      }) => {
-
+    console.log({ values })
     const shouldShowModal = modalState.isOpen &&
         modalState.data.index === index &&
         modalState.data.path.join("") === path.join("")
 
     return <div className="flex flex-row mt-2">
-        {values && typeof values[0] === "undefined" ? (
+        {values && values[0] === "" ? (
             <button
                 type="button"
                 className="rounded-lg border border-gray-300 focus:outline-none dark:text-white
@@ -48,13 +48,13 @@ const ValueDropdown: React.FC<ValueDropdownProps> = ({
             >
                 Wybierz opcję
             </button>
-        ) : values && values[0] && values[0].value !== "" ? (
+        ) : values[0] && values[0] !== "" ? (
             <>
                 <select className="px-4 py-2" defaultValue="">
                     {values.map((value, valueIndex) =>
-                            value.value !== "" && (
-                                <option key={valueIndex} value={value.value}>
-                                    {value.value}
+                            value !== "" && (
+                                <option key={valueIndex} value={value}>
+                                    {value}
                                 </option>
                             ),
                     )}
@@ -82,7 +82,6 @@ const ValueDropdown: React.FC<ValueDropdownProps> = ({
         {shouldShowModal && <RenameModal
             onClose={closeModal}
             isOpen={modalState.isOpen}
-            // onClose={() => (false)}
             onSubmit={onSubmit}
             values={values}
             path={path}
