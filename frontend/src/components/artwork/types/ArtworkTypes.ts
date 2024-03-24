@@ -13,9 +13,9 @@ export interface EditingState {
 }
 
 export interface SelectedDetail {
-    category: any
+    collectionName: any
     subcategories: Subcategory[]
-    collection: string
+    category: string
     values?: string[]
     date: string
 }
@@ -39,7 +39,8 @@ export interface SubcategoryListProps {
 }
 
 export interface RecursiveSubcategoryProps {
-    subcategories: Subcategory[];
+    identifier: string;
+    subcategories?: Subcategory[];
     addSubcategory: (path: number[]) => void;
     addValueToSubcategory: (path: number[], newValue: string, index?: number) => void;
     deleteSubcategory: (path: number[]) => void;
@@ -49,7 +50,7 @@ export interface RecursiveSubcategoryProps {
     isDropdownVisible: (path: number[]) => boolean;
     addDropdownOption: (path: number[], newOption: string, row: number, index: number) => void;
     replaceValuesInSubcategory: (path: number[], newValues: string[]) => void;
-    values: string[];
+    values?: string[];
     setValues: React.Dispatch<React.SetStateAction<string[]>>;
     onOpenRenameModal?: (path: number[], values: string[]) => void;
     modalState: ModalState;

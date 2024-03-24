@@ -283,7 +283,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                 category: "",
                 values: [],
                 subcategories: [],
-                collection: jsonData[0].name,
+                collectionName: jsonData[0].name,
                 date: new Date().toISOString(),
             },
         }))
@@ -378,9 +378,9 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                     category: newCategoryName,
                     subcategories: newSubcategories,
                     values: categoryData?.values || [],
-                    collection: jsonData[0].name,
+                    collectionName: jsonData[0].name,
                     date: new Date().toISOString(),
-                } as unknown as SelectedDetail,
+                } as SelectedDetail,
             }
         })
     }
@@ -498,18 +498,8 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             />
 
             <div className="ml-16">
-                {selectedDetail.values?.length !== 0 && <div className="flex flex-row">
-                    <span className="flex w-0.5 bg-gray-300 h-full"></span>
-                    <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5" />
 
-                    <select className="border border-gray-300 rounded-md py-2 px-4 shadow-md my-2">
-                        {selectedDetail.values?.map((value, valueIndex) => (
-                            <option key={valueIndex} value={value}>
-                                {value}
-                            </option>
-                        ))}
-                    </select>
-                </div>}
+
                 <SubcategoryList
                     identifier={identifier}
                     subcategories={selectedDetail.subcategories}

@@ -4,7 +4,7 @@ import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
 import ValueDropdown from "./ValueDropdown"
 import {
     ModalState,
-    RecursiveSubcategoryProps,
+    RecursiveSubcategoryProps, SelectedDetail,
     Subcategory,
     SubcategoryListProps,
 } from "../types/ArtworkTypes"
@@ -206,38 +206,42 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
 
     const replaceValuesInSubcategory = useCallback((path: number[], newValues: string[]) => {
         setSelectedDetails(prevDetails => {
-            const updateSubcategories = (subcategories: Subcategory[], pathIndex: number): Subcategory[] => {
-                if (pathIndex >= path.length) return subcategories
-
-                const newSubcategories = [...subcategories]
-
-                if (pathIndex === path.length - 1) {
-                    const targetSubcategory = newSubcategories[path[pathIndex]]
-
-                    newSubcategories[path[pathIndex]] = {
-                        ...targetSubcategory,
-                        values: newValues,
-                    }
-                } else {
-                    const targetSubcategory = newSubcategories[path[pathIndex]]
-                    newSubcategories[path[pathIndex]] = {
-                        ...targetSubcategory,
-                        subcategories: updateSubcategories(targetSubcategory.subcategories || [], pathIndex + 1),
-                    }
+            const updateValues = (details: SelectedDetail, path: number[], newValues: string[]): SelectedDetail => {
+                if (path.length === 0) {
+                    return { ...details, values: newValues };
                 }
 
-                return newSubcategories
+                const updateSubcategories = (subcategories: Subcategory[], pathIndex: number): Subcategory[] => {
+                    if (pathIndex >= path.length) return subcategories;
+
+                    return subcategories.map((subcat, index) => {
+                        if (index === path[pathIndex]) {
+                            if (pathIndex === path.length - 1) {
+                                return { ...subcat, values: newValues };
+                            } else {
+                                return {
+                                    ...subcat,
+                                    subcategories: updateSubcategories(subcat.subcategories || [], pathIndex + 1),
+                                }
+                            }
+                        }
+                        return subcat;
+                    })
+                }
+
+                const updatedSubcategories = updateSubcategories(details.subcategories, 0);
+                return { ...details, subcategories: updatedSubcategories };
             }
+
+            const updatedDetail = updateValues(prevDetails[identifier], path, newValues);
 
             return {
                 ...prevDetails,
-                [identifier]: {
-                    ...prevDetails[identifier],
-                    subcategories: updateSubcategories(prevDetails[identifier].subcategories, 0),
-                },
+                [identifier]: updatedDetail,
             }
         })
-    }, [setSelectedDetails, identifier])
+    }, [setSelectedDetails, identifier]);
+
 
     const [modalState, setModalState] = useState<ModalState>({
         isOpen: false,
@@ -262,7 +266,8 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                     isDropdownVisible={isDropdownVisible}
                     addDropdownOption={addDropdownOption}
                     replaceValuesInSubcategory={replaceValuesInSubcategory}
-                    values={values}
+                    values={selectedDetails[identifier]?.values}
+                    identifier={identifier}
                     setValues={setValues}
                     modalState={modalState}
                     setModalState={setModalState}
@@ -273,6 +278,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
 }
 
 const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
+                                                                       identifier,
                                                                        subcategories,
                                                                        addSubcategory,
                                                                        addValueToSubcategory,
@@ -349,9 +355,24 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
         }))
     }, [setModalState])
 
+
     return (
         <div>
-            {subcategories.map((subcat, index) => {
+            {values && (
+                <ValueDropdown
+                    values={values}
+                    path={currentPath}
+                    index={identifier}
+                    openRenameModal={openRenameModal}
+                    handleDeleteValues={handleDeleteValues}
+                    replaceValuesInSubcategory={replaceValuesInSubcategory}
+                    onSubmit={handleRenameSubmit}
+                    closeModal={closeModal}
+                    modalState={modalState}
+                />
+            )}
+
+            {subcategories && subcategories.map((subcat, index) => {
                 const currentPath = [...path, index]
 
                 return (
@@ -379,7 +400,9 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                         className="flex items-center border border-gray-300
                                                         rounded-md px-2 py-1 shadow-md w-fit"
                                                         onDoubleClick={() => startEditing(index, subcat.name)}>
-                                                        <p className="w-fit">{subcat.name || "Nowa kategoria"}</p>
+                                                        <p className="w-fit">
+                                                            {subcat.name || "Nowa kategoria"}
+                                                        </p>
                                                     </div>
                                                 )}
                                                 <div className="flex flex-row items-center justify-center">
@@ -416,7 +439,6 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                 index={index}
                                                 openRenameModal={openRenameModal}
                                                 handleDeleteValues={handleDeleteValues}
-                                                addValueToSubcategory={addValueToSubcategory}
                                                 replaceValuesInSubcategory={replaceValuesInSubcategory}
                                                 onSubmit={handleRenameSubmit}
                                                 closeModal={closeModal}
@@ -425,6 +447,7 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                     </div>
                                     {subcat.subcategories && subcat.subcategories.length > 0 && (
                                         <RecursiveSubcategory
+                                            identifier={identifier}
                                             subcategories={subcat.subcategories}
                                             addSubcategory={addSubcategory}
                                             addValueToSubcategory={addValueToSubcategory}
@@ -465,7 +488,8 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                         </div>
                                     </div>
                                 </div>
-                            </div>}
+                            </div>
+                        }
                     </div>
                 )
             })}

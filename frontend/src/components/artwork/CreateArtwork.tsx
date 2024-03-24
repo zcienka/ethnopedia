@@ -18,10 +18,10 @@ const CreateArtwork = () => {
 
     const defaultSelectedDetails: { [key: string]: SelectedDetail } = {
         [`${Date.now()}`]: {
-            category: "",
+            collectionName: "",
             subcategories: [],
             values: [],
-            collection: "",
+            category: "",
             date: ""
         } as SelectedDetail,
     }
@@ -50,10 +50,10 @@ const CreateArtwork = () => {
                     onSubmit={(values, { setSubmitting }) => {
 
                         const detailsToSubmit = Object.values(selectedDetails).map(detail => ({
-                            category: detail.category,
+                            collectionName: detail.collectionName,
                             subcategories: detail.subcategories,
                             values: detail.values,
-                            collection: detail.collection,
+                            category: detail.category,
                             date: detail.date || "2024-01-01"
                         }))
 

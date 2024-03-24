@@ -6,12 +6,11 @@ import { ModalState } from "../types/ArtworkTypes"
 
 
 interface ValueDropdownProps {
-    subcategoryName: string;
+    subcategoryName?: string;
     values: string[];
     path: number[];
-    index: number;
+    index: any;
     handleDeleteValues: (path: number[]) => void;
-    addValueToSubcategory: (path: number[], newValue: string) => void;
     replaceValuesInSubcategory: (path: number[], newValues: string[]) => void;
     onSubmit: (path: number[], newValues: string[]) => void;
     openRenameModal: (path: number[], values: string[], index: number) => void
@@ -25,17 +24,16 @@ const ValueDropdown: React.FC<ValueDropdownProps> = ({
                                                          path,
                                                          index,
                                                          handleDeleteValues,
-                                                         addValueToSubcategory,
                                                          replaceValuesInSubcategory,
                                                          onSubmit,
                                                          modalState,
                                                          openRenameModal,
                                                          closeModal,
                                                      }) => {
-    console.log({ values })
     const shouldShowModal = modalState.isOpen &&
         modalState.data.index === index &&
         modalState.data.path.join("") === path.join("")
+
 
     return <div className="flex flex-row mt-2">
         {values && values[0] === "" ? (
