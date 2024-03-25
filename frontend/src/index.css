@@ -24,6 +24,7 @@
     html {
         @apply text-gray-900;
     }
+
     * {
         box-sizing: border-box;
     }
@@ -52,7 +53,7 @@
         display: block;
         margin: 0;
         padding: 0;
-        width:100%;
+        width: 100%;
     }
 
     .half-border::after {
@@ -67,5 +68,11 @@
 
     .color-button {
         @apply px-4 py-2 bg-blue-500 text-white hover:bg-blue-400 font-semibold border-none;
+    }
+
+    .logo {
+        font-family: "Jomhuria", serif;
+        font-weight: 400;
+        font-style: normal;
     }
 }

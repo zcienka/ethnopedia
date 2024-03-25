@@ -2,6 +2,7 @@ import axios from "axios"
 import { Collection } from "../@types/Collection"
 import { useMutation } from "react-query"
 import { API_URL } from "../config"
+import {SelectedDetail} from "../components/artwork/types/ArtworkTypes";
 
 interface CollectionsResponse {
     collections: Collection[];
@@ -10,19 +11,6 @@ interface CollectionsResponse {
     pageSize: number;
 }
 
-
-type Subcategory = {
-    name: string
-    values?: string[]
-    subcategories?: Subcategory[]
-    isSelectable?: boolean
-}
-
-interface SelectedDetail {
-    category: any;
-    subcategories: Subcategory[];
-    values?: string[]
-}
 
 
 export const getCollections = async (page: number = 1, pageSize: number = 10): Promise<CollectionsResponse> => {

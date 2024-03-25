@@ -1,177 +1,498 @@
-import React from "react"
+import React, { useCallback, useState } from "react"
 import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg"
+import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
+import ValueDropdown from "./ValueDropdown"
+import {
+    ModalState,
+    RecursiveSubcategoryProps, SelectedDetail,
+    Subcategory,
+    SubcategoryListProps,
+} from "../types/ArtworkTypes"
 
-interface Subcategory {
-    name: string;
-    values?: string[];
-}
-
-interface EditingState {
-    isEditing: boolean;
-    editingIndex: number | null;
-    editValue: string;
-}
-
-
-interface SubcategoryListProps {
-    identifier: string;
-    subcategories: Subcategory[];
-    editingState: EditingState;
-    handleDoubleClick: (index: number, name: string) => void;
-    handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-    handleBlur: () => void;
-    deleteSubcategory: (identifier: string, index: number) => void;
-    inputRef: React.RefObject<HTMLTextAreaElement>;
-    handleSubcategoryChange: (identifier: string, index: number, value: string) => void;
-}
 
 const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                                              identifier,
-                                                             subcategories,
-                                                             editingState,
-                                                             handleDoubleClick,
-                                                             handleChange,
-                                                             handleBlur,
-                                                             deleteSubcategory,
-                                                             inputRef,
-                                                             handleSubcategoryChange,
+                                                             selectedDetails,
+                                                             setSelectedDetails,
                                                          }) => {
+
+    const [values, setValues] = useState<string[]>([])
+
+    const addSubcategory = useCallback((path: number[]) => {
+        const newSubcategory: Subcategory = {
+            name: "",
+            values: [],
+            subcategories: [],
+        }
+
+        setSelectedDetails((prevDetails) => {
+            const addSubcategoryAtPath = (subcategories: Subcategory[], path: number[]): Subcategory[] => {
+                if (path.length === 0) {
+                    return [...subcategories, newSubcategory]
+                } else {
+                    const [currentIndex, ...restOfPath] = path
+                    return subcategories.map((subcat, index) => {
+                        if (index === currentIndex) {
+                            return {
+                                ...subcat,
+                                subcategories: addSubcategoryAtPath(subcat.subcategories ?? [], restOfPath),
+                            }
+                        }
+                        return subcat
+                    })
+                }
+            }
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: addSubcategoryAtPath(prevDetails[identifier].subcategories, path),
+                },
+            }
+        })
+    }, [setSelectedDetails, identifier])
+
+    const deleteSubcategory = useCallback((path: number[]) => {
+        setSelectedDetails((prevDetails) => {
+            const deleteSubcategoryAtPath = (subcategories: Subcategory[], path: number[]): Subcategory[] => {
+                if (path.length === 0) {
+                    return []
+                }
+                if (path.length === 1) {
+                    return subcategories.filter((_, index) => index !== path[0])
+                }
+                const [currentIndex, ...restOfPath] = path
+                return subcategories.map((subcat, index) => {
+                    if (index === currentIndex) {
+                        return {
+                            ...subcat,
+                            subcategories: deleteSubcategoryAtPath(subcat.subcategories ?? [], restOfPath),
+                        }
+                    }
+                    return subcat
+                })
+            }
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: deleteSubcategoryAtPath(prevDetails[identifier].subcategories, path),
+                },
+            }
+        })
+    }, [setSelectedDetails, identifier])
+
+
+    const addValueToSubcategory = useCallback((path: number[], newValue: string) => {
+        setSelectedDetails((prevDetails) => {
+            const updateValuesAtPath = (subcategories: Subcategory[], path: number[]): Subcategory[] => {
+                if (path.length === 1) {
+                    return subcategories.map((subcat, index) => {
+                        if (index === path[0]) {
+                            return { ...subcat, values: [...subcat.values, newValue] }
+                        }
+                        return subcat
+                    })
+                } else {
+                    const newPath = [...path]
+                    const index = newPath.shift()
+                    if (index !== undefined) {
+                        return subcategories.map((subcat, subIndex) => {
+                            if (subIndex === index) {
+                                return {
+                                    ...subcat,
+                                    subcategories: updateValuesAtPath(subcat.subcategories || [], newPath),
+                                }
+                            }
+                            return subcat
+                        })
+                    }
+                }
+                return subcategories
+            }
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: updateValuesAtPath(prevDetails[identifier].subcategories, path),
+                },
+            }
+        })
+    }, [setSelectedDetails, identifier])
+
+
+    const handleSubcategoryNameChange = useCallback((path: number[], newName: string) => {
+        setSelectedDetails((prevDetails) => {
+            const updateSubcategoryNameAtPath = (subcategories: Subcategory[], path: number[]): Subcategory[] => {
+                if (path.length === 0) {
+                    return subcategories
+                }
+                const [currentIndex, ...restOfPath] = path
+                return subcategories.map((subcat, index) => {
+                    if (index === currentIndex) {
+                        if (restOfPath.length === 0) {
+                            return { ...subcat, name: newName }
+                        } else {
+                            return {
+                                ...subcat,
+                                subcategories: updateSubcategoryNameAtPath(subcat.subcategories ?? [], restOfPath),
+                            }
+                        }
+                    }
+                    return subcat
+                })
+            }
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: updateSubcategoryNameAtPath(prevDetails[identifier].subcategories ?? [], path),
+                },
+            }
+        })
+    }, [setSelectedDetails, identifier])
+
+    const [activeDropdownPath, setActiveDropdownPath] = useState<number[]>([])
+
+    const toggleDropdown = useCallback((path: number[]) => {
+        setActiveDropdownPath(prev => (
+            JSON.stringify(prev) === JSON.stringify(path) ? [] : path
+        ))
+    }, [])
+
+    const isDropdownVisible = useCallback((path: number[]) => (
+        JSON.stringify(activeDropdownPath) === JSON.stringify(path)
+    ), [activeDropdownPath])
+
+    const addDropdownOption = useCallback((path: number[], option: string, index: number, row: number) => {
+            setSelectedDetails((prevDetails) => {
+                const newDetails = { ...prevDetails }
+                let currentSubcategories = newDetails[identifier].subcategories
+
+                const newPath = [...path]
+
+                while (newPath.length > 1) {
+                    const nextIndex = newPath.shift()
+                    if (typeof nextIndex !== "undefined")
+                        currentSubcategories = currentSubcategories[nextIndex].subcategories || []
+                }
+
+                if (currentSubcategories && newPath.length === 1) {
+                    const targetIndex = newPath[0]
+                    const targetSubcategory = currentSubcategories[targetIndex]
+
+                    const updatedValues = [...(targetSubcategory.values || []), option]
+
+                    currentSubcategories[targetIndex] = {
+                        ...targetSubcategory,
+                        values: updatedValues,
+                    }
+
+                    setValues(updatedValues)
+                }
+
+                return newDetails
+            })
+            setValues(prevValues => [...prevValues, option])
+        },
+        [setSelectedDetails, identifier, setValues],
+    )
+
+
+    const replaceValuesInSubcategory = useCallback((path: number[], newValues: string[]) => {
+        setSelectedDetails(prevDetails => {
+            const updateValues = (details: SelectedDetail, path: number[], newValues: string[]): SelectedDetail => {
+                if (path.length === 0) {
+                    return { ...details, values: newValues };
+                }
+
+                const updateSubcategories = (subcategories: Subcategory[], pathIndex: number): Subcategory[] => {
+                    if (pathIndex >= path.length) return subcategories;
+
+                    return subcategories.map((subcat, index) => {
+                        if (index === path[pathIndex]) {
+                            if (pathIndex === path.length - 1) {
+                                return { ...subcat, values: newValues };
+                            } else {
+                                return {
+                                    ...subcat,
+                                    subcategories: updateSubcategories(subcat.subcategories || [], pathIndex + 1),
+                                }
+                            }
+                        }
+                        return subcat;
+                    })
+                }
+
+                const updatedSubcategories = updateSubcategories(details.subcategories, 0);
+                return { ...details, subcategories: updatedSubcategories };
+            }
+
+            const updatedDetail = updateValues(prevDetails[identifier], path, newValues);
+
+            return {
+                ...prevDetails,
+                [identifier]: updatedDetail,
+            }
+        })
+    }, [setSelectedDetails, identifier]);
+
+
+    const [modalState, setModalState] = useState<ModalState>({
+        isOpen: false,
+        data: {
+            values: [""],
+            path: [],
+            index: -1,
+        },
+    })
+
     return (
-        <>
-            {subcategories.length !== 0 && subcategories?.map((subcatDetail, subcatIndex) => (
-                <div className="flex flex-row w-full">
-                    <div className="w-full">
-                        <div className="flex flex-row w-full">
-                            <div className="flex flex-row w-full">
-                                <div className="flex relative">
-                                    <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
-                                </div>
+        <div>
+            {selectedDetails[identifier]?.subcategories && (
+                <RecursiveSubcategory
+                    subcategories={selectedDetails[identifier].subcategories}
+                    addSubcategory={addSubcategory}
+                    addValueToSubcategory={addValueToSubcategory}
+                    deleteSubcategory={deleteSubcategory}
+                    path={[]}
+                    handleSubcategoryNameChange={handleSubcategoryNameChange}
+                    toggleDropdown={toggleDropdown}
+                    isDropdownVisible={isDropdownVisible}
+                    addDropdownOption={addDropdownOption}
+                    replaceValuesInSubcategory={replaceValuesInSubcategory}
+                    values={selectedDetails[identifier]?.values}
+                    identifier={identifier}
+                    setValues={setValues}
+                    modalState={modalState}
+                    setModalState={setModalState}
+                />
+            )}
+        </div>
+    )
+}
 
-                                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center min-w-8" />
+const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
+                                                                       identifier,
+                                                                       subcategories,
+                                                                       addSubcategory,
+                                                                       addValueToSubcategory,
+                                                                       deleteSubcategory,
+                                                                       path = [],
+                                                                       handleSubcategoryNameChange,
+                                                                       toggleDropdown,
+                                                                       isDropdownVisible,
+                                                                       addDropdownOption,
+                                                                       replaceValuesInSubcategory,
+                                                                       values,
+                                                                       setValues,
+                                                                       onOpenRenameModal,
+                                                                       modalState,
+                                                                       setModalState,
+                                                                   }) => {
 
-                                {editingState.isEditing && editingState.editingIndex === subcatIndex ? (
-                                    <div
-                                        className="flex flex-row items-center w-fit border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-                                            <textarea
-                                                ref={inputRef}
-                                                className="border-none h-fit w-96"
-                                                value={editingState.editValue}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                autoFocus
-                                            ></textarea>
+    const [currentPath, setCurrentPath] = useState<number[]>([])
+    const [renameModal, setRenameModal] = useState<{
+        isOpen: boolean;
+        initialValues: string[];
+        path: number[];
+    }>({ isOpen: false, initialValues: [], path: [] })
+
+
+    const openRenameModal = useCallback((path: number[], values: string[], index: number) => {
+        setValues(values)
+        setCurrentPath(path)
+        setModalState({
+            isOpen: true,
+            data: { values, path, index },
+        })
+    }, [setValues, setCurrentPath, setModalState])
+
+
+    const [isEditing, setIsEditing] = useState<number | null>(null)
+    const [editingName, setEditingName] = useState("")
+
+    const startEditing = (index: number, name: string) => {
+        setIsEditing(index)
+        setEditingName(name)
+    }
+    const stopEditing = (index: number) => {
+        if (isEditing !== null) {
+            handleSubcategoryNameChange([...path, index], editingName)
+            setIsEditing(null)
+            setEditingName("")
+        }
+    }
+
+    const handleDeleteValues = (path: number[]) => {
+        replaceValuesInSubcategory(path, [])
+        setRenameModal({ isOpen: false, initialValues: [], path: [] })
+    }
+
+    const handleRenameSubmit = (path: number[], newValues: string[]) => {
+        newValues.forEach(newValue => {
+            addValueToSubcategory(path, newValue)
+        })
+
+        setModalState(prev => ({
+            ...prev,
+            isOpen: true,
+        }))
+
+        replaceValuesInSubcategory(path, newValues)
+        setRenameModal({ isOpen: false, initialValues: [], path: [] })
+    }
+
+    const closeModal = useCallback(() => {
+        setModalState(prev => ({
+            ...prev,
+            isOpen: false,
+        }))
+    }, [setModalState])
+
+
+    return (
+        <div>
+            {values && (
+                <ValueDropdown
+                    values={values}
+                    path={currentPath}
+                    index={identifier}
+                    openRenameModal={openRenameModal}
+                    handleDeleteValues={handleDeleteValues}
+                    replaceValuesInSubcategory={replaceValuesInSubcategory}
+                    onSubmit={handleRenameSubmit}
+                    closeModal={closeModal}
+                    modalState={modalState}
+                />
+            )}
+
+            {subcategories && subcategories.map((subcat, index) => {
+                const currentPath = [...path, index]
+
+                return (
+                    <div key={index} className="flex flex-col h-full">
+                        <div className="flex flex-col border-l-4 border-gray-300">
+
+                            <div className="flex flex-row items-center">
+                                <hr className="border-t-4 border-gray-300 dark:border-gray-700 w-16 self-start mt-8" />
+
+                                <div className="flex flex-col">
+                                    <div className="flex flex-col">
+                                        <div className="flex flex-col">
+                                            <div className="flex flex-row mt-4">
+                                                {isEditing === index ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editingName}
+                                                        onChange={(e) => setEditingName(e.target.value)}
+                                                        onBlur={() => stopEditing(index)}
+                                                        autoFocus
+                                                        className="border border-gray-300 rounded-md px-2 py-1 shadow-md w-fit"
+                                                    />
+                                                ) : (
+                                                    <div
+                                                        className="flex items-center border border-gray-300
+                                                        rounded-md px-2 py-1 shadow-md w-fit"
+                                                        onDoubleClick={() => startEditing(index, subcat.name)}>
+                                                        <p className="w-fit">
+                                                            {subcat.name || "Nowa kategoria"}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                                <div className="flex flex-row items-center justify-center">
+                                                    <button
+                                                        type="button"
+                                                        className="w-fit p-2 border-gray-300 shadow-md ml-2"
+                                                        onClick={() => addSubcategory(currentPath)}
+                                                    >
+                                                        <PlusIcon />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="w-fit p-2 border-gray-300 shadow-md ml-1"
+                                                        onClick={() => deleteSubcategory(currentPath)}
+                                                    >
+                                                        <MinusIcon />
+                                                    </button>
+
+                                                    {subcat.name !== "" && subcat.values?.length === 0 &&
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => addValueToSubcategory(currentPath, "")}
+                                                            className="ml-2">
+                                                            Utwórz opcję
+                                                        </button>
+                                                    }
+                                                </div>
+                                            </div>
+
+                                            {subcat.name !== "" && <ValueDropdown
+                                                subcategoryName={subcat.name}
+                                                values={subcat.values || []}
+                                                path={currentPath}
+                                                index={index}
+                                                openRenameModal={openRenameModal}
+                                                handleDeleteValues={handleDeleteValues}
+                                                replaceValuesInSubcategory={replaceValuesInSubcategory}
+                                                onSubmit={handleRenameSubmit}
+                                                closeModal={closeModal}
+                                                modalState={modalState} />}
+                                        </div>
                                     </div>
-                                ) : (
-                                    <div onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}
-                                         className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-                                        <p className="w-full">{subcatDetail.name == "" ? "Wybierz podkategorię" : subcatDetail.name}</p>
-                                    </div>
-                                )}
-                                <div className="items-center flex">
-                                    <button type="button"
-                                            className="p-2 border-gray-300 shadow-md ml-2 mt-1"
-                                            onClick={() => deleteSubcategory(identifier, subcatIndex)}>
-                                        <MinusIcon />
-                                    </button>
+                                    {subcat.subcategories && subcat.subcategories.length > 0 && (
+                                        <RecursiveSubcategory
+                                            identifier={identifier}
+                                            subcategories={subcat.subcategories}
+                                            addSubcategory={addSubcategory}
+                                            addValueToSubcategory={addValueToSubcategory}
+                                            deleteSubcategory={deleteSubcategory}
+                                            path={[...path, index]}
+                                            handleSubcategoryNameChange={handleSubcategoryNameChange}
+                                            toggleDropdown={toggleDropdown}
+                                            isDropdownVisible={isDropdownVisible}
+                                            addDropdownOption={addDropdownOption}
+                                            replaceValuesInSubcategory={replaceValuesInSubcategory}
+                                            values={values}
+                                            setValues={setValues}
+                                            modalState={modalState}
+                                            setModalState={setModalState}
+                                        />
+                                    )}
                                 </div>
                             </div>
-
-                            {/*<AddNewSubcategory />*/}
-
                         </div>
 
-                        {subcatDetail.values?.length !== 0 &&
-                            <div className="flex flex-row">
-                                <div className="flex relative">
-                                    <span className="justify-start bg-gray-300 h-full w-0.5"></span>
-                                </div>
+                        {index === subcategories.length - 1 &&
+                            <div className="flex flex-row w-full">
+                                <div className="flex flex-col w-full">
+                                    <div className="flex flex-row items-center">
+                                        <span className="border-l-4 border-gray-300 h-1/2 flex self-start"></span>
+                                        <hr className="border-t-4 border-gray-300 dark:border-gray-700 w-8 self-center -ml-0.5" />
 
-                                <select
-                                    className="border border-gray-300 rounded-md px-2 py-1 mt-2 ml-8"
-                                    onChange={e =>
-                                        handleSubcategoryChange(identifier, subcatIndex, e.target.value)}>
-                                    {subcatDetail.values?.map((value, index) => (
-                                        <option key={index} value={value}>{value}</option>
-                                    ))}
-                                </select>
+                                        <div className="flex items-center flex-row">
+                                            <button
+                                                className="p-2 border-gray-300 shadow-md"
+                                                onClick={() => addSubcategory(path)}
+                                                type="button">
+                                                <PlusIcon />
+                                            </button>
+                                        </div>
+
+                                        <div className="flex items-center flex-row pt-4 h-12">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         }
                     </div>
-
-                </div>
-            ))}
-        </>
-
-
-        // <div className="flex flex-row w-full">
-        //     <div className="flex relative">
-        //         <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
-        //     </div>
-        //
-        //     <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center min-w-8" />
-        //
-        //     {editingState.isEditing && editingState.editingIndex === subcatIndex ? (
-        //         <div
-        //             className="flex flex-row items-center w-fit border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-        //                                     <textarea
-        //                                         ref={inputRef}
-        //                                         className="border-none h-fit w-96"
-        //                                         value={editingState.editValue}
-        //                                         onChange={handleChange}
-        //                                         onBlur={handleBlur}
-        //                                         autoFocus
-        //                                     ></textarea>
-        //         </div>
-        //     ) : (
-        //         <div onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}
-        //              className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-        //             <p className="w-full">{subcatDetail.name == "" ? "Wybierz podkategorię" : subcatDetail.name}</p>
-        //         </div>
-        //     )}
-        //     <div className="items-center flex">
-        //         <button type="button"
-        //                 className="p-2 border-gray-300 shadow-md ml-2 mt-1"
-        //                 onClick={() => deleteSubcategory(identifier, subcatIndex)}>
-        //             <MinusIcon />
-        //         </button>
-        //     </div>
-        // </div>
-
-
-        // <div className="flex flex-col w-full">
-        //     {subcategories.map((subcatDetail, subcatIndex) => (
-        //         <div key={subcatIndex} className="flex flex-row w-full items-center my-2">
-        //             <div className="flex relative">
-        //                 <span className="justify-start absolute bg-gray-300 h-full w-0.5"></span>
-        //             </div>
-        //             <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-8 self-center min-w-8" />
-        //             {editingState.isEditing && editingState.editingIndex === subcatIndex ? (
-        //                 <textarea
-        //                     ref={inputRef}
-        //                     className="border-none h-fit w-full px-2 py-1"
-        //                     value={editingState.editValue}
-        //                     onChange={handleChange}
-        //                     onBlur={handleBlur}
-        //                     autoFocus
-        //                 />
-        //             ) : (
-        //                 <div
-        //                     className="flex-1 px-2 py-1 border border-gray-300 rounded-md shadow-md"
-        //                     onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}
-        //                 >
-        //                     {subcatDetail.name || "Wybierz podkategorię"}
-        //                 </div>
-        //             )}
-        //             <button
-        //                 type="button"
-        //                 className="p-2 border-gray-300 shadow-md ml-2"
-        //                 onClick={() => deleteSubcategory(identifier, subcatIndex)}
-        //             >
-        //                 <MinusIcon className="h-5 w-5" />
-        //             </button>
-        //         </div>
-        //     ))}
-        // </div>
+                )
+            })}
+        </div>
     )
 }
 

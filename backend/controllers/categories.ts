@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express"
 import { ObjectId } from "mongodb"
 import mongoose from "mongoose"
 import {getMongoDBNativeDriverClient} from "../db/connect"
-const mongoClient = getMongoDBNativeDriverClient()
 
 const asyncWrapper = require("../middleware/async")
 
@@ -55,7 +54,6 @@ const getCategoriesById = async (req: Request, res: Response, next: NextFunction
     // const totalPages = Math.ceil(total / limit)
 
     // const categories = await Category.find({}).skip(skip).limit(limit)
-    //eq.query.id
     try {
         const id = req.params.name
 

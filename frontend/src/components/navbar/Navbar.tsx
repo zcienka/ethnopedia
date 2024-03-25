@@ -39,6 +39,9 @@ const Navbar = () => {
                                                    deleteSelected={handleAccountDeletion}
                                                    warningMessage={"Czy na pewno chcesz usunąć konto?"}/>}
         <div className="max-w-screen-xl flex flex-wrap justify-between mx-auto p-4">
+            <div className="flex items-center mt-1">
+                <h1 className="logo text-6xl text-gray-900">ethnopedia</h1>
+            </div>
             <div className="flex items-center md:order-2">
                 <ToggleTheme />
                 {isUserLoggedIn ? <>
