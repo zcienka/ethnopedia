@@ -9,6 +9,7 @@ const capitalizeFirstLetter = (string: string) => {
 const translations: { [key: string]: string } = {
     "collections": "Kolekcje",
     "artworks": "Rekordy",
+    "create-artwork": "Dodaj nowy rekord"
 }
 
 const isId = (segment: string) => {

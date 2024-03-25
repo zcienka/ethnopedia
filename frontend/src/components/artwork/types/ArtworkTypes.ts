@@ -24,7 +24,6 @@ export interface SubcategoryListProps {
     identifier: string
     subcategories: Subcategory[]
 
-    selectedDetail: SelectedDetail;
     selectedDetails: { [key: string]: SelectedDetail };
     setSelectedDetails: React.Dispatch<React.SetStateAction<{ [key: string]: SelectedDetail }>>;
 

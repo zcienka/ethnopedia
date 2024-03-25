@@ -12,7 +12,6 @@ import {
 
 const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                                              identifier,
-                                                             selectedDetail,
                                                              selectedDetails,
                                                              setSelectedDetails,
                                                          }) => {

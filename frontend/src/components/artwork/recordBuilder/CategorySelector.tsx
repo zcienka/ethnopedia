@@ -13,7 +13,6 @@ interface CategorySelectorProps {
     handleCategoryChange: (identifier: string, newCategory: string) => void;
     addSubcategory: (identifier: string) => void;
     locationDetails: Array<{ name: string }>;
-    setEditingState: React.Dispatch<React.SetStateAction<EditingState>>
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({
@@ -22,7 +21,6 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                                                                handleCategoryChange,
                                                                addSubcategory,
                                                                locationDetails,
-                                                               setEditingState
                                                            }) => {
 
     return (
@@ -30,7 +28,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
             <label className="ml-16 mb-1">Kategoria:</label>
 
             <div className="relative flex flex-row">
-                <hr className="border-t-2 border-gray-300 dark:border-gray-700 w-16 self-center" />
+                <hr className="border-t-4 border-gray-300 dark:border-gray-700 w-16 self-center" />
 
                 <div className="flex flex-col">
                     <select

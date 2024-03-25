@@ -42,8 +42,7 @@ const ValueDropdown: React.FC<ValueDropdownProps> = ({
                 className="rounded-lg border border-gray-300 focus:outline-none dark:text-white
                     dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700
                     dark:bg-gray-800 px-4 py-2 cursor-pointer shadow-md"
-                onClick={() => openRenameModal(path, values, index)}
-            >
+                onClick={() => openRenameModal(path, values, index)}>
                 Wybierz opcję
             </button>
         ) : values[0] && values[0] !== "" ? (
