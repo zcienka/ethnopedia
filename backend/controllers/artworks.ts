@@ -135,7 +135,6 @@ const filterArtworks = async (req: Request, res: Response, next: NextFunction): 
 }
 
 const createArtwork = asyncWrapper(async (req: Request, res: Response, next: NextFunction) => {
-
     try {
         const newArtwork = await Artwork.create(req.body)
 

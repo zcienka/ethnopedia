@@ -34,13 +34,13 @@ const Navbar = () => {
         },
     })
 
-    return <nav className="bg-white border-gray-200 dark:bg-gray-900 w-full border-b dark:border-gray-600">
+    return <nav className="bg-gray-800 border-gray-200 dark:bg-gray-200 w-full border-b dark:border-gray-600">
         {showDeleteAccountWarning && <WarningPopup onClose={() => setShowDeleteAccountWarning(!showDeleteAccountWarning) }
                                                    deleteSelected={handleAccountDeletion}
                                                    warningMessage={"Czy na pewno chcesz usunąć konto?"}/>}
         <div className="max-w-screen-xl flex flex-wrap justify-between mx-auto p-4">
             <div className="flex items-center mt-1">
-                <h1 className="logo text-6xl text-gray-900">ethnopedia</h1>
+                <h1 className="logo text-gray-200 text-6xl ">ethnopedia</h1>
             </div>
             <div className="flex items-center md:order-2">
                 <ToggleTheme />
@@ -49,7 +49,7 @@ const Navbar = () => {
                         p-3 cursor-pointer">
                             <UserIcon />
                         </div>
-                        <h2 className="font-semibold ml-2 text-lg">{firstName}</h2>
+                        <h2 className="font-semibold ml-2 text-lg dark:text-gray-800 text-white">{firstName}</h2>
                     </> :
                     <>
                         <button type="button"

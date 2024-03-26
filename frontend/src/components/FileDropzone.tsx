@@ -37,7 +37,7 @@ const FileDropzone = ({ onClose }: Props) => {
                                 text-sm w-4 h-4 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600
                                 dark:hover:text-white"
                                 data-modal-hide="default-modal"
-                        onClick={onClose}>
+                                onClick={onClose}>
                             <Close />
                         </button>
                     </div>

@@ -1,7 +1,8 @@
 import React from "react"
 
 export interface Subcategory {
-    name: string;
+    label?: string;
+    name?: string;
     values: string[];
     subcategories?: Subcategory[];
 }
@@ -15,18 +16,24 @@ export interface EditingState {
 export interface SelectedDetail {
     collectionName: any
     subcategories: Subcategory[]
-    category: string
+    label: string
     values?: string[]
     date: string
+}
+
+export interface LocationDetail {
+    label?: string
+    name?: string
+    values?: string[]
+    subcategories?: Subcategory[]
+    isSelectable: boolean
 }
 
 export interface SubcategoryListProps {
     identifier: string
     subcategories: Subcategory[]
-
     selectedDetails: { [key: string]: SelectedDetail };
     setSelectedDetails: React.Dispatch<React.SetStateAction<{ [key: string]: SelectedDetail }>>;
-
     editingState: EditingState
     handleDoubleClick: (index: number, name: string) => void
     handleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
@@ -44,17 +51,17 @@ export interface RecursiveSubcategoryProps {
     addValueToSubcategory: (path: number[], newValue: string, index?: number) => void;
     deleteSubcategory: (path: number[]) => void;
     path?: number[];
-    handleSubcategoryNameChange: (path: number[], newName: string) => void;
-    toggleDropdown: (path: number[]) => void;
-    isDropdownVisible: (path: number[]) => boolean;
-    addDropdownOption: (path: number[], newOption: string, row: number, index: number) => void;
+    handleSubcategoryLabelChange: (path: number[], newName: string) => void;
     replaceValuesInSubcategory: (path: number[], newValues: string[]) => void;
     values?: string[];
     setValues: React.Dispatch<React.SetStateAction<string[]>>;
-    onOpenRenameModal?: (path: number[], values: string[]) => void;
     modalState: ModalState;
     setModalState: React.Dispatch<React.SetStateAction<ModalState>>;
+    handleNameChange: (path: number[], newName: string) => void;
+    inputVisibility: { [key: string]: boolean };
+    setInputVisibility: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
 }
+
 
 export interface ModalState {
     isOpen: boolean

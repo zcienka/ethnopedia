@@ -2,26 +2,12 @@ import React, { useEffect, useRef, useState } from "react"
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg"
 import CategorySelector from "./recordBuilder/CategorySelector"
 import SubcategoryList from "./recordBuilder/SubcategoryList"
-import { SelectedDetail } from "./types/ArtworkTypes"
-
-type Subcategory = {
-    name: string
-    values?: string[]
-    subcategories?: Subcategory[]
-    isSelectable?: boolean
-}
-
-interface LocationDetail {
-    name: string
-    values?: string[]
-    subcategories?: Subcategory[]
-    isSelectable: boolean
-}
+import { LocationDetail, SelectedDetail, Subcategory } from "./types/ArtworkTypes"
 
 interface CollectionItem {
     _id: any
     collectionId: any
-    category: string
+    label: string
     name: string
     locationDetails: LocationDetail[]
 }
@@ -40,17 +26,22 @@ interface NewArtworkStructureProps {
     categoriesData: CollectionItem[]
 }
 
-const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetails, setSelectedDetails, categoriesData }) => {
+const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({
+                                                                     selectedDetails,
+                                                                     setSelectedDetails,
+                                                                     categoriesData,
+                                                                 }) => {
     const addCategory = () => {
         const newCategoryId = `${Date.now()}`
 
         setSelectedDetails(prevDetails => ({
             ...prevDetails,
             [newCategoryId]: {
-                category: "",
+                label: "",
+                name: "",
                 values: [],
                 subcategories: [],
-                collectionName: categoriesData[0].name,
+                collectionName: "Wielkopolska",
                 date: new Date().toISOString(),
             },
         }))
@@ -58,7 +49,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
 
     return (
         <div className="flex flex-col p-4 w-full">
-            {categoriesData[0].name}
+            {categoriesData[0].label}
             <div className="p-4">
 
                 {Object.entries(selectedDetails) !== undefined && Object.entries(selectedDetails)
@@ -83,7 +74,6 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                 <div className="flex flex-row w-full ml-2">
                     <div className="flex flex-col w-full">
                         <div className="flex flex-row items-center">
-
                             <span className="border-l-4 border-gray-300 h-1/2 flex self-start"></span>
                             <hr className="border-t-4 border-gray-300 dark:border-gray-700 w-8 self-center" />
 
@@ -96,7 +86,6 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({ selectedDetai
                                 </button>
                             </div>
                             <div className="flex items-center flex-row pt-4 h-12">
-
                             </div>
                         </div>
                     </div>
@@ -117,7 +106,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                                                                                selectedDetail,
                                                                                setSelectedDetails,
                                                                                identifier,
-                                                                               categoriesData
+                                                                               categoriesData,
                                                                            }) => {
 
     const addSubcategory = (identifier: string) => {
@@ -130,25 +119,26 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
         }))
     }
 
-    const handleCategoryChange = (identifier: string, newCategoryName: string) => {
+    const handleCategoryChange = (identifier: string, label: string) => {
         setSelectedDetails(prevDetails => {
-            const categoryData = categoriesData[0].locationDetails.find(detail => detail.name === newCategoryName)
+            const categoryData = categoriesData[0].locationDetails.find(detail => detail.label === label)
 
             const newSubcategories = categoryData?.subcategories?.map(subcat => ({
-                name: subcat.name,
+                label: subcat.label,
                 values: subcat.values || [],
-                category: newCategoryName,
-                isSelectable: subcat.isSelectable,
+                name: subcat.name,
+                // isSelectable: subcat.isSelectable,
                 date: new Date().toISOString(),
             })) || []
 
             return {
                 ...prevDetails,
                 [identifier]: {
-                    category: newCategoryName,
+                    label: label,
+                    // name: categoriesData[0].name,
                     subcategories: newSubcategories,
                     values: categoryData?.values || [],
-                    collectionName: categoriesData[0].name,
+                    collectionName: "Wielkopolska",
                     date: new Date().toISOString(),
                 } as SelectedDetail,
             }
@@ -176,12 +166,11 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             [itemIndex]: {
                 ...prevDetails[itemIndex],
                 subcategories: prevDetails[itemIndex].subcategories.map((subcat, index) =>
-                    index === subcatIndex ? { ...subcat, name: newName } : subcat,
+                    index === subcatIndex ? { ...subcat, label: newName } : subcat,
                 ),
             },
         }))
     }
-
 
     const [editingState, setEditingState] = useState<EditingState>({
         isEditing: false,
@@ -227,34 +216,32 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
         })
     }
 
-    return (
-        <div>
-            <CategorySelector
-                identifier={identifier}
-                selectedCategory={selectedDetail.category}
-                handleCategoryChange={handleCategoryChange}
-                addSubcategory={addSubcategory}
-                locationDetails={categoriesData[0].locationDetails}
-            />
+    return <div>
+        <CategorySelector
+            identifier={identifier}
+            selectedCategory={selectedDetail.label}
+            handleCategoryChange={handleCategoryChange}
+            addSubcategory={addSubcategory}
+            locationDetails={categoriesData[0].locationDetails!}
+        />
 
-            <div className="ml-16">
-                <SubcategoryList
-                    identifier={identifier}
-                    subcategories={selectedDetail.subcategories}
-                    selectedDetails={selectedDetails}
-                    setSelectedDetails={setSelectedDetails}
-                    editingState={editingState}
-                    handleDoubleClick={handleDoubleClick}
-                    handleChange={handleChange}
-                    handleBlur={handleBlur}
-                    deleteSubcategory={deleteSubcategory}
-                    inputRef={inputRef}
-                    handleSubcategoryChange={handleSubcategoryChange}
-                    setEditingState={setEditingState}
-                />
-            </div>
+        <div className="ml-16">
+            <SubcategoryList
+                identifier={identifier}
+                subcategories={selectedDetail.subcategories}
+                selectedDetails={selectedDetails}
+                setSelectedDetails={setSelectedDetails}
+                editingState={editingState}
+                handleDoubleClick={handleDoubleClick}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                deleteSubcategory={deleteSubcategory}
+                inputRef={inputRef}
+                handleSubcategoryChange={handleSubcategoryChange}
+                setEditingState={setEditingState}
+            />
         </div>
-    )
+    </div>
 }
 
 export default NewArtworkStructure

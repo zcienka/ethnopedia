@@ -1203,10 +1203,10 @@ const collectionData = [
 const categoryData = [
     {
         "category": "Region",
-        "name": "Wielkopolska",
+        "label": "Wielkopolska",
         "locationDetails": [
             {
-                "name": "Podregion",
+                "label": "Podregion",
                 "values": [
                     "Wielkopolska Północno-Zachodnia",
                     "Wielkopolska Północno-Wschodnia",
@@ -1216,7 +1216,7 @@ const categoryData = [
                 "isSelectable": true,
             },
             {
-                "name": "Region etnograficzny",
+                "label": "Region etnograficzny",
                 "values": [
                     "Szamotulskie",
                     "Ziemia Lubuska",
@@ -1225,7 +1225,7 @@ const categoryData = [
                 "isSelectable": true,
             },
             {
-                "name": "Powiat",
+                "label": "Powiat",
                 "values": [
                     "Gniezno",
                     "Poznań",
@@ -1235,7 +1235,7 @@ const categoryData = [
                 "isSelectable": true,
             },
             {
-                "name": "Miejscowość",
+                "label": "Miejscowość",
                 "values": [
                     "Leszno",
                     "Kalisz",
@@ -1246,106 +1246,106 @@ const categoryData = [
                 "isSelectable": true,
             },
             {
-                "name": "Sygnatura nagrania",
+                "label": "Sygnatura nagrania",
                 "subcategories": [
                     {
-                        "name": "Pozycja",
+                        "label": "Pozycja",
                         "values": [],
                     },
                 ],
                 "isSelectable": false,
             },
             {
-                "name": "Incipit",
+                "label": "Incipit",
                 "subcategories": [
                     {
-                        "name": "Język incipitu",
+                        "label": "Język incipitu",
                         "values": ["angielski", "niemiecki"],
                     },
                 ],
                 "isSelectable": true,
             },
             {
-                "name": "Nazwisko wykonawcy",
+                "label": "Nazwisko wykonawcy",
                 "subcategories": [
                     {
-                        "name": "Wykonawca",
+                        "label": "Wykonawca",
                         "values": ["sadjkasdkjsda", "sadjkasdkjsda", "sadjkasdkjsda"],
                     },
                 ],
                 "isSelectable": false,
             },
             {
-                "name": "Numer wątku muzycznego",
+                "label": "Numer wątku muzycznego",
                 "subcategories": [],
                 "isSelectable": false,
             },
             {
-                "name": "Numer w publikacji",
+                "label": "Numer w publikacji",
                 "subcategories": [],
                 "isSelectable": false,
             },
             {
-                "name": "Sposób wykonania",
+                "label": "Sposób wykonania",
                 "subcategories": [
-                    { "name": "Barwa głosu", "values": [], "isSelectable": false },
-                    { "name": "Tempo wykonania", "values": [], "isSelectable": false },
-                    { "name": "Ornamentyka", "values": [], "isSelectable": false },
+                    { "label": "Barwa głosu", "values": [], "isSelectable": false },
+                    { "label": "Tempo wykonania", "values": [], "isSelectable": false },
+                    { "label": "Ornamentyka", "values": [], "isSelectable": false },
                 ],
                 "isSelectable": true,
             },
             {
-                "name": "Funkcja utworu ogólnie",
+                "label": "Funkcja utworu ogólnie",
                 "subcategories": [
-                    { "name": "Szczegółowa funkcja", "values": [], "isSelectable": false },
-                    { "name": "Funkcja określona przez wykonawcę", "values": [], "isSelectable": false },
+                    { "label": "Szczegółowa funkcja", "values": [], "isSelectable": false },
+                    { "label": "Funkcja określona przez wykonawcę", "values": [], "isSelectable": false },
                 ],
                 "isSelectable": true,
             },
             {
-                "name": "Numer wątku melodycznego",
+                "label": "Numer wątku melodycznego",
                 "subcategories": [],
                 "isSelectable": false,
             },
             {
-                "name": "Wykorzystanie w publikacji",
+                "label": "Wykorzystanie w publikacji",
                 "subcategories": [],
                 "isSelectable": false,
             },
             {
-                "name": "Klasyfikacja melodyczna",
+                "label": "Klasyfikacja melodyczna",
                 "subcategories": [
-                    { "name": "Rytmika", "values": [], "isSelectable": false },
-                    { "name": "Metrum", "values": [], "isSelectable": false },
-                    { "name": "Forma melodyczna", "values": [], "isSelectable": false },
-                    { "name": "Skala", "values": [], "isSelectable": false },
-                    { "name": "Ambitus", "values": [], "isSelectable": false },
-                    { "name": "Układ kadencji", "values": [], "isSelectable": false },
+                    { "label": "Rytmika", "values": [], "isSelectable": false },
+                    { "label": "Metrum", "values": [], "isSelectable": false },
+                    { "label": "Forma melodyczna", "values": [], "isSelectable": false },
+                    { "label": "Skala", "values": [], "isSelectable": false },
+                    { "label": "Ambitus", "values": [], "isSelectable": false },
+                    { "label": "Układ kadencji", "values": [], "isSelectable": false },
                 ],
                 "isSelectable": true,
             },
             {
-                "name": "Struktura tekstu",
+                "label": "Struktura tekstu",
                 "subcategories": [
-                    { "name": "Ilość wersów", "values": [], "isSelectable": false },
-                    { "name": "Układ sylab w wersie", "values": [], "isSelectable": false },
+                    { "label": "Ilość wersów", "values": [], "isSelectable": false },
+                    { "label": "Układ sylab w wersie", "values": [], "isSelectable": false },
                 ],
                 "isSelectable": true,
             },
             {
-                "name": "Uwagi",
+                "label": "Uwagi",
                 "subcategories": [
-                    { "name": "Stan techniczny nagrania", "values": [], "isSelectable": false },
-                    { "name": "Walory melodii", "values": [], "isSelectable": false },
+                    { "label": "Stan techniczny nagrania", "values": [], "isSelectable": false },
+                    { "label": "Walory melodii", "values": [], "isSelectable": false },
                 ],
                 "isSelectable": false,
             },
             {
-                "name": "Obecność w źródłach",
+                "label": "Obecność w źródłach",
                 "subcategories": [
-                    { "name": "Antologie", "values": [], "isSelectable": false },
-                    { "name": "Rękopisy", "values": [], "isSelectable": false },
-                    { "name": "Śpiewniki", "values": [], "isSelectable": false },
+                    { "label": "Antologie", "values": [], "isSelectable": false },
+                    { "label": "Rękopisy", "values": [], "isSelectable": false },
+                    { "label": "Śpiewniki", "values": [], "isSelectable": false },
                 ],
                 "isSelectable": true,
             },

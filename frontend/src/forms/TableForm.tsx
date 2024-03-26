@@ -44,11 +44,11 @@ const TableForm = ({ onClose }: Props) => {
                             Dodaj nową tabelę
                         </h2>
                         <form action="#" className="grid grid-cols-3 gap-2">
-                            {inputs.map((input, index) => (
-                                <Input
-                                    columnName={"Kolumna nr " + input.id.toString()}
-                                    onInputChange={(value) => handleInputChange(input.id, value)} />
-                            ))}
+                            {/*{inputs.map((input, index) => (*/}
+                            {/*    <Input*/}
+                            {/*        columnName={"Kolumna nr " + input.id.toString()}*/}
+                            {/*        onInputChange={(value) => handleInputChange(input.id, value)} />*/}
+                            {/*))}*/}
                         </form>
                         <button
                             type="button"

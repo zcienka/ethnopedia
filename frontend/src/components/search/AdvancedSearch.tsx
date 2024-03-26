@@ -21,13 +21,6 @@ type Category = {
     subcategories?: Subcategory[]
 }
 
-// type CollectionItem = {
-//     _id: string
-//     collection: string
-//     categories: Category[]
-// }
-//
-// type CollectionArray = CollectionItem[]
 interface SearchComponentProps {
     id: string;
 }
@@ -102,8 +95,7 @@ const AdvancedSearch: React.FC<SearchComponentProps> = ({ id }) => {
                         </span>
                         Dodaj regułę
                     </button>
-                    <button className="flex items-center font-semibold border-blue-500 bg-blue-500 hover:bg-blue-400
-                            text-white p-2"
+                    <button className="flex items-center font-semibold color-button p-2"
                             onClick={handleSearch}
                     >
                         <span className="mr-1">

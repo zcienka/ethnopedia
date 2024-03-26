@@ -39,7 +39,7 @@ const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
                                                                        handleBlur,
                                                                        inputRef,
                                                                        handleDoubleClick,
-                                                                       selectedDetail
+                                                                       selectedDetail,
                                                                    }) => {
 
 
@@ -48,21 +48,23 @@ const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
             {editingState.isEditing && editingState.editingIndex === subcatIndex ? (
                 <div
                     className="flex flex-row items-center w-fit border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2">
-          <textarea
-              ref={inputRef}
-              className="border-none h-fit w-96"
-              value={editingState.editValue}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              autoFocus></textarea>
-                </div>
-            ) : (
-                <div>{subcatIndex}</div>
-                // <div className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2"
-                //      onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}>
-                //     <p className="w-full">{subcatDetail.name === "" ? "Wybierz podkategorię" : subcatDetail.name}</p>
-                // </div>
-            )}
+              <textarea
+                  ref={inputRef}
+                  className="border-none h-fit w-96"
+                  value={editingState.editValue}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  autoFocus>
+
+              </textarea>
+                    </div>
+                ) : (
+                    <div>{subcatIndex}</div>
+                    // <div className="flex flex-row items-center border border-gray-300 rounded-md px-2 py-1 shadow-md mt-2"
+                    //      onDoubleClick={() => handleDoubleClick(subcatIndex, subcatDetail.name)}>
+                    //     <p className="w-full">{subcatDetail.name === "" ? "Wybierz podkategorię" : subcatDetail.name}</p>
+                    // </div>
+                )}
         </>
     )
 }

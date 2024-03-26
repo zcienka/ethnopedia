@@ -22,7 +22,8 @@ const CreateArtwork = () => {
             collectionName: "",
             subcategories: [],
             values: [],
-            category: "",
+            label: "",
+            name: "",
             date: "",
         } as SelectedDetail,
     }
@@ -37,7 +38,7 @@ const CreateArtwork = () => {
             enabled: !!id,
         },
     )
-
+console.log({categoriesData})
     if (categoriesData === undefined) {
         return <LoadingPage />
     }
@@ -47,7 +48,9 @@ const CreateArtwork = () => {
             <Navbar />
             <div className="flex flex-1 justify-center mt-2">
                 <div className="flex flex-1 flex-col max-w-screen-xl">
-                    <Navigation />
+                    <span className="mt-2">
+                        <Navigation />
+                    </span>
                     <div className="flex flex-1 justify-center h-fill max-w-screen-xl w-full mt-2">
                         <Formik
                             initialValues={{ defaultSelectedDetails }}
@@ -57,7 +60,7 @@ const CreateArtwork = () => {
                                     collectionName: detail.collectionName,
                                     subcategories: detail.subcategories,
                                     values: detail.values,
-                                    category: detail.category,
+                                    label: detail.label,
                                     date: detail.date || new Date().toISOString(),
                                 }))
 

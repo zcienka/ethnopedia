@@ -82,12 +82,14 @@ const CollectionsPage = () => {
     const [showPopup, setShowNewCollectionPopup] = useState(false)
     const [sortOrder, setSortOrder] = useState("A-Z")
 
-
     const navigate = useNavigate()
 
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
+        console.log(fetchedData.collections)
+        // return <div>test</div>
+
         const sortedCollections = fetchedData.collections ? [...fetchedData.collections].sort((a, b) => {
             if (sortOrder === "A-Z") {
                 return a.name.localeCompare(b.name)
@@ -177,7 +179,6 @@ const CollectionsPage = () => {
                             <span className="text-white">
                                 <FileExportIcon />
                             </span>
-
                             Eksportuj plik
                         </button>
                         <button

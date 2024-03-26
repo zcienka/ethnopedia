@@ -12,7 +12,7 @@ const QuickSearch = () => {
 
     const formik = useFormik({
         initialValues: {
-            collectionName: window.location.href.split('/')[window.location.href.split('/').findIndex((element) => element === 'collections')+1],
+            collectionName: window.location.href.split("/")[window.location.href.split("/").findIndex((element) => element === "collections") + 1],
             searchText: "",
         },
         onSubmit: (values, { resetForm }) => {
@@ -31,7 +31,8 @@ const QuickSearch = () => {
                     value={formik.values.searchText}
                     className="border border-gray-300 p-2 rounded-lg"
                 />
-                <button type="submit" className="font-semibold bg-blue-500 hover:bg-blue-400 text-white p-2 flex items-center">
+                <button type="submit"
+                        className="font-semibold color-button p-2 flex items-center">
                     <span className="mr-1">
                         <SearchLoopIcon />
                     </span>

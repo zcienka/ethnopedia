@@ -2,6 +2,7 @@ import { ReactComponent as Close } from "../../assets/icons/close.svg"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import { useCreateCollectionMutation } from "../../api/collections"
 import { useQueryClient } from "react-query"
+import { useNavigate } from "react-router-dom"
 
 type Props = {
     onClose: () => void
@@ -10,6 +11,7 @@ type Props = {
 const CreateCollection = ({ onClose }: Props) => {
     const { mutate: createCollection } = useCreateCollectionMutation()
     const queryClient = useQueryClient()
+    const navigate = useNavigate()
 
     return <div
         id="default-modal"
@@ -36,9 +38,11 @@ const CreateCollection = ({ onClose }: Props) => {
                             },
                         })
                     }}>
+
                     {({ isSubmitting }) => (
                         <Form
-                            className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border dark:border-gray-600">
+                            className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border
+                            dark:border-gray-600">
                             <div className="flex items-start justify-between p-4 pb-0 rounded-t">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                                     Dodaj nową kolekcję
@@ -46,7 +50,8 @@ const CreateCollection = ({ onClose }: Props) => {
 
                                 <button
                                     type="button"
-                                    className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 text-sm dark:hover:bg-gray-600 dark:hover:text-white p-2 rounded-lg"
+                                    className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 text-sm
+                                    dark:hover:bg-gray-600 dark:hover:text-white p-2 rounded-lg"
                                     onClick={onClose}
                                 >
                                     <Close />
@@ -54,7 +59,8 @@ const CreateCollection = ({ onClose }: Props) => {
                             </div>
                             <div className="px-4 pb-4">
                                 <label htmlFor="name"
-                                       className="text-sm font-bold text-gray-700 dark:text-white dark:border-gray-600 block my-2">
+                                       className="text-sm font-bold text-gray-700 dark:text-white dark:border-gray-600
+                                       block my-2">
                                     Nazwa
                                 </label>
                                 <Field
@@ -66,7 +72,8 @@ const CreateCollection = ({ onClose }: Props) => {
                                 <ErrorMessage name="name" component="div" className="text-red-500 text-sm" />
 
                                 <label htmlFor="description"
-                                       className="text-sm font-bold text-gray-700 dark:text-white dark:border-gray-600 block my-2">
+                                       className="text-sm font-bold text-gray-700 dark:text-white dark:border-gray-600
+                                       block my-2">
                                     Opis
                                 </label>
                                 <Field
@@ -74,22 +81,24 @@ const CreateCollection = ({ onClose }: Props) => {
                                     id="description"
                                     name="description"
                                     rows={4}
-                                    className="w-full resize-y min-h-[12rem] px-4 py-2 border rounded-lg focus:outline-none dark:border-gray-600 dark:bg-gray-800"
+                                    className="w-full resize-y min-h-[12rem] px-4 py-2 border rounded-lg
+                                    focus:outline-none dark:border-gray-600 dark:bg-gray-800"
                                 />
                                 <ErrorMessage name="description" component="div" className="text-red-500 text-sm" />
                             </div>
                             <div className="flex justify-end px-4 pb-4">
                                 <button
                                     type="button"
-                                    className="px-4 py-2 bg-sky-500 text-white hover:bg-sky-400"
+                                    className="px-4 py-2 color-button"
                                     onClick={onClose}
                                 >
                                     Anuluj
                                 </button>
                                 <button
                                     type="submit"
-                                    className="ml-2 px-4 py-2 bg-sky-500 text-white hover:bg-sky-400"
-                                    disabled={isSubmitting}
+                                    className="ml-2 px-4 py-2 color-button"
+                                    onClick={() => navigate("/collections/create")}
+                                    // disabled={isSubmitting}
                                 >
                                     Utwórz
                                 </button>

@@ -6,7 +6,7 @@ import { ModalState } from "../types/ArtworkTypes"
 
 
 interface ValueDropdownProps {
-    subcategoryName?: string;
+    subcategoryLabel?: string;
     values: string[];
     path: number[];
     index: any;
@@ -19,7 +19,7 @@ interface ValueDropdownProps {
 }
 
 const ValueDropdown: React.FC<ValueDropdownProps> = ({
-                                                         subcategoryName,
+                                                         subcategoryLabel,
                                                          values,
                                                          path,
                                                          index,
@@ -34,6 +34,7 @@ const ValueDropdown: React.FC<ValueDropdownProps> = ({
         modalState.data.index === index &&
         modalState.data.path.join("") === path.join("")
 
+    console.log({values})
 
     return <div className="flex flex-row mt-2">
         {values && values[0] === "" ? (

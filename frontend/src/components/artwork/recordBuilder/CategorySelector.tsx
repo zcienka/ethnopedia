@@ -1,18 +1,13 @@
 import React from "react"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
-
-interface EditingState {
-    isEditing: boolean;
-    editingIndex: number | null;
-    editValue: string;
-}
+import { LocationDetail } from "../types/ArtworkTypes"
 
 interface CategorySelectorProps {
     identifier: string;
     selectedCategory: string;
     handleCategoryChange: (identifier: string, newCategory: string) => void;
     addSubcategory: (identifier: string) => void;
-    locationDetails: Array<{ name: string }>;
+    locationDetails: LocationDetail[];
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({
@@ -39,8 +34,8 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                         <option key={""} value={""} hidden>Wybierz kategorię</option>
 
                         {locationDetails.map((item, index) => (
-                            <option key={index} value={item.name}>
-                                {item.name}
+                            <option key={index} value={item.label}>
+                                {item.label}
                             </option>
                         ))}
                     </select>
