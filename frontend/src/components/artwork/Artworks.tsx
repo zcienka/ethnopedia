@@ -185,7 +185,7 @@ const Artworks = () => {
                         </div>
 
                         <div className="flex items-center">
-                            <button className="text-lg mr-2 h-fit font-semibold"
+                            <button className="text-lg mr-2 h-fit font-semibold ml-4"
                                     onClick={() => setShowEditCollection(true)}>
                                 Edytuj
                             </button>
@@ -196,7 +196,7 @@ const Artworks = () => {
                                 className="text-lg font-semibold h-fit border-red-700 text-red-700 bg-red-50 hover:bg-white">
                                 <span className="flex-row flex items-center"
                                       onClick={() => setShowDeleteCollectionWarning(true)}>
-                                    <p className="ml-2">Usuń</p>
+                                    <p>Usuń</p>
                                 </span>
                             </button>
                         </div>

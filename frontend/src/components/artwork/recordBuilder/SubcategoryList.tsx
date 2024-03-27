@@ -8,7 +8,6 @@ import {
     Subcategory,
     SubcategoryListProps,
 } from "../types/ArtworkTypes"
-import CustomTextField from "../../CustomTextField"
 import Input from "../../Input"
 
 
@@ -18,13 +17,14 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                                              setSelectedDetails,
                                                          }) => {
 
-    const [values, setValues] = useState<string[]>([])
+    const [, setValues] = useState<string[]>([])
 
     const addSubcategory = useCallback((path: number[]) => {
         const newSubcategory: Subcategory = {
             label: "",
             values: [],
             subcategories: [],
+            value: "",
         }
 
         setSelectedDetails((prevDetails) => {
@@ -144,6 +144,7 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                                     label: newName,
                                     values: subcat.values,
                                     subcategories: subcat.subcategories,
+                                    value: subcat.value,
                                 }] ?? [], restOfPath),
                             }
                         }
@@ -233,6 +234,50 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
         })
     }, [setSelectedDetails, identifier])
 
+    const handleSetValueToSubcategory = useCallback((path: number[], newValue: string) => {
+        setSelectedDetails((prevDetails: { [key: string]: SelectedDetail }) => {
+            let newDetails: { [key: string]: SelectedDetail } = JSON.parse(JSON.stringify(prevDetails))
+
+            const setValueAtPath = (subcategories: Subcategory[], path: number[], newValue: string): void => {
+                if (path.length === 0) return
+
+                const [currentIndex, ...restOfPath] = path
+
+                if (restOfPath.length === 0) {
+                    subcategories[currentIndex].value = newValue
+                } else {
+                    setValueAtPath(subcategories[currentIndex].subcategories || [], restOfPath, newValue)
+                }
+            }
+
+            setValueAtPath(newDetails[identifier].subcategories || [], path, newValue)
+
+            return newDetails
+        })
+    }, [setSelectedDetails, identifier])
+
+    const handleDeleteValueInSubcategory = useCallback((path: number[]) => {
+        setSelectedDetails((prevDetails: { [key: string]: SelectedDetail }) => {
+            let newDetails: { [key: string]: SelectedDetail } = JSON.parse(JSON.stringify(prevDetails))
+
+            const deleteValueAtPath = (subcategories: Subcategory[], path: number[]): void => {
+                if (path.length === 0) return
+
+                const [currentIndex, ...restOfPath] = path
+
+                if (restOfPath.length === 0) {
+                    subcategories[currentIndex].value = ""
+                } else {
+                    deleteValueAtPath(subcategories[currentIndex].subcategories || [], restOfPath)
+                }
+            }
+
+            deleteValueAtPath(newDetails[identifier].subcategories || [], path)
+
+            return newDetails
+        })
+    }, [setSelectedDetails, identifier])
+
 
     const [modalState, setModalState] = useState<ModalState>({
         isOpen: false,
@@ -264,6 +309,8 @@ const SubcategoryList: React.FC<SubcategoryListProps> = ({
                     handleNameChange={handleNameChange}
                     inputVisibility={inputVisibility}
                     setInputVisibility={setInputVisibility}
+                    setValueToSubcategory={handleSetValueToSubcategory}
+                    handleDeleteValueInSubcategory={handleDeleteValueInSubcategory}
                 />
             )}
         </div>
@@ -286,6 +333,8 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                                        handleNameChange,
                                                                        inputVisibility,
                                                                        setInputVisibility,
+                                                                       setValueToSubcategory,
+                                                                       handleDeleteValueInSubcategory,
                                                                    }) => {
 
     const [currentPath, setCurrentPath] = useState<number[]>([])
@@ -370,7 +419,7 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                             <div className="flex flex-row h-fit">
 
                                                 <div
-                                                    className="border border-gray-300 flex flex-row px-4 py-2 rounded-lg bg-gray-50">
+                                                    className="border border-gray-300 flex flex-row px-2 py-2 rounded-lg bg-gray-50">
                                                     {isEditing === index ? (
                                                         <input
                                                             type="text"
@@ -384,34 +433,42 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                         <div
                                                             className="flex items-center border border-gray-300
                                                         rounded-md px-2 py-1 shadow-md w-fit"
-                                                            onDoubleClick={() => startEditing(index, subcat.label!)}>
+                                                            onClick={() => startEditing(index, subcat.label!)}>
                                                             <p className="w-fit">
                                                                 {subcat.label || "Nowa kategoria"}
                                                             </p>
                                                         </div>
                                                     )}
                                                     {inputVisibility[`${path}-${index}`] ? (
-                                                        <span className="h-fit w-fit">
+                                                        <span className="flex flex-row ml-2 h-fit w-fit rounded-xl items-center">
                                                         <Input
-                                                            columnName={subcat!.name ?? ""}
-                                                            onInputChange={(value) => handleNameChange([...path, index], value)}
+                                                            inputValue={subcat!.value ?? ""}
+                                                            onInputChange={(newValue) => setValueToSubcategory([...path, index], newValue)}
                                                         />
+                                                               <button
+                                                                   type="button"
+                                                                   onClick={() => {
+                                                                       handleDeleteValueInSubcategory([...path, index]);
+                                                                       setInputVisibility(prev => ({ ...prev, [`${path}-${index}`]: false }));
+                                                                   }}
+                                                                   className="ml-2 shadow-md w-fit p-2 h-fit">
+                                                                <MinusIcon />
+                                                            </button>
                                                     </span>
                                                     ) : (
                                                         <button
-                                                            onClick={() => setInputVisibility(prev => ({ ...prev, [`${path}-${index}`]: true }))}>Show
-                                                            Input</button>
+                                                            className="p-2 ml-2 shadow-md"
+                                                            type="button"
+                                                            onClick={() => setInputVisibility(prev => ({
+                                                                ...prev,
+                                                                [`${path}-${index}`]: true,
+                                                            }))}>
+                                                            <PlusIcon />
+                                                        </button>
                                                     )}
                                                 </div>
 
                                                 <div className="flex flex-row items-center justify-center">
-                                                    <button
-                                                        type="button"
-                                                        className="w-fit p-2 border-gray-300 shadow-md ml-2"
-                                                        onClick={() => addSubcategory(currentPath)}
-                                                    >
-                                                        <PlusIcon />
-                                                    </button>
                                                     <button
                                                         type="button"
                                                         className="w-fit p-2 border-gray-300 shadow-md ml-1"
@@ -425,7 +482,7 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                             type="button"
                                                             onClick={() => addValueToSubcategory(currentPath, "")}
                                                             className="ml-2">
-                                                            Utwórz opcję
+                                                            Utwórz listę
                                                         </button>
                                                     }
 
@@ -462,6 +519,8 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                             handleNameChange={handleNameChange}
                                             inputVisibility={inputVisibility}
                                             setInputVisibility={setInputVisibility}
+                                            setValueToSubcategory={setValueToSubcategory}
+                                            handleDeleteValueInSubcategory={handleDeleteValueInSubcategory}
                                         />
                                     )}
                                 </div>

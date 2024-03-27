@@ -43,6 +43,7 @@ const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({
                 subcategories: [],
                 collectionName: "Wielkopolska",
                 date: new Date().toISOString(),
+                value: "",
             },
         }))
     }
@@ -140,7 +141,8 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                     values: categoryData?.values || [],
                     collectionName: "Wielkopolska",
                     date: new Date().toISOString(),
-                } as SelectedDetail,
+                    value: ""
+                } as any,
             }
         })
     }

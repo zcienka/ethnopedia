@@ -25,6 +25,7 @@ const CreateArtwork = () => {
             label: "",
             name: "",
             date: "",
+            value: "",
         } as SelectedDetail,
     }
     const [selectedDetails, setSelectedDetails] = useState<{ [key: string]: SelectedDetail }>(defaultSelectedDetails)
@@ -36,9 +37,16 @@ const CreateArtwork = () => {
         () => getCategories(id as string),
         {
             enabled: !!id,
+            onSuccess: (data) => {
+                const initialSelectedDetails = data[0].locationDetails.reduce((acc: any, category: any) => {
+                    acc[category.label] = category
+                    return acc
+                }, {})
+                setSelectedDetails(initialSelectedDetails)
+            },
         },
     )
-console.log({categoriesData})
+
     if (categoriesData === undefined) {
         return <LoadingPage />
     }
@@ -62,7 +70,7 @@ console.log({categoriesData})
                                     values: detail.values,
                                     label: detail.label,
                                     date: detail.date || new Date().toISOString(),
-                                }))
+                                })) as SelectedDetail[]
 
 
                                 createCollection(detailsToSubmit, {

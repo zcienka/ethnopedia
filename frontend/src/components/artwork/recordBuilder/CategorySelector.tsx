@@ -18,6 +18,8 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                                                                locationDetails,
                                                            }) => {
 
+
+
     return (
         <div key={identifier}>
             <label className="ml-16 mb-1">Kategoria:</label>

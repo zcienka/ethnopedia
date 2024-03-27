@@ -4,6 +4,7 @@ export interface Subcategory {
     label?: string;
     name?: string;
     values: string[];
+    value: string
     subcategories?: Subcategory[];
 }
 
@@ -19,6 +20,7 @@ export interface SelectedDetail {
     label: string
     values?: string[]
     date: string
+    value: string
 }
 
 export interface LocationDetail {
@@ -60,6 +62,8 @@ export interface RecursiveSubcategoryProps {
     handleNameChange: (path: number[], newName: string) => void;
     inputVisibility: { [key: string]: boolean };
     setInputVisibility: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>;
+    setValueToSubcategory: (path: number[], newValue: string) => void;
+    handleDeleteValueInSubcategory: (path: number[]) => void;
 }
 
 
