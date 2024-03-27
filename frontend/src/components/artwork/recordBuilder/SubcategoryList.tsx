@@ -397,7 +397,6 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                     index={identifier}
                     openRenameModal={openRenameModal}
                     handleDeleteValues={handleDeleteValues}
-                    replaceValuesInSubcategory={replaceValuesInSubcategory}
                     onSubmit={handleRenameSubmit}
                     closeModal={closeModal}
                     modalState={modalState}
@@ -490,13 +489,11 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                             </div>
 
                                             {subcat.label !== "" && <ValueDropdown
-                                                subcategoryLabel={subcat.label}
                                                 values={subcat.values || []}
                                                 path={currentPath}
                                                 index={index}
                                                 openRenameModal={openRenameModal}
                                                 handleDeleteValues={handleDeleteValues}
-                                                replaceValuesInSubcategory={replaceValuesInSubcategory}
                                                 onSubmit={handleRenameSubmit}
                                                 closeModal={closeModal}
                                                 modalState={modalState} />}

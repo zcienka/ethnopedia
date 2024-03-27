@@ -6,12 +6,10 @@ import { ModalState } from "../types/ArtworkTypes"
 
 
 interface ValueDropdownProps {
-    subcategoryLabel?: string;
     values: string[];
     path: number[];
     index: any;
     handleDeleteValues: (path: number[]) => void;
-    replaceValuesInSubcategory: (path: number[], newValues: string[]) => void;
     onSubmit: (path: number[], newValues: string[]) => void;
     openRenameModal: (path: number[], values: string[], index: number) => void
     closeModal: () => void;
@@ -19,12 +17,10 @@ interface ValueDropdownProps {
 }
 
 const ValueDropdown: React.FC<ValueDropdownProps> = ({
-                                                         subcategoryLabel,
                                                          values,
                                                          path,
                                                          index,
                                                          handleDeleteValues,
-                                                         replaceValuesInSubcategory,
                                                          onSubmit,
                                                          modalState,
                                                          openRenameModal,

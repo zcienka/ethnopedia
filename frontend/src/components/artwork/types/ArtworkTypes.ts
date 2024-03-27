@@ -6,6 +6,7 @@ export interface Subcategory {
     values: string[];
     value: string
     subcategories?: Subcategory[];
+    isSelectable?: boolean;
 }
 
 export interface EditingState {

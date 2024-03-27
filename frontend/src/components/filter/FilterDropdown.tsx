@@ -7,13 +7,7 @@ import { ReactComponent as AngleDownIcon } from "../../assets/icons/angleDown.sv
 import { ReactComponent as FilterIcon } from "../../assets/icons/filter.svg"
 import { getAdvancedSearchResult } from "../../api/artworks"
 import { useParams } from "react-router-dom"
-
-interface Subcategory {
-    name: string
-    values?: string[]
-    subcategories?: Subcategory[]
-    isSelectable: boolean
-}
+import { Subcategory } from "../artwork/types/ArtworkTypes"
 
 interface Category {
     _id: string
@@ -35,7 +29,7 @@ interface CheckedSubcategory {
 
 
 const FilterDropdown: React.FC = () => {
-    const [openCategories, setOpenCategories] = useState<Set<string>>(new Set())
+    const [, setOpenCategories] = useState<Set<string>>(new Set())
     const [queryString, setQueryString] = useState<string | undefined>(undefined)
     const [checkedSubcategories, setCheckedSubcategories] = useState<CheckedSubcategory>({})
     const { id } = useParams<{ id: string }>()
@@ -108,15 +102,15 @@ const FilterDropdown: React.FC = () => {
 
     const renderLocationDetails = (categoryName: string, subcategories: Subcategory[]) => {
         return subcategories.map(subcategory => subcategory.isSelectable ? (
-            <div key={subcategory.name} className="mt-2">
-                <h3 className="text-md font-semibold">{subcategory.name}</h3>
+            <div key={subcategory.label} className="mt-2">
+                <h3 className="text-md font-semibold">{subcategory.label}</h3>
                 {subcategory.values !== undefined ? subcategory.values.map(value => (
                     <label key={value} className="block cursor-pointer">
                         <input
                             type="checkbox"
                             className="mr-2 leading-tight"
-                            checked={checkedSubcategories[categoryName]?.[subcategory.name]?.[value] || false}
-                            onChange={(e) => handleCheckboxChange(categoryName, subcategory.name, value, e.target.checked)}
+                            checked={checkedSubcategories[categoryName]?.[subcategory.label!]?.[value] || false}
+                            onChange={(e) => handleCheckboxChange(categoryName, subcategory.label!, value, e.target.checked)}
                         />
                         <span className="text-sm">{value}</span>
                     </label>
@@ -155,9 +149,9 @@ const FilterDropdown: React.FC = () => {
 
     const renderSubcategories = (subcategories: Subcategory[], categoryName: string) => {
         return subcategories.map(subcategory => subcategory.values !== undefined && subcategory.values.length > 0 && (
-            <div key={subcategory.name} className="mt-2 text-gray-900">
-                <div className="font-semibold">{subcategory.name}</div>
-                {renderValues(subcategory.values || [], categoryName, subcategory.name)}
+            <div key={subcategory.label} className="mt-2 text-gray-900">
+                <div className="font-semibold">{subcategory.label}</div>
+                {renderValues(subcategory.values || [], categoryName, subcategory.label!)}
             </div>
         ))
     }

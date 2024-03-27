@@ -38,8 +38,6 @@ const SubcategoryComponent: React.FC<SubcategoryComponentProps> = ({
                                                                        handleChange,
                                                                        handleBlur,
                                                                        inputRef,
-                                                                       handleDoubleClick,
-                                                                       selectedDetail,
                                                                    }) => {
 
 
