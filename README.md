@@ -1,6 +1,6 @@
-# EthnoArchive
+# Ethnopedia
 
-The EthnoArchive is a desktop and web application inspired by CollectiveAccess that allows users to edit the metadata of their files.
+Ethnopedia is a desktop and web application inspired by CollectiveAccess that allows users to edit the metadata of their files.
 
 It is specifically intended to be used by ethnomusicologists and music librarians working with folk music to edit the metadata of their music files.
 This tool will be developed in collaboration with the musicology expert, making sure it works well for folk music needs.
