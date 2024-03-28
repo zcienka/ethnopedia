@@ -26,10 +26,18 @@ interface NewArtworkStructureProps {
     categoriesData: CollectionItem[]
 }
 
+const defaultCategoriesData: CollectionItem[] = [{
+    _id: "",
+    collectionId: "",
+    label: "",
+    name: "",
+    locationDetails: [],
+}]
+
 const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({
                                                                      selectedDetails,
                                                                      setSelectedDetails,
-                                                                     categoriesData,
+                                                                     categoriesData = defaultCategoriesData,
                                                                  }) => {
     const addCategory = () => {
         const newCategoryId = `${Date.now()}`
@@ -109,15 +117,44 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                                                                                identifier,
                                                                                categoriesData,
                                                                            }) => {
+    const [valueInput, setValueInput] = useState<string>("")
 
     const addSubcategory = (identifier: string) => {
-        setSelectedDetails(prevDetails => ({
-            ...prevDetails,
-            [identifier]: {
-                ...prevDetails[identifier],
-                subcategories: [...prevDetails[identifier]?.subcategories || []],
-            },
-        }))
+        setSelectedDetails(prevDetails => {
+            const newSubcategory = {
+                label: "",
+                name: "",
+                values: [],
+                value: "",
+                subcategories: [],
+                isSelectable: true,
+            }
+
+            const existingSubcategories = prevDetails[identifier]?.subcategories || []
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    subcategories: [...existingSubcategories, newSubcategory],
+                },
+            }
+        })
+    }
+
+    const addValue = (identifier: string): void => {
+        setSelectedDetails((prevDetails: { [key: string]: SelectedDetail }) => {
+            const newValues = [...(prevDetails[identifier].values || []), valueInput]
+
+            return {
+                ...prevDetails,
+                [identifier]: {
+                    ...prevDetails[identifier],
+                    values: newValues,
+                },
+            }
+        })
+        setValueInput("")
     }
 
     const handleCategoryChange = (identifier: string, label: string) => {
@@ -128,7 +165,6 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                 label: subcat.label,
                 values: subcat.values || [],
                 name: subcat.name,
-                // isSelectable: subcat.isSelectable,
                 date: new Date().toISOString(),
             })) || []
 
@@ -136,12 +172,11 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
                 ...prevDetails,
                 [identifier]: {
                     label: label,
-                    // name: categoriesData[0].name,
                     subcategories: newSubcategories,
                     values: categoryData?.values || [],
                     collectionName: "Wielkopolska",
                     date: new Date().toISOString(),
-                    value: ""
+                    value: "",
                 } as any,
             }
         })
@@ -225,6 +260,7 @@ const CategoryAndValueSelector: React.FC<CategoryAndValueSelectorProps> = ({
             handleCategoryChange={handleCategoryChange}
             addSubcategory={addSubcategory}
             locationDetails={categoriesData[0].locationDetails!}
+            addValue={addValue}
         />
 
         <div className="ml-16">

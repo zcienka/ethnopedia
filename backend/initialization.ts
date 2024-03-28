@@ -1391,19 +1391,17 @@ const initializeDatabase = async () => {
         }))
 
         const insertedCollections = await Collection.insertMany(collectionsWithUser)
-        //
-        // const collectionMap = insertedCollections.reduce((map: any, collection: any) => {
+
+        // const artworksDataGreaterPoland = insertedCollections.reduce((map: any, collection: any) => {
         //     map[collection.name] = collection._id
         //     return map
         // }, {})
 
-        const updatedArtworks = artworksData.map(artwork => {
-            return {
-                ...artwork,
-                collectionName: "Wielkopolska",
-                userId: userId,
-            }
-        })
+        const updatedArtworks = artworksData.map(artwork => ({
+            ...artwork,
+            collectionName: artwork.Region === "Wielkopolska" ? "Wielkopolska" : undefined,
+            userId: userId,
+        }));
 
         await Artwork.insertMany(updatedArtworks)
 

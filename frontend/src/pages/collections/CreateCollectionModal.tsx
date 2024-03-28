@@ -8,7 +8,7 @@ type Props = {
     onClose: () => void
 }
 
-const CreateCollection = ({ onClose }: Props) => {
+const CreateCollectionModal = ({ onClose }: Props) => {
     const { mutate: createCollection } = useCreateCollectionMutation()
     const queryClient = useQueryClient()
     const navigate = useNavigate()
@@ -40,8 +40,7 @@ const CreateCollection = ({ onClose }: Props) => {
                     }}>
 
                     {({ isSubmitting }) => (
-                        <Form
-                            className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border
+                        <Form className="relative bg-white rounded-lg shadow-md dark:bg-gray-800 border
                             dark:border-gray-600">
                             <div className="flex items-start justify-between p-4 pb-0 rounded-t">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -97,7 +96,7 @@ const CreateCollection = ({ onClose }: Props) => {
                                 <button
                                     type="submit"
                                     className="ml-2 px-4 py-2 color-button"
-                                    onClick={() => navigate("/collections/create")}
+                                    onClick={() => navigate("/create-collection")}
                                     // disabled={isSubmitting}
                                 >
                                     Utwórz
@@ -111,4 +110,4 @@ const CreateCollection = ({ onClose }: Props) => {
     </div>
 }
 
-export default CreateCollection
+export default CreateCollectionModal

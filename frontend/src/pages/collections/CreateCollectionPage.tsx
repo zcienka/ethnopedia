@@ -1,0 +1,12 @@
+import Navbar from "../../components/navbar/Navbar"
+import React from "react"
+import CreateArtwork from "../../components/artwork/CreateArtwork"
+
+const CreateCollectionPage = () => {
+    return (
+        <>
+            <CreateArtwork />
+        </>
+    )
+}
+export default CreateCollectionPage

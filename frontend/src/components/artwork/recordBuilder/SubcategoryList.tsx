@@ -9,6 +9,7 @@ import {
     SubcategoryListProps,
 } from "../types/ArtworkTypes"
 import Input from "../../Input"
+import { ReactComponent as ListIcon } from "../../../assets/icons/list.svg"
 
 
 const SubcategoryList: React.FC<SubcategoryListProps> = ({
@@ -479,9 +480,10 @@ const RecursiveSubcategory: React.FC<RecursiveSubcategoryProps> = ({
                                                     {subcat.label !== "" && subcat.values?.length === 0 &&
                                                         <button
                                                             type="button"
-                                                            onClick={() => addValueToSubcategory(currentPath, "")}
-                                                            className="ml-2">
-                                                            Utwórz listę
+                                                            className="p-2 border-gray-300 shadow-md mr-1 ml-2"
+                                                            onClick={() => addValueToSubcategory(currentPath, "")}>
+                                                            <ListIcon />
+
                                                         </button>
                                                     }
 

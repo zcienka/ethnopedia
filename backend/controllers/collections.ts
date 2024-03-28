@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import { ObjectId } from "mongodb"
 
 const Collection = require("../models/collection")
+const Category = require("../models/collection")
 const Artwork = require("../models/artwork")
 const asyncWrapper = require("../middleware/async")
 
@@ -11,6 +12,10 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
     const pageSize = parseInt(req.query.pageSize as string) || 10
 
     const collections = await Collection.find({})
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+
+    const categories = await Category.find({})
         .skip((page - 1) * pageSize)
         .limit(pageSize)
 
@@ -43,7 +48,7 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
             name: collection.name,
             description: collection.description,
             artworksCount: artworkMap.get(collection.name) || 0,
-            // categoriesCount: artworkMap.get(collection.name) || 0,
+            categoriesCount: 17,
         })
     })
 
@@ -55,6 +60,21 @@ const getAllCollections = async (req: Request, res: Response, next: any) => {
         currentPage: page,
         pageSize: pageSize,
     })
+}
+
+function countLabelsRecursively(categoryDetails: any) {
+    let count = 0
+    const recurse = (details: any) => {
+        if (details)
+            details.forEach((detail: any) => {
+                count++
+                if (detail.subcategories) {
+                    recurse(detail.subcategories)
+                }
+            })
+    }
+    recurse(categoryDetails)
+    return count
 }
 
 const artworksInCollection = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {

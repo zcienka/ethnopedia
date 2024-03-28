@@ -3,4 +3,5 @@ export type Collection = {
     description: string
     name: string
     artworksCount?: number
+    categoriesCount?: number
 }

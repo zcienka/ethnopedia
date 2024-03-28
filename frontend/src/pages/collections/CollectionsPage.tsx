@@ -1,4 +1,4 @@
-import CreateCollection from "./CreateCollection"
+import CreateCollectionModal from "./CreateCollectionModal"
 import CustomDropdown from "../../components/CustomDropdown"
 import LoadingPage from "../LoadingPage"
 import React, { useState } from "react"
@@ -88,7 +88,6 @@ const CollectionsPage = () => {
         return <LoadingPage />
     } else {
         console.log(fetchedData.collections)
-        // return <div>test</div>
 
         const sortedCollections = fetchedData.collections ? [...fetchedData.collections].sort((a, b) => {
             if (sortOrder === "A-Z") {
@@ -122,15 +121,28 @@ const CollectionsPage = () => {
                             <p className="text-gray-600 dark:text-gray-300">{collection.description}</p>
                         </div>
                     </div>
-                    <h2 className="text-md min-w-fit items-center flex mx-2">
+
+                    <div className="flex flex-col">
+                        <h2 className="text-md min-w-fit items-center flex mx-2">
                         <span className="font-bold mr-1">
                             {collection.artworksCount ?? 0}
                         </span>
-                        {
-                            (collection.artworksCount ?? 0) === 1 ? "rekord" :
-                                (collection.artworksCount ?? 0) > 1 && (collection.artworksCount ?? 0) < 5 ? "rekordy" : "rekordów"
-                        }
-                    </h2>
+                            {
+                                (collection.artworksCount ?? 0) === 1 ? "rekord" :
+                                    (collection.artworksCount ?? 0) > 1 && (collection.artworksCount ?? 0) < 5 ? "rekordy" : "rekordów"
+                            }
+                        </h2>
+
+                        <h2 className="text-md min-w-fit items-center flex mx-2">
+                        <span className="font-bold mr-1">
+                            {collection.categoriesCount ?? 0}
+                        </span>
+                            {
+                                (collection.categoriesCount ?? 0) === 1 ? "kolekcja" :
+                                    (collection.categoriesCount ?? 0) > 1 && (collection.categoriesCount ?? 0) < 5 ? "kolekcje" : "kolekcji"
+                            }
+                        </h2>
+                    </div>
                 </div>
             </div>
         ))
@@ -141,7 +153,7 @@ const CollectionsPage = () => {
         ]
 
         return <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 h-full">
-            {showPopup && <CreateCollection onClose={() => setShowNewCollectionPopup(!showPopup)} />}
+            {showPopup && <CreateCollectionModal onClose={() => setShowNewCollectionPopup(!showPopup)} />}
             {showWarningPopup && <WarningPopup onClose={() => setShowWarningPopup(!showWarningPopup)}
                                                deleteSelected={deleteSelected}
                                                warningMessage={"Czy na pewno chcesz usunąć zaznaczone kolekcje?"} />}
@@ -226,11 +238,11 @@ const CollectionsPage = () => {
                 {allCollections}
 
                 <div className="flex justify-center">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={Math.ceil(fetchedData.total / pageSize)}
-                            onPageChange={(page) => setCurrentPage(page)}
-                        />
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={Math.ceil(fetchedData.total / pageSize)}
+                        onPageChange={(page) => setCurrentPage(page)}
+                    />
                 </div>
             </div>
         </section>

@@ -1,5 +1,6 @@
 import React from "react"
 import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg"
+import { ReactComponent as ListIcon } from "../../../assets/icons/list.svg"
 import { LocationDetail } from "../types/ArtworkTypes"
 
 interface CategorySelectorProps {
@@ -8,6 +9,7 @@ interface CategorySelectorProps {
     handleCategoryChange: (identifier: string, newCategory: string) => void;
     addSubcategory: (identifier: string) => void;
     locationDetails: LocationDetail[];
+    addValue: (identifier: string) => void;
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({
@@ -16,8 +18,8 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                                                                handleCategoryChange,
                                                                addSubcategory,
                                                                locationDetails,
+                                                               addValue,
                                                            }) => {
-
 
 
     return (
@@ -48,6 +50,13 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({
                             className="p-2 border-gray-300 shadow-md mr-1"
                             onClick={() => addSubcategory(identifier)}>
                         <PlusIcon />
+                    </button>
+
+                    <button type="button"
+                            className="p-2 border-gray-300 shadow-md mr-1"
+                            onClick={() => addValue(identifier)}
+                    >
+                        <ListIcon />
                     </button>
                 </div>
             </div>
