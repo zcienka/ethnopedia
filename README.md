@@ -13,6 +13,14 @@ This tool will be developed in collaboration with the musicology expert, making 
 # Main page
 ![Main page](./src/ui2.png)
 
+# Details
+![Details](./src/details.png)
+
+# Creating a record
+![Creating a record](./src/drzewo-dodawanie-rekordu.png)
+
+# Advanced search
+![Search](./src/wyszukiwanie.png)
 
 ## Features
 
