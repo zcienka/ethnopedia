@@ -6,9 +6,25 @@ import NewArtworkStructure from "./NewArtworkStructure"
 import { useNavigate, useParams } from "react-router-dom"
 import Navbar from "../navbar/Navbar"
 import { useUser } from "../../providers/UserProvider"
-import { SelectedDetail } from "./types/ArtworkTypes"
+import { LocationDetail, SelectedDetail } from "./types/ArtworkTypes"
 import Navigation from "../Navigation"
 import FetchDataWrapper from "../TreeWrapper"
+
+interface CollectionItem {
+    _id: any
+    collectionId: any
+    label: string
+    name: string
+    locationDetails: LocationDetail[]
+}
+
+const defaultCategoriesData: CollectionItem[] = [{
+    _id: "",
+    collectionId: "",
+    label: "",
+    name: "",
+    locationDetails: [],
+}]
 
 const CreateArtwork: React.FC = () => {
     const queryClient = useQueryClient()
@@ -71,10 +87,11 @@ const CreateArtwork: React.FC = () => {
                                                 </h3>
                                             </div>
                                             <div className="flex-grow">
-                                                <NewArtworkStructure
-                                                    selectedDetails={selectedDetails}
-                                                    setSelectedDetails={setSelectedDetails}
-                                                    categoriesData={categoriesData } />
+                                                { <NewArtworkStructure
+                                                        selectedDetails={selectedDetails}
+                                                        setSelectedDetails={setSelectedDetails}
+                                                        categoriesData={defaultCategoriesData} />
+                                                }
                                             </div>
                                             <div className="flex justify-end px-4 pb-4 border-t pt-4 h-auto">
                                                 <button

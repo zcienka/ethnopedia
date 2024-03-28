@@ -85,7 +85,7 @@ const ArtworkPage = () => {
     if (fetchedData === undefined) {
         return <LoadingPage />
     } else {
-        const { Tytuł, Artyści, Rok, ...otherDetails } = fetchedData.artwork
+        const { Tytuł, Artyści, Rok, collectionName, Region, Podregion, ...otherDetails } = fetchedData.artwork
         const detailsToShow = showMore ? otherDetails : {}
 
         const artworksEdit = Object.entries(textFields).map(([columnName, value]: [string, any], index: number) => {
@@ -135,6 +135,9 @@ const ArtworkPage = () => {
                                 Tytuł={Tytuł}
                                 Artyści={Artyści}
                                 Rok={Rok}
+                                Podregion={Podregion}
+                                Region={Region}
+                                collectionName={collectionName}
                                 detailsToShow={detailsToShow}
                                 showStructure={showStructure}
                                 handleEditClick={handleEditClick}

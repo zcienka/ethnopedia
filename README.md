@@ -1,9 +1,11 @@
 # Ethnopedia
 
-Ethnopedia is a desktop and web application inspired by CollectiveAccess that allows users to edit the metadata of their files.
+Ethnopedia is a desktop and web application inspired by CollectiveAccess that allows users to edit the metadata of their files in a reconfigurable way.
 
-It is specifically intended to be used by ethnomusicologists and music librarians working with folk music to edit the metadata of their music files.
+It is specifically intended to be used by ethnomusicologists and music librarians working with folk music to edit the metadata of their files.
 This tool will be developed in collaboration with the musicology expert, making sure it works well for folk music needs.
+
+> The most fucking boring project on the planet
 
 # Records view
 ![List page](./src/ui1.png)

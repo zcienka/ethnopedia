@@ -934,6 +934,7 @@ const artworksData = [
         "Źródło": "Rejestracja terenowa",
         "Klasyfikacja melodyczna": "Skala frygijska",
         "Kategoria": "Wielkopolska",
+        "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "W encyklopedii regionalnej",
         "Struktura tekstu": "Onomatopeiczna",
         "Uwagi": "Tradycyjne rytmy",
@@ -956,7 +957,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/909",
         "Źródło": "Dziedzictwo lokalne",
         "Klasyfikacja melodyczna": "Skala lidyjska",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "W opracowaniu naukowym",
         "Struktura tekstu": "Humorystyczna",
         "Uwagi": "Element kultury miejskiej",
@@ -979,7 +980,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/808",
         "Źródło": "Zbiór uniwersytecki",
         "Klasyfikacja melodyczna": "Skala dorycka",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "W podręczniku muzyki",
         "Struktura tekstu": "Kupletowa",
         "Uwagi": "Popularność wśród młodzieży",
@@ -1002,7 +1003,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/707",
         "Źródło": "Zbiór etnograficzny",
         "Klasyfikacja melodyczna": "Skala mixolydzka",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "W zbiorze pieśni",
         "Struktura tekstu": "Balladowa",
         "Uwagi": "Charakterystyczne dla regionu",
@@ -1025,7 +1026,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/606",
         "Źródło": "Tradycja oralna",
         "Klasyfikacja melodyczna": "Skala bluesowa",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "W monografii regionalnej",
         "Struktura tekstu": "Epicka",
         "Uwagi": "Unikalny styl wykonania",
@@ -1048,7 +1049,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/505",
         "Źródło": "Zbiór ludowy",
         "Klasyfikacja melodyczna": "Skala diatoniczna",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "W antologii",
         "Struktura tekstu": "Liryczna",
         "Uwagi": "Element folkloru",
@@ -1071,7 +1072,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/404",
         "Źródło": "Dziedzictwo regionalne",
         "Klasyfikacja melodyczna": "Modalna",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "W książce tematycznej",
         "Struktura tekstu": "Powtarzalna",
         "Uwagi": "Znane lokalnie",
@@ -1094,7 +1095,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/303",
         "Źródło": "Zbiór kościelny",
         "Klasyfikacja melodyczna": "Skala heksatoniczna",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "Dokumentacja etnograficzna",
         "Struktura tekstu": "Beztekstowe",
         "Uwagi": "Zachowana tradycja",
@@ -1118,7 +1119,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/303",
         "Źródło": "Zbiór kościelny",
         "Klasyfikacja melodyczna": "Skala heksatoniczna",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "Dokumentacja etnograficzna",
         "Struktura tekstu": "Beztekstowe",
         "Uwagi": "Zachowana tradycja",
@@ -1141,7 +1142,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/202",
         "Źródło": "Zbiór prywatny",
         "Klasyfikacja melodyczna": "Skala molowa",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "Rzadko dokumentowany",
         "Struktura tekstu": "Narracyjna",
         "Uwagi": "Unikatowe wykonanie",
@@ -1164,7 +1165,7 @@ const artworksData = [
         "Link do nagrania": "https://example.com/recording/101",
         "Źródło": "Zbiór ludowy",
         "Klasyfikacja melodyczna": "Skala dur",
-        "Kategoria": "Wielkopolska",
+        "Kategoria": "Wielkopolska", "Podregion": "Wielkopolska Północno-Zachodnia",
         "Wykorzystanie w publikacji": "Często dokumentowany",
         "Struktura tekstu": "Refrenowa",
         "Uwagi": "Popularny w regionie",
@@ -1220,7 +1221,7 @@ const categoryData = [
                 "values": [
                     "Szamotulskie",
                     "Ziemia Lubuska",
-                    "Kaliskie"
+                    "Kaliskie",
                 ],
                 "isSelectable": true,
             },
@@ -1230,7 +1231,7 @@ const categoryData = [
                     "Gniezno",
                     "Poznań",
                     "Września",
-                    "Środa"
+                    "Środa",
                 ],
                 "isSelectable": true,
             },
@@ -1401,14 +1402,14 @@ const initializeDatabase = async () => {
             ...artwork,
             collectionName: artwork.Region === "Wielkopolska" ? "Wielkopolska" : undefined,
             userId: userId,
-        }));
+        }))
 
         await Artwork.insertMany(updatedArtworks)
 
         const categoriesMap = categoryData.map(category => {
             return {
                 ...category,
-                collectionName: "Wielkopolska"
+                collectionName: "Wielkopolska",
             }
         })
 

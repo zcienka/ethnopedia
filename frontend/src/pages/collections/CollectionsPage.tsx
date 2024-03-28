@@ -138,8 +138,8 @@ const CollectionsPage = () => {
                             {collection.categoriesCount ?? 0}
                         </span>
                             {
-                                (collection.categoriesCount ?? 0) === 1 ? "kolekcja" :
-                                    (collection.categoriesCount ?? 0) > 1 && (collection.categoriesCount ?? 0) < 5 ? "kolekcje" : "kolekcji"
+                                (collection.categoriesCount ?? 0) === 1 ? "kategoria" :
+                                    (collection.categoriesCount ?? 0) > 1 && (collection.categoriesCount ?? 0) < 5 ? "kategorie" : "kategorii"
                             }
                         </h2>
                     </div>

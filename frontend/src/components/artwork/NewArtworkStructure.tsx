@@ -26,18 +26,10 @@ interface NewArtworkStructureProps {
     categoriesData: CollectionItem[]
 }
 
-const defaultCategoriesData: CollectionItem[] = [{
-    _id: "",
-    collectionId: "",
-    label: "",
-    name: "",
-    locationDetails: [],
-}]
-
 const NewArtworkStructure: React.FC<NewArtworkStructureProps> = ({
                                                                      selectedDetails,
                                                                      setSelectedDetails,
-                                                                     categoriesData = defaultCategoriesData,
+                                                                     categoriesData,
                                                                  }) => {
     const addCategory = () => {
         const newCategoryId = `${Date.now()}`
